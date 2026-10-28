@@ -1,0 +1,239 @@
+<style>
+  /* =========================================
+     CLAIMLEDGER — GLOBAL TOAST NOTIFICATION
+  ========================================= */
+
+  .claimledger-toast-position {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1090;
+    pointer-events: none;
+  }
+
+  .claimledger-toast {
+    --claimledger-toast-accent: #16a34a;
+    --claimledger-toast-accent-bg: #f0fdf4;
+
+    position: relative;
+    width: 370px;
+    max-width: calc(100vw - 32px);
+    overflow: hidden;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    box-shadow:
+      0 16px 40px rgba(23, 32, 51, 0.1),
+      0 4px 12px rgba(23, 32, 51, 0.04);
+    pointer-events: auto;
+  }
+
+  .claimledger-toast-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  /* Icon */
+  .claimledger-toast-icon {
+    display: flex;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(22, 163, 74, 0.12);
+    border-radius: 11px;
+    background: var(--claimledger-toast-accent-bg);
+    color: var(--claimledger-toast-accent);
+    font-size: 17px;
+  }
+
+  /* Message */
+  .claimledger-toast-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 2px;
+  }
+
+  .claimledger-toast-title {
+    display: block;
+    margin: 0 0 4px;
+    color: #172033;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .claimledger-toast-message {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  /* Close button */
+  .claimledger-toast-close {
+    display: flex;
+    flex: 0 0 28px;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: -3px -4px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease;
+  }
+
+  .claimledger-toast-close:hover {
+    background: #f1f5f9;
+    color: #172033;
+  }
+
+  .claimledger-toast-close:focus-visible {
+    outline: 2px solid #64748b;
+    outline-offset: 2px;
+  }
+
+  .claimledger-toast-close i {
+    font-size: 11px;
+  }
+
+  /* Lifetime progress indicator */
+  .claimledger-toast-progress-track {
+    height: 3px;
+    width: 100%;
+    overflow: hidden;
+    background: #f1f5f9;
+  }
+
+  .claimledger-toast-progress {
+    height: 100%;
+    width: 100%;
+    background: var(--claimledger-toast-accent);
+    transform-origin: left center;
+  }
+
+  .claimledger-toast.showing .claimledger-toast-progress,
+  .claimledger-toast.show .claimledger-toast-progress {
+    animation: claimledger-toast-countdown 5s linear forwards;
+  }
+
+  @keyframes claimledger-toast-countdown {
+    from {
+      transform: scaleX(1);
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  /* Success */
+  .claimledger-toast[data-claimledger-type="success"] {
+    --claimledger-toast-accent: #16a34a;
+    --claimledger-toast-accent-bg: #f0fdf4;
+  }
+
+  /* Error */
+  .claimledger-toast[data-claimledger-type="error"] {
+    --claimledger-toast-accent: #dc2626;
+    --claimledger-toast-accent-bg: #fef2f2;
+  }
+
+  /* Warning */
+  .claimledger-toast[data-claimledger-type="warning"] {
+    --claimledger-toast-accent: #d97706;
+    --claimledger-toast-accent-bg: #fffbeb;
+  }
+
+  /* Information */
+  .claimledger-toast[data-claimledger-type="info"] {
+    --claimledger-toast-accent: #2563eb;
+    --claimledger-toast-accent-bg: #eff6ff;
+  }
+
+  /* Mobile */
+  @media (max-width: 576px) {
+    .claimledger-toast-position {
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+    }
+
+    .claimledger-toast {
+      width: 100%;
+      max-width: none;
+    }
+
+    .claimledger-toast-inner {
+      padding: 14px;
+    }
+  }
+
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .claimledger-toast-close {
+      transition: none;
+    }
+
+    .claimledger-toast.showing .claimledger-toast-progress,
+    .claimledger-toast.show .claimledger-toast-progress {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- CLAIMLEDGER GLOBAL TOAST -->
+<div class="claimledger-toast-position">
+  <div
+    id="claimledgerToast"
+    class="toast claimledger-toast"
+    data-claimledger-type="success"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-bs-autohide="true"
+    data-bs-delay="5000"
+  >
+    <div class="claimledger-toast-inner">
+      <div class="claimledger-toast-icon" aria-hidden="true">
+        <i class="bi bi-check-lg"></i>
+      </div>
+
+      <div class="claimledger-toast-content">
+        <strong class="claimledger-toast-title" id="claimledgerToastTitle">
+          Success
+        </strong>
+
+        <p class="claimledger-toast-message" id="claimledgerToastMessage">
+          Action completed successfully.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="claimledger-toast-close"
+        data-bs-dismiss="toast"
+        aria-label="Close notification"
+      >
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="claimledger-toast-progress-track" aria-hidden="true">
+      <div class="claimledger-toast-progress"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{% load static %}
+
+<!-- ================= COMPANY DETAILS PARTIAL ================= -->
+<div id="CompanyDetailsPartial">
+  {% include 'partials/company_details_partial.html' %}
+</div>
+
+<!-- Keep the offcanvas outside the HTMX replacement target -->
+{% include "company/edit_company_offcanvas.html" %}

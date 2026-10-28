@@ -1,0 +1,201 @@
+<!-- ================= CLAIMLEDGER EMPTY DASHBOARD ================= -->
+<div class="claimledger_dashboard">
+  <!-- Welcome header -->
+  <section class="claimledger_dashboard_header">
+    <div class="claimledger_dashboard_welcome">
+      <span class="claimledger_dashboard_eyebrow"> YOUR WORKSPACE </span>
+
+      <h1>Good to have you here.</h1>
+
+      <p>Get started by setting up your first construction project.</p>
+    </div>
+
+    <button
+      type="button"
+      class="claimledger_dashboard_header_button"
+      href="{% url 'claims:create-claim' %}"
+      hx-get="{% url 'claims:create-claim' %}"
+      hx-target="#content"
+      hx-push-url="true"
+    >
+      <i class="bi bi-plus-lg"></i>
+      <span>New Claim</span>
+    </button>
+
+    <button
+      type="button"
+      class="claimledger_dashboard_header_button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#addProjectOffcanvas"
+      aria-controls="addProjectOffcanvas"
+    >
+      <i class="bi bi-plus-lg"></i>
+      <span>New project</span>
+    </button>
+  </section>
+
+  <!-- Summary cards -->
+  <section class="claimledger_dashboard_stats">
+    <article class="claimledger_dashboard_stat_card">
+      <div class="claimledger_dashboard_stat_top">
+        <div class="claimledger_dashboard_stat_icon">
+          <i class="bi bi-folder2-open"></i>
+        </div>
+
+        <span class="claimledger_dashboard_stat_label"> PROJECTS </span>
+      </div>
+
+      <div class="claimledger_dashboard_stat_value">
+        {{ project_count|default:0 }}
+      </div>
+
+      <p class="claimledger_dashboard_stat_description">
+        Projects in your workspace
+      </p>
+    </article>
+
+    <article class="claimledger_dashboard_stat_card">
+      <div class="claimledger_dashboard_stat_top">
+        <div class="claimledger_dashboard_stat_icon">
+          <i class="bi bi-file-earmark-text"></i>
+        </div>
+
+        <span class="claimledger_dashboard_stat_label"> PAYMENT CLAIMS </span>
+      </div>
+
+      <div class="claimledger_dashboard_stat_value">
+        {{ claim_count|default:0 }}
+      </div>
+
+      <p class="claimledger_dashboard_stat_description">
+        Claims recorded across projects
+      </p>
+    </article>
+  </section>
+
+  <!-- First project empty state -->
+  {% if not project_count %}
+
+  <section class="claimledger_dashboard_empty">
+    <div class="claimledger_dashboard_empty_content">
+      <div class="claimledger_dashboard_empty_illustration">
+        <div class="claimledger_dashboard_empty_icon">
+          <i class="bi bi-folder-plus"></i>
+        </div>
+
+        <span
+          class="claimledger_dashboard_empty_dot claimledger_dot_one"
+        ></span>
+        <span
+          class="claimledger_dashboard_empty_dot claimledger_dot_two"
+        ></span>
+        <span
+          class="claimledger_dashboard_empty_dot claimledger_dot_three"
+        ></span>
+      </div>
+
+      <span class="claimledger_dashboard_empty_eyebrow"> YOUR FIRST STEP </span>
+
+      <h2>Your projects start here</h2>
+
+      <p>
+        Create your first construction project to start organising payment
+        claims and tracking what has been submitted and paid.
+      </p>
+
+      <button
+        type="button"
+        class="claimledger_dashboard_primary_button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#addProjectOffcanvas"
+        aria-controls="addProjectOffcanvas"
+      >
+        <i class="bi bi-plus-lg"></i>
+        Create your first project
+      </button>
+
+      <span class="claimledger_dashboard_empty_note">
+        You can add payment claims after creating a project.
+      </span>
+    </div>
+  </section>
+
+  {% else %}
+
+  <!-- Existing projects: show this section once projects exist -->
+  <section class="claimledger_dashboard_projects">
+    <div class="claimledger_dashboard_section_header">
+      <div>
+        <h2>Your projects</h2>
+        <p>Projects you're currently tracking.</p>
+      </div>
+
+      <button
+        type="button"
+        class="claimledger_dashboard_text_button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#addProjectOffcanvas"
+        aria-controls="addProjectOffcanvas"
+      >
+        <i class="bi bi-plus-lg"></i>
+        Add project
+      </button>
+    </div>
+
+    <!-- Replace this placeholder with your project list or include -->
+    <div class="claimledger_dashboard_projects_placeholder">
+      <i class="bi bi-folder2-open"></i>
+      <p>Your project list will appear here.</p>
+    </div>
+  </section>
+
+  {% endif %}
+
+  <!-- Getting started guide -->
+  <section class="claimledger_dashboard_getting_started">
+    <div class="claimledger_dashboard_section_header">
+      <div>
+        <h2>How ClaimLedger works</h2>
+        <p>Three steps to get your claim tracking organised.</p>
+      </div>
+    </div>
+
+    <div class="claimledger_dashboard_steps">
+      <article class="claimledger_dashboard_step">
+        <div class="claimledger_dashboard_step_icon">
+          <i class="bi bi-folder-plus"></i>
+        </div>
+
+        <span class="claimledger_dashboard_step_number"> STEP 01 </span>
+
+        <h3>Create a project</h3>
+
+        <p>Add your project, client details and site information.</p>
+      </article>
+
+      <article class="claimledger_dashboard_step">
+        <div class="claimledger_dashboard_step_icon">
+          <i class="bi bi-file-earmark-plus"></i>
+        </div>
+
+        <span class="claimledger_dashboard_step_number"> STEP 02 </span>
+
+        <h3>Record a claim</h3>
+
+        <p>Create a payment claim for work completed on your project.</p>
+      </article>
+
+      <article class="claimledger_dashboard_step">
+        <div class="claimledger_dashboard_step_icon">
+          <i class="bi bi-wallet2"></i>
+        </div>
+
+        <span class="claimledger_dashboard_step_number"> STEP 03 </span>
+
+        <h3>Track payment</h3>
+
+        <p>Follow submitted claims and record payments received.</p>
+      </article>
+    </div>
+  </section>
+</div>

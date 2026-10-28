@@ -1,0 +1,130 @@
+{% load static %}
+
+<aside class="cr-sidebar d-none d-lg-flex">
+  <!-- Brand -->
+  <div class="cr-sidebar-brand">
+    <div class="cr-brand-mark">C</div>
+
+    <div class="cr-brand-text">
+      <span class="cr-brand-name">Coreva</span>
+      <span class="cr-brand-subtitle">Site Operations</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="cr-sidebar-nav">
+    <div class="cr-nav-section">
+      <span class="cr-nav-label">Workspace</span>
+
+      <!-- Today -->
+      <a
+        href="{% url 'dashboard:dashboard' %}"
+        hx-get="{% url 'dashboard:dashboard' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="cr-nav-link {% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}"
+      >
+        <span class="cr-nav-icon">
+          <i class="bi bi-house"></i>
+        </span>
+
+        <span class="cr-nav-text">Dashboard</span>
+      </a>
+
+      <!-- Projects -->
+      <a
+        href="{% url 'projects:projects' %}"
+        hx-get="{% url 'projects:projects' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="cr-nav-link {% if request.resolver_match.namespace == 'projects' %}active{% endif %}"
+      >
+        <span class="cr-nav-icon">
+          <i class="bi bi-buildings"></i>
+        </span>
+
+        <span class="cr-nav-text">Projects</span>
+      </a>
+    </div>
+
+    <div class="cr-nav-section">
+      <span class="cr-nav-label">Company</span>
+
+      <!-- Company Details -->
+      <a
+        href="{% url 'account:company' company.uuid %}"
+        hx-get="{% url 'account:company' company.uuid %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="cr-nav-link {% if request.resolver_match.namespace == 'account' %}active{% endif %}"
+      >
+        <span class="cr-nav-icon">
+          <i class="bi bi-building-check"></i>
+        </span>
+
+        <span class="cr-nav-text">My Company</span>
+      </a>
+
+      <!-- My Team -->
+      <a href="#" class="cr-nav-link">
+        <span class="cr-nav-icon">
+          <i class="bi bi-people"></i>
+        </span>
+
+        <span class="cr-nav-text">My Team</span>
+      </a>
+    </div>
+
+    <div class="cr-nav-section">
+      <span class="cr-nav-label">People & Access</span>
+
+      <!-- Contractors -->
+      <a
+        href="#"
+        class="cr-nav-link {% if request.resolver_match.namespace == 'contractors' %}active{% endif %} d-none"
+      >
+        <span class="cr-nav-icon">
+          <i class="bi bi-person-workspace"></i>
+        </span>
+
+        <span class="cr-nav-text">Contractors</span>
+      </a>
+
+      <!-- Subcontractor Portal -->
+      <a href="#" class="cr-nav-link">
+        <span class="cr-nav-icon">
+          <i class="bi bi-building-check"></i>
+        </span>
+
+        <span class="cr-nav-text">My Subcontractor Portal</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Bottom -->
+  <div class="cr-sidebar-bottom">
+    <!-- Settings -->
+    <a
+      href="{% url 'account:account' %}"
+      hx-get="{% url 'account:account' %}"
+      hx-target="#content"
+      hx-push-url="true"
+      class="cr-nav-link {% if request.resolver_match.namespace == 'account' %}active{% endif %}"
+    >
+      <span class="cr-nav-icon">
+        <i class="bi bi-gear"></i>
+      </span>
+
+      <span class="cr-nav-text">Settings</span>
+    </a>
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}" class="cr-logout-link">
+      <span class="cr-nav-icon">
+        <i class="bi bi-box-arrow-right"></i>
+      </span>
+
+      <span class="cr-nav-text">Logout</span>
+    </a>
+  </div>
+</aside>

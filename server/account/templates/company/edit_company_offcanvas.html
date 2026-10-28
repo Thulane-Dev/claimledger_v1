@@ -1,0 +1,269 @@
+<!-- EDIT COMPANY OFFCANVAS -->
+<div
+    class="offcanvas offcanvas-end claimledger-company-offcanvas"
+    tabindex="-1"
+    id="EditCompanyOffcanvas"
+    aria-labelledby="claimledgerEditCompanyTitle"
+>
+    <div class="claimledger-company-offcanvas-header">
+        <div class="claimledger-company-offcanvas-heading">
+            <div class="claimledger-company-section-icon">
+                <i class="bi bi-pencil-square" aria-hidden="true"></i>
+            </div>
+
+            <div>
+                <h5 id="claimledgerEditCompanyTitle">Edit company details</h5>
+                <p>Update your company's business information.</p>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="claimledger-company-offcanvas-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        >
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="offcanvas-body claimledger-company-offcanvas-body">
+        <form
+            method="POST"
+            hx-post="{% url 'account:update-company-info' company.uuid %}"
+            hx-target="#CompanyDetailsPartial"
+            hx-swap="innerHTML"
+            hx-push-url="false"
+            hx-on::after-request="
+                if (event.detail.successful) {
+                closeCompanyOffcanvas();
+                }
+            "
+            id="claimledgerEditCompanyForm"
+        >
+            {% csrf_token %}
+
+            <!-- BUSINESS INFORMATION -->
+            <div class="claimledger-company-form-section">
+                <div class="claimledger-company-form-heading">
+                    <span>01</span>
+                    <div>
+                        <h6>Business information</h6>
+                        <p>Company registration details.</p>
+                    </div>
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyName">Company name</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyName"
+                        name="name"
+                        value="{{ company.name }}"
+                        maxlength="255"
+                        placeholder="Registered company name"
+                        required
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyRegistration">
+                        Registration number
+                    </label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyRegistration"
+                        name="registration_number"
+                        value="{{ company.registration_number }}"
+                        maxlength="64"
+                        placeholder="Company registration number"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyVat">VAT number</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyVat"
+                        name="vat_number"
+                        value="{{ company.vat_number }}"
+                        maxlength="64"
+                        placeholder="VAT number (if applicable)"
+                    />
+                </div>
+            </div>
+
+            <!-- CONTACT INFORMATION -->
+            <div class="claimledger-company-form-section">
+                <div class="claimledger-company-form-heading">
+                    <span>02</span>
+                    <div>
+                        <h6>Contact information</h6>
+                        <p>Company contact details.</p>
+                    </div>
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyEmail">Company email</label>
+                    <input
+                        type="email"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyEmail"
+                        name="email"
+                        value="{{ company.email }}"
+                        maxlength="254"
+                        placeholder="company@example.co.za"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyPhone">Phone number</label>
+                    <input
+                        type="tel"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyPhone"
+                        name="phone"
+                        value="{{ company.phone }}"
+                        maxlength="32"
+                        placeholder="Company contact number"
+                    />
+                </div>
+            </div>
+
+            <!-- ADDRESS INFORMATION -->
+            <div class="claimledger-company-form-section">
+                <div class="claimledger-company-form-heading">
+                    <span>03</span>
+                    <div>
+                        <h6>Business address</h6>
+                        <p>Registered or business address.</p>
+                    </div>
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyStreet">Street address</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyStreet"
+                        name="street"
+                        value="{% if company.address %}{{ company.address.street }}{% endif %}"
+                        maxlength="255"
+                        placeholder="Street and building"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanySuburb">Suburb</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanySuburb"
+                        name="suburb"
+                        value="{% if company.address %}{{ company.address.suburb|default:'' }}{% endif %}"
+                        maxlength="255"
+                        placeholder="Suburb"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyCity">City / Town</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyCity"
+                        name="city"
+                        value="{% if company.address %}{{ company.address.city|default:'' }}{% endif %}"
+                        maxlength="255"
+                        placeholder="City or town"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyProvince">Province</label>
+                    <select
+                        class="form-select claimledger-company-input"
+                        id="claimledgerCompanyProvince"
+                        name="province"
+                    >
+                        <option value="">Select province</option>
+                        {% for value, label in province_choices %}
+                            <option
+                                value="{{ value }}"
+                                {% if company.address and company.address.province == value %}selected{% endif %}
+                            >
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyPostalCode">Postal code</label>
+                    <input
+                        type="text"
+                        inputmode="numeric"
+                        pattern="[0-9]{4}"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyPostalCode"
+                        name="postal_code"
+                        value="{% if company.address %}{{ company.address.postal_code }}{% endif %}"
+                        maxlength="4"
+                        placeholder="e.g. 1459"
+                    />
+                </div>
+
+                <div class="claimledger-company-form-field">
+                    <label for="claimledgerCompanyCountry">Country</label>
+                    <input
+                        type="text"
+                        class="form-control claimledger-company-input"
+                        id="claimledgerCompanyCountry"
+                        name="country"
+                        value="{% if company.address %}{{ company.address.country|default:'South Africa' }}{% else %}South Africa{% endif %}"
+                        maxlength="255"
+                    />
+                </div>
+            </div>
+
+            <!-- FORM FOOTER -->
+            <div class="claimledger-company-form-footer">
+                <button
+                    type="button"
+                    class="claimledger-company-cancel-button"
+                    data-bs-dismiss="offcanvas"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="claimledger-company-save-button"
+                >
+                    <i class="bi bi-check2" aria-hidden="true"></i>
+                    Save changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- CLOSE DELIVERY OFFCANVAS  -->
+<script>
+  function closeCompanyOffcanvas() {
+    var offcanvasElement = document.getElementById("EditCompanyOffcanvas");
+    var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+    if (!offcanvasInstance) {
+      offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+    }
+
+    offcanvasInstance.hide();
+  }
+</script>
+
+

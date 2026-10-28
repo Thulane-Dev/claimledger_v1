@@ -1,0 +1,729 @@
+{% load static %}
+
+<div class="cl-cert-create-page">
+
+    <!-- PAGE HEADER -->
+    <header class="cl-cert-create-header">
+        <div class="cl-cert-create-heading">
+            <div class="cl-cert-create-breadcrumb">
+                <span>Payment Claims</span>
+                <span class="cl-cert-create-breadcrumb-separator">/</span>
+                <span>{{ payment_claim.claim_number }}</span>
+                <span class="cl-cert-create-breadcrumb-separator">/</span>
+                <span>New Certificate</span>
+            </div>
+
+            <div class="cl-cert-create-title-row">
+                <div>
+                    <h1>Create Payment Certificate</h1>
+                    <p>
+                        Review claimed work, confirm certified amounts,
+                        and prepare the payment certificate.
+                    </p>
+                </div>
+
+                <span class="cl-cert-create-status">
+                    <span class="cl-cert-create-status-dot"></span>
+                    Draft
+                </span>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- CLAIM DETAILS -->
+    <section class="cl-cert-create-claim-card">
+
+        <div class="cl-cert-create-claim-main">
+            <div class="cl-cert-create-eyebrow">CERTIFICATION FOR</div>
+
+            <h2>
+                {{ payment_claim.claim_title|default:"Payment claim" }}
+            </h2>
+
+            <div class="cl-cert-create-claim-meta">
+                <span>
+                    <span class="cl-cert-create-meta-label">Claim</span>
+                    <strong>{{ payment_claim.claim_number|default:"—" }}</strong>
+                </span>
+
+                <span>
+                    <span class="cl-cert-create-meta-label">Project</span>
+                    <strong>
+                        {{ payment_claim.project|default:"No project assigned" }}
+                    </strong>
+                </span>
+
+                <span>
+                    <span class="cl-cert-create-meta-label">Claim period</span>
+                    <strong>
+                        {% if payment_claim.claim_period_start %}
+                            {{ payment_claim.claim_period_start|date:"d M Y" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                        –
+                        {% if payment_claim.claim_period_end %}
+                            {{ payment_claim.claim_period_end|date:"d M Y" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </strong>
+                </span>
+            </div>
+        </div>
+
+        <div class="cl-cert-create-parties">
+            <div class="cl-cert-create-party">
+                <span>Claimant</span>
+                <strong>
+                    {{ payment_claim.claimant_company|default:"—" }}
+                </strong>
+            </div>
+
+            <div class="cl-cert-create-party">
+                <span>Certifying company</span>
+                <strong>
+                    {{ payment_claim.recipient_company|default:"—" }}
+                </strong>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- CERTIFICATE SUMMARY -->
+    <section class="cl-cert-create-summary-grid">
+
+        <article class="cl-cert-create-summary-card">
+            <div class="cl-cert-create-summary-top">
+                <span>Total claimed</span>
+                <span class="cl-cert-create-summary-icon">CL</span>
+            </div>
+
+            <strong class="cl-cert-create-money">
+                R {{ claimed_total|floatformat:2 }}
+            </strong>
+
+            <p>Amount submitted by the claimant</p>
+        </article>
+
+        <article class="cl-cert-create-summary-card cl-cert-create-summary-primary">
+            <div class="cl-cert-create-summary-top">
+                <span>Certified subtotal</span>
+                <span class="cl-cert-create-summary-icon">✓</span>
+            </div>
+
+            <strong class="cl-cert-create-money">
+                R {{ certified_subtotal|floatformat:2 }}
+            </strong>
+
+            <p>Based on line-item certification entered so far</p>
+        </article>
+
+        <article class="cl-cert-create-summary-card">
+            <div class="cl-cert-create-summary-top">
+                <span>Sample deductions</span>
+                <span class="cl-cert-create-summary-icon">−</span>
+            </div>
+
+            <strong class="cl-cert-create-money cl-cert-create-money-deduction">
+                R {{ sample_deduction_total|floatformat:2 }}
+            </strong>
+
+            <p>Demonstration values — not yet saved</p>
+        </article>
+
+        <article class="cl-cert-create-summary-card cl-cert-create-summary-payable">
+            <div class="cl-cert-create-summary-top">
+                <span>Illustrative net payable</span>
+                <span class="cl-cert-create-summary-icon">R</span>
+            </div>
+
+            <strong class="cl-cert-create-money">
+                R {{ sample_net_payable|floatformat:2 }}
+            </strong>
+
+            <p>Preview only, before actual certificate calculations</p>
+        </article>
+
+    </section>
+
+
+    <!-- LINE ITEM CERTIFICATION -->
+    <section class="cl-cert-create-panel">
+
+        <div class="cl-cert-create-panel-header">
+            <div>
+                <div class="cl-cert-create-eyebrow">CLAIM REVIEW</div>
+                <h2>Line item certification</h2>
+                <p>
+                    Compare each claimed amount with the amount approved
+                    for certification.
+                </p>
+            </div>
+
+            <span class="cl-cert-create-count">
+                {{ line_items|length }} line items
+            </span>
+        </div>
+
+        <div class="cl-cert-create-table-wrap">
+            <table class="cl-cert-create-table">
+                <thead>
+                    <tr>
+                        <th>Work item</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th class="cl-cert-create-text-right">Claimed</th>
+                        <th class="cl-cert-create-text-right">Certified</th>
+                        <th class="cl-cert-create-text-right">Difference</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for line_item in line_items %}
+                    <tr>
+                        <td>
+                            <div class="cl-cert-create-item-name">
+                                {{ line_item.description|default:"Unnamed work item" }}
+                            </div>
+                            <div class="cl-cert-create-item-reference">
+                                Line item {{ forloop.counter }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ line_item.quantity|default_if_none:"—" }}
+                            {% if line_item.unit == "other" %}
+                                {{ line_item.custom_unit }}
+                            {% else %}
+                                {{ line_item.get_unit_display }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            R {{ line_item.rate|default_if_none:0|floatformat:2 }}
+                        </td>
+
+                        <td class="cl-cert-create-text-right">
+                            <strong>
+                                R {{ line_item.amount|default_if_none:0|floatformat:2 }}
+                            </strong>
+                        </td>
+
+                        <td class="cl-cert-create-text-right">
+                            {% if line_item.certified_amount != None %}
+                                <strong class="cl-cert-create-certified-value">
+                                    R {{ line_item.certified_amount|floatformat:2 }}
+                                </strong>
+                            {% else %}
+                                <span class="cl-cert-create-not-set">
+                                    Not certified
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="cl-cert-create-text-right">
+                            {% if line_item.certification_difference != None %}
+                                <span class="cl-cert-create-difference">
+                                    R {{ line_item.certification_difference|floatformat:2 }}
+                                </span>
+                            {% else %}
+                                <span class="cl-cert-create-muted">—</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="cl-cert-create-action-cell">
+                            <a
+                                href="{% url 'claims:claim-item' line_item.uuid %}"
+                                hx-get="{% url 'claims:claim-item' line_item.uuid %}"
+                                hx-target="#content"
+                                hx-push-url="true"
+                                class="cl-cert-create-action-link"
+                            >
+                                {% if line_item.certified_amount != None %}
+                                    Edit
+                                {% else %}
+                                    Certify
+                                {% endif %}
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">
+                            <div class="cl-cert-create-empty">
+                                <strong>No line items found</strong>
+                                <p>
+                                    This payment claim has no line items
+                                    to certify yet.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cl-cert-create-panel-footer">
+            <span>
+                Certification changes should be supported by an explanation
+                where the certified amount differs from the claimed amount.
+            </span>
+        </div>
+
+    </section>
+
+
+    <!-- DEDUCTIONS -->
+    <section class="cl-cert-create-panel">
+
+        <div class="cl-cert-create-panel-header">
+            <div>
+                <div class="cl-cert-create-eyebrow">CERTIFICATE ADJUSTMENTS</div>
+                <h2>Deductions and adjustments</h2>
+                <p>
+                    Record amounts withheld or adjusted before determining
+                    the final amount payable.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="cl-cert-create-primary-button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#clCertCreateDeductionCanvas"
+                aria-controls="clCertCreateDeductionCanvas"
+            >
+                <span aria-hidden="true">+</span>
+                Add deduction
+            </button>
+        </div>
+
+        <div class="cl-cert-create-demo-notice">
+            <span class="cl-cert-create-demo-indicator"></span>
+            Sample deductions are shown for layout preview only. They are
+            not saved to a certificate.
+        </div>
+
+        <div class="cl-cert-create-deduction-list">
+
+            {% for deduction in sample_deductions %}
+            <div class="cl-cert-create-deduction-row">
+
+                <div class="cl-cert-create-deduction-symbol">
+                    {% if deduction.category == "retention" %}
+                        R
+                    {% elif deduction.category == "penalty" %}
+                        !
+                    {% else %}
+                        −
+                    {% endif %}
+                </div>
+
+                <div class="cl-cert-create-deduction-info">
+                    <strong>{{ deduction.name }}</strong>
+                    <span>{{ deduction.description }}</span>
+                </div>
+
+                <div class="cl-cert-create-deduction-category">
+                    {{ deduction.get_category_display|default:deduction.category }}
+                </div>
+
+                <strong class="cl-cert-create-deduction-amount">
+                    − R {{ deduction.amount|floatformat:2 }}
+                </strong>
+
+                <button
+                    type="button"
+                    class="cl-cert-create-icon-button"
+                    aria-label="Edit sample deduction"
+                    title="Editing will be enabled when deductions are connected"
+                    disabled
+                >
+                    ⋯
+                </button>
+
+            </div>
+            {% empty %}
+            <div class="cl-cert-create-empty">
+                <strong>No deductions added</strong>
+                <p>Add retention, penalties or another applicable adjustment.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="cl-cert-create-deduction-total">
+            <span>Total sample deductions</span>
+            <strong>− R {{ sample_deduction_total|floatformat:2 }}</strong>
+        </div>
+
+    </section>
+
+
+    <!-- CERTIFICATE DETAILS -->
+    <section class="cl-cert-create-panel">
+
+        <div class="cl-cert-create-panel-header">
+            <div>
+                <div class="cl-cert-create-eyebrow">CERTIFICATE INFORMATION</div>
+                <h2>Certificate details</h2>
+                <p>
+                    Complete the details that will appear on the certificate.
+                </p>
+            </div>
+        </div>
+
+        <div class="cl-cert-create-details-grid">
+
+            <div class="cl-cert-create-field">
+                <label for="clCertNumber">Certificate number</label>
+                <input
+                    id="clCertNumber"
+                    type="text"
+                    name="certificate_number"
+                    placeholder="e.g. PC-001"
+                >
+                <small>Use your agreed certificate numbering format.</small>
+            </div>
+
+            <div class="cl-cert-create-field">
+                <label for="clCertDate">Certification date</label>
+                <input
+                    id="clCertDate"
+                    type="date"
+                    name="certification_date"
+                >
+            </div>
+
+            <div class="cl-cert-create-field">
+                <label for="clCertPaymentDate">Expected payment date</label>
+                <input
+                    id="clCertPaymentDate"
+                    type="date"
+                    name="expected_payment_date"
+                >
+            </div>
+
+            <div class="cl-cert-create-field cl-cert-create-field-full">
+                <label for="clCertNotes">Certification notes</label>
+                <textarea
+                    id="clCertNotes"
+                    name="notes"
+                    rows="4"
+                    placeholder="Add notes about this certification, adjustments or outstanding matters..."
+                ></textarea>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CERTIFICATE EVIDENCE -->
+    <section class="cl-cert-create-panel">
+
+        <div class="cl-cert-create-panel-header">
+            <div>
+                <div class="cl-cert-create-eyebrow">SUPPORTING RECORDS</div>
+                <h2>Certificate evidence</h2>
+                <p>
+                    Attach documents that support the certification and
+                    any adjustments made.
+                </p>
+            </div>
+        </div>
+
+        <label for="clCertEvidence" class="cl-cert-create-upload-zone">
+            <span class="cl-cert-create-upload-icon">↑</span>
+            <strong>Upload supporting documents</strong>
+            <span>
+                Select site records, signed measurements, inspection records,
+                photographs or other supporting files.
+            </span>
+            <span class="cl-cert-create-upload-cta">Choose files</span>
+            <input
+                type="file"
+                id="clCertEvidence"
+                name="supporting_documents"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+            >
+        </label>
+
+        <div
+            id="clCertEvidencePreview"
+            class="cl-cert-create-evidence-list"
+            aria-live="polite"
+        ></div>
+
+        <div class="cl-cert-create-evidence-note">
+            <span aria-hidden="true">ⓘ</span>
+            Evidence selected here is only held in the browser until a
+            certificate submission handler saves the files.
+        </div>
+
+    </section>
+
+
+    <!-- BOTTOM ACTIONS -->
+    <footer class="cl-cert-create-bottom-bar">
+        <div class="cl-cert-create-bottom-info">
+            <span>Payment certificate</span>
+            <strong>Draft preparation</strong>
+        </div>
+
+        <div class="cl-cert-create-bottom-actions">
+            <a
+                href="javascript:history.back()"
+                class="cl-cert-create-secondary-button"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="button"
+                class="cl-cert-create-secondary-button"
+                disabled
+                title="Connect this button to the save-draft view"
+            >
+                Save draft
+            </button>
+
+            <button
+                type="button"
+                class="cl-cert-create-primary-button"
+                disabled
+                title="Enable issuing after certification and deduction logic is implemented"
+            >
+                Issue certificate
+                <span aria-hidden="true">→</span>
+            </button>
+        </div>
+    </footer>
+
+
+    <!-- ADD DEDUCTION OFFCANVAS -->
+    <div
+        class="offcanvas offcanvas-end cl-cert-create-offcanvas"
+        tabindex="-1"
+        id="clCertCreateDeductionCanvas"
+        aria-labelledby="clCertCreateDeductionTitle"
+    >
+        <div class="offcanvas-header cl-cert-create-offcanvas-header">
+            <div>
+                <div class="cl-cert-create-eyebrow">CERTIFICATE ADJUSTMENT</div>
+                <h2 id="clCertCreateDeductionTitle">Add deduction</h2>
+                <p>Enter the amount and reason for this adjustment.</p>
+            </div>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+            ></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <form id="clCertCreateDeductionForm">
+
+                <div class="cl-cert-create-field">
+                    <label for="clDeductionType">Deduction type</label>
+                    <select id="clDeductionType" name="category" required>
+                        <option value="">Select deduction type</option>
+                        <option value="retention">Retention</option>
+                        <option value="penalty">Penalty</option>
+                        <option value="previous_payment">Previous payment adjustment</option>
+                        <option value="materials">Materials supplied</option>
+                        <option value="contra_charge">Contra charge</option>
+                        <option value="other">Other deduction</option>
+                    </select>
+                </div>
+
+                <div class="cl-cert-create-field">
+                    <label for="clDeductionName">Description</label>
+                    <input
+                        id="clDeductionName"
+                        name="name"
+                        type="text"
+                        maxlength="150"
+                        placeholder="e.g. Retention withheld"
+                        required
+                    >
+                </div>
+
+                <div class="cl-cert-create-field">
+                    <label for="clDeductionAmount">Amount (ZAR)</label>
+                    <div class="cl-cert-create-currency-input">
+                        <span>R</span>
+                        <input
+                            id="clDeductionAmount"
+                            name="amount"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="cl-cert-create-field">
+                    <label for="clDeductionReason">Reason / calculation</label>
+                    <textarea
+                        id="clDeductionReason"
+                        name="description"
+                        rows="4"
+                        placeholder="Explain why this amount is being deducted and how it was calculated..."
+                    ></textarea>
+                </div>
+
+                <div class="cl-cert-create-field">
+                    <label for="clDeductionEvidence">Supporting evidence (optional)</label>
+                    <input
+                        id="clDeductionEvidence"
+                        name="supporting_documents"
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+                    >
+                    <small>
+                        For example, a penalty notice, contra-charge record
+                        or retention calculation.
+                    </small>
+                </div>
+
+                <div class="cl-cert-create-offcanvas-notice">
+                    This form is a UI prototype. A deduction model and save
+                    endpoint are needed before entries can be stored.
+                </div>
+
+                <div class="cl-cert-create-offcanvas-actions">
+                    <button
+                        type="button"
+                        class="cl-cert-create-secondary-button"
+                        data-bs-dismiss="offcanvas"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="cl-cert-create-primary-button"
+                    >
+                        Add deduction
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+(function () {
+    function initCertificateEvidencePreview() {
+        const input = document.getElementById("clCertEvidence");
+        const preview = document.getElementById("clCertEvidencePreview");
+
+        if (!input || !preview || input.dataset.previewReady === "true") {
+            return;
+        }
+
+        input.dataset.previewReady = "true";
+
+        input.addEventListener("change", function () {
+            preview.innerHTML = "";
+
+            Array.from(input.files || []).forEach(function (file, index) {
+                const row = document.createElement("div");
+                row.className = "cl-cert-create-evidence-file";
+
+                const details = document.createElement("div");
+                details.className = "cl-cert-create-evidence-file-details";
+
+                const name = document.createElement("strong");
+                name.textContent = file.name;
+
+                const size = document.createElement("span");
+                size.textContent = file.size
+                    ? (file.size / 1024).toFixed(1) + " KB"
+                    : "File selected";
+
+                details.appendChild(name);
+                details.appendChild(size);
+
+                const remove = document.createElement("button");
+                remove.type = "button";
+                remove.className = "cl-cert-create-evidence-remove";
+                remove.textContent = "Remove";
+                remove.setAttribute("aria-label", "Remove " + file.name);
+
+                remove.addEventListener("click", function () {
+                    const transfer = new DataTransfer();
+
+                    Array.from(input.files).forEach(function (selectedFile, i) {
+                        if (i !== index) {
+                            transfer.items.add(selectedFile);
+                        }
+                    });
+
+                    input.files = transfer.files;
+                    input.dispatchEvent(new Event("change", { bubbles: true }));
+                });
+
+                row.appendChild(details);
+                row.appendChild(remove);
+                preview.appendChild(row);
+            });
+        });
+    }
+
+    function initCertificateDeductionPrototype() {
+        const form = document.getElementById("clCertCreateDeductionForm");
+
+        if (!form || form.dataset.prototypeReady === "true") {
+            return;
+        }
+
+        form.dataset.prototypeReady = "true";
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // This prototype intentionally does not save a deduction.
+            // Connect this form to a Django endpoint and deduction model
+            // before enabling real certificate calculations.
+
+            const notice = form.querySelector(
+                ".cl-cert-create-offcanvas-notice"
+            );
+
+            if (notice) {
+                notice.textContent =
+                    "The layout is ready, but saving deductions requires a Django model and endpoint.";
+            }
+        });
+    }
+
+    function initCertificateCreatePage() {
+        initCertificateEvidencePreview();
+        initCertificateDeductionPrototype();
+    }
+
+    document.addEventListener("DOMContentLoaded", initCertificateCreatePage);
+    document.addEventListener("htmx:afterSwap", initCertificateCreatePage);
+    document.addEventListener("htmx:load", initCertificateCreatePage);
+})();
+</script>
+

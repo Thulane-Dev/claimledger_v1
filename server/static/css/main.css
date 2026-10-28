@@ -1,0 +1,113 @@
+:root {
+  --primary_color: #010738;
+  --blue_color_new: #1e35d0;
+
+  --secondary_color: #0b1736;
+  --navy_blue_color: #09132d;
+  --green_color: #08855f;
+  --light_green_color: #0ec77a;
+  --grey_text: #4b5563;
+
+  /* --blue_color_new: #0165fb; */
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f6f8fb;
+  /* background-color: #F1F5F9; */
+  /* background-color: #EEF2F6; */
+}
+
+input {
+  font-size: 16px !important;
+}
+
+select {
+  font-size: 16px !important;
+}
+
+.coreva_background_lg {
+  color: rgb(37, 99, 235) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  text-decoration: none;
+  /* font-size: 13px; */
+  margin-bottom: 20px;
+}
+
+.coreva_background_lg:hover {
+  color: #667085 !important;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.toast_card {
+  background-color: var(--green_color);
+  color: white;
+  border-radius: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid var(--green_color); /* You can change color */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+/* Page Content  */
+.content {
+  margin-left: 280px;
+  padding: 20px;
+  padding-top: 50px;
+}
+
+@media (max-width: 991.98px) {
+  .content {
+    margin-left: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 50px;
+  }
+}
+
+.link_hover:hover {
+  cursor: pointer;
+  color: black !important;
+}
+
+.transparent_button {
+  background-color: transparent;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+/* =========================================================
+   CLAIMLEDGER NAVBAR SPACING
+   ========================================================= */
+
+/* Mobile: leave room for the fixed bottom navbar */
+/* @media (max-width: 767.98px) {
+  .content {
+    padding-bottom: calc(+ env(safe-area-inset-bottom));
+  }
+} */
+
+/* Tablet and desktop: no mobile navbar spacing */
+/* @media (min-width: 768px) {
+  .content {
+    padding-bottom: 20px;
+  }
+} */

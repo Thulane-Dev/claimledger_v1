@@ -1,0 +1,324 @@
+.claimledger-profile-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+  color: #172033;
+}
+
+/* Heading */
+.claimledger-profile-heading {
+  margin-bottom: 24px;
+}
+
+.claimledger-profile-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.claimledger-profile-heading h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 27px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.claimledger-profile-heading p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Shared card */
+.claimledger-profile-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e7ebf0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(23, 32, 51, 0.025);
+}
+
+/* Profile header */
+.claimledger-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.claimledger-profile-avatar {
+  display: flex;
+  flex: 0 0 64px;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #dbe3f0;
+  border-radius: 16px;
+  background: #f0f4fa;
+  color: #172033;
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.claimledger-profile-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.claimledger-profile-header-info h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-profile-header-info > p {
+  margin: 5px 0 12px;
+  color: #64748b;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-profile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.claimledger-profile-role,
+.claimledger-profile-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 5px 9px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.claimledger-profile-status-active {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.claimledger-profile-status-inactive {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.claimledger-profile-status-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.claimledger-profile-header-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  margin-left: auto;
+  padding: 8px 10px;
+  border: 1px solid #e7ebf0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Two-column information layout */
+.claimledger-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 22px;
+}
+
+.claimledger-profile-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 21px 22px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-profile-icon {
+  display: flex;
+  flex: 0 0 39px;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 17px;
+}
+
+.claimledger-profile-card-heading h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.claimledger-profile-card-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Information rows */
+.claimledger-profile-details {
+  padding: 4px 22px;
+}
+
+.claimledger-profile-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 17px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-profile-detail:last-child {
+  border-bottom: 0;
+}
+
+.claimledger-profile-detail > span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.claimledger-profile-detail > strong {
+  max-width: 100%;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-profile-detail > .claimledger-profile-text-active {
+  color: #15803d;
+}
+
+.claimledger-profile-detail > .claimledger-profile-text-inactive {
+  color: #b91c1c;
+}
+
+.claimledger-profile-reference {
+  font-family: monospace;
+  font-size: 11px !important;
+  letter-spacing: 0.02em;
+}
+
+.claimledger-profile-break {
+  overflow-wrap: anywhere;
+}
+
+/* Bottom note */
+.claimledger-profile-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 14px 16px;
+  border: 1px solid #e7ebf0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.claimledger-profile-note i {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 15px;
+}
+
+.claimledger-profile-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .claimledger-profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .claimledger-profile-header-label {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .claimledger-profile-page {
+    padding: 22px 14px 35px;
+  }
+
+  .claimledger-profile-heading h1 {
+    font-size: 24px;
+  }
+
+  .claimledger-profile-header {
+    align-items: flex-start;
+    gap: 13px;
+    padding: 18px;
+  }
+
+  .claimledger-profile-avatar {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 17px;
+  }
+
+  .claimledger-profile-header-info h2 {
+    font-size: 16px;
+  }
+
+  .claimledger-profile-card-heading {
+    padding: 17px;
+  }
+
+  .claimledger-profile-details {
+    padding-right: 17px;
+    padding-left: 17px;
+  }
+
+  .claimledger-profile-note {
+    margin-top: 18px;
+  }
+}

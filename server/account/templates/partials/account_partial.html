@@ -1,0 +1,167 @@
+<div class="claimledger-profile-page">
+
+    <!-- Page heading -->
+    <div class="claimledger-profile-heading">
+        <div>
+            <span class="claimledger-profile-eyebrow">ACCOUNT</span>
+            <h1>My Profile</h1>
+            <p>View your personal information and account details.</p>
+        </div>
+    </div>
+
+    <!-- Profile header -->
+    <section class="claimledger-profile-card claimledger-profile-header">
+        <div class="claimledger-profile-avatar">
+            {{ profile.first_name|default:"U"|first|upper }}{{ profile.last_name|default:""|first|upper }}
+        </div>
+
+        <div class="claimledger-profile-header-info">
+            <h2>
+                {% if profile.first_name or profile.last_name %}
+                    {{ profile.first_name|default:"" }} {{ profile.last_name|default:"" }}
+                {% else %}
+                    Unnamed User
+                {% endif %}
+            </h2>
+
+            <p>{{ profile.email }}</p>
+
+            <div class="claimledger-profile-badges">
+                <span class="claimledger-profile-role">
+                    <i class="bi bi-person-badge" aria-hidden="true"></i>
+                    {{ profile.get_role_display }}
+                </span>
+
+                <span class="claimledger-profile-status
+                    {% if profile.status == 'active' %}
+                        claimledger-profile-status-active
+                    {% else %}
+                        claimledger-profile-status-inactive
+                    {% endif %}">
+                    <span class="claimledger-profile-status-dot"></span>
+                    {{ profile.get_status_display }}
+                </span>
+            </div>
+        </div>
+
+        <!-- <div class="claimledger-profile-header-label">
+            <i class="bi bi-shield-check" aria-hidden="true"></i>
+            ClaimLedger Account
+        </div> -->
+
+        <button type="button" 
+            class="claimledger_detail_button_secondary"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#editProfileOffcanvas"
+            aria-controls="editProfileOffcanvas">
+            <i class="bi bi-printer"></i>
+            Edit Profile
+        </button>
+    </section>
+
+    <!-- Information cards -->
+    <div class="claimledger-profile-grid">
+
+        <!-- Personal information -->
+        <section class="claimledger-profile-card">
+            <div class="claimledger-profile-card-heading">
+                <div class="claimledger-profile-icon">
+                    <i class="bi bi-person" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h3>Personal Information</h3>
+                    <p>Your registered contact details.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-profile-details">
+                <div class="claimledger-profile-detail">
+                    <span>First name</span>
+                    <strong>{{ profile.first_name|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Last name</span>
+                    <strong>{{ profile.last_name|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Email address</span>
+                    <strong class="claimledger-profile-break">
+                        {{ profile.email|default:"Not provided" }}
+                    </strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Phone number</span>
+                    <strong>
+                        {% if profile.phone %}
+                            {{ profile.phone }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account information -->
+        <section class="claimledger-profile-card">
+            <div class="claimledger-profile-card-heading">
+                <div class="claimledger-profile-icon">
+                    <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h3>Account Information</h3>
+                    <p>Your ClaimLedger account details.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-profile-details">
+                <div class="claimledger-profile-detail">
+                    <span>Account role</span>
+                    <strong>{{ profile.get_role_display }}</strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Account status</span>
+                    <strong class="{% if profile.status == 'active' %}claimledger-profile-text-active{% else %}claimledger-profile-text-inactive{% endif %}">
+                        {{ profile.get_status_display }}
+                    </strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Member since</span>
+                    <strong>
+                        {% if profile.date_created %}
+                            {{ profile.date_created|date:"d M Y" }}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="claimledger-profile-detail">
+                    <span>Account reference</span>
+                    <strong class="claimledger-profile-reference">
+                        {{ profile.uuid|stringformat:"s"|upper }}
+                    </strong>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Account information note -->
+    <div class="claimledger-profile-note">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        <p>
+            This page displays the personal and account information
+            currently registered with ClaimLedger.
+        </p>
+    </div>
+
+</div>
+
+
+

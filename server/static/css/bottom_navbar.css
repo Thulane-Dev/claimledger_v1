@@ -1,0 +1,114 @@
+/* ClaimLedger mobile bottom navigation */
+
+.claimledger-mobile-nav {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .claimledger-mobile-nav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: end;
+
+    min-height: 70px;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+
+    background: #ffffff;
+    border-top: 1px solid #e8ebf0;
+    box-shadow: 0 -4px 20px rgba(23, 32, 51, 0.06);
+  }
+
+  .claimledger-mobile-nav__item {
+    display: flex;
+    min-width: 0;
+    min-height: 48px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    color: #8992a3;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.18s ease;
+  }
+
+  .claimledger-mobile-nav__item > i {
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  .claimledger-mobile-nav__item > span:last-child {
+    overflow: hidden;
+    max-width: 100%;
+
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .claimledger-mobile-nav__item.is-active {
+    color: #172033;
+  }
+
+  .claimledger-mobile-nav__item.is-active > i {
+    color: #172033;
+  }
+
+  /* Primary New claim action */
+
+  .claimledger-mobile-nav__item--primary {
+    color: #172033;
+    gap: 4px;
+  }
+
+  .claimledger-mobile-nav__add {
+    display: flex;
+    width: 43px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+    background: #172033;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 10px rgba(23, 32, 51, 0.18);
+  }
+
+  .claimledger-mobile-nav__add i {
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .claimledger-mobile-nav__item--primary > span:last-child {
+    color: #172033;
+    font-weight: 700;
+  }
+
+  .claimledger-mobile-nav__item:focus-visible {
+    outline: 2px solid #64748b;
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  /* Keep page content above the fixed navbar */
+
+  body {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
+}

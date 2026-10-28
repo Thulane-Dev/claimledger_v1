@@ -1,0 +1,96 @@
+
+{% load static %}
+
+<header class="claimledger-topbar">
+
+    <!-- Mobile brand -->
+    <a href="{% url 'dashboard:dashboard' %}"
+        hx-get="{% url 'dashboard:dashboard' %}"
+        hx-target="#content"
+        hx-push-url="true"
+       class="claimledger-topbar-brand d-lg-none">
+        <span class="claimledger-topbar-brand-mark">C</span>
+        <span>ClaimLedger</span>
+    </a>
+
+    <!-- Desktop page context -->
+    <div class="claimledger-topbar-context d-none d-lg-flex">
+        <span class="claimledger-topbar-page-title">
+            {% block topbar_title %}Workspace{% endblock %}
+        </span>
+        {% block topbar_breadcrumb %}{% endblock %}
+    </div>
+
+    <!-- Right actions -->
+    <div class="claimledger-topbar-actions">
+
+        <!-- Notifications placeholder until implemented -->
+        <a href="#"
+           class="claimledger-topbar-icon-button claimledger-topbar-placeholder"
+           aria-label="Notifications"
+           aria-disabled="true"
+           title="Notifications coming soon">
+            <i class="bi bi-bell"></i>
+        </a>
+
+        <!-- Profile menu -->
+        <div class="dropdown">
+            <button
+                class="claimledger-topbar-profile dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Open account menu">
+
+                <span class="claimledger-topbar-avatar">
+                    {% if request.user.first_name %}
+                        {{ request.user.first_name|slice:":1"|upper }}{% if request.user.last_name %}{{ request.user.last_name|slice:":1"|upper }}{% endif %}
+                    {% else %}
+                        <i class="bi bi-person"></i>
+                    {% endif %}
+                </span>
+
+                <span class="claimledger-topbar-profile-text d-none d-md-flex">
+                    <span class="claimledger-topbar-profile-name">
+                        {% if request.user.get_full_name %}
+                            {{ request.user.get_full_name }}
+                        {% else %}
+                            My account
+                        {% endif %}
+                    </span>
+                    <span class="claimledger-topbar-profile-label">Account</span>
+                </span>
+
+                <i class="bi bi-chevron-down claimledger-topbar-chevron"></i>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end claimledger-profile-dropdown">
+                <div class="claimledger-profile-dropdown-heading">
+                    <span class="claimledger-profile-dropdown-name">
+                        {% if request.user.get_full_name %}
+                            {{ request.user.get_full_name }}
+                        {% else %}
+                            My account
+                        {% endif %}
+                    </span>
+                    <span class="claimledger-profile-dropdown-email">
+                        {{ request.user.email }}
+                    </span>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="{% url 'account:account' %}">
+                    <i class="bi bi-gear"></i>
+                    Account settings
+                </a>
+
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Log out
+                </a>
+            </div>
+        </div>
+
+    </div>
+</header>

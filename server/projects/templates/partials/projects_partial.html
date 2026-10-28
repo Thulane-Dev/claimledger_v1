@@ -1,0 +1,384 @@
+<div class="claimledger_projects_page">
+  <!-- Page header -->
+  <header class="claimledger_projects_header">
+    <div class="claimledger_projects_heading">
+      <span class="claimledger_projects_eyebrow"> WORKSPACE </span>
+
+      <h1>Projects</h1>
+
+      <p>
+        Manage your construction projects and keep payment claims organised.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="claimledger_projects_add_button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#addProjectOffcanvas"
+      aria-controls="addProjectOffcanvas"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Add project
+    </button>
+  </header>
+
+  <!-- Project summary cards -->
+  <section class="claimledger_projects_summary">
+    <article class="claimledger_projects_summary_card">
+      <div class="claimledger_projects_summary_top">
+        <span class="claimledger_projects_summary_label"> ALL PROJECTS </span>
+        <span class="claimledger_projects_summary_icon">
+          <i class="bi bi-folder2-open"></i>
+        </span>
+      </div>
+
+      <div class="claimledger_projects_summary_value">
+        {{ project_count|default:0 }}
+      </div>
+
+      <p>Projects in your workspace</p>
+    </article>
+
+    <article class="claimledger_projects_summary_card">
+      <div class="claimledger_projects_summary_top">
+        <span class="claimledger_projects_summary_label"> ACTIVE </span>
+        <span
+          class="claimledger_projects_summary_icon claimledger_projects_icon_active"
+        >
+          <i class="bi bi-play-circle"></i>
+        </span>
+      </div>
+
+      <div class="claimledger_projects_summary_value">
+        {{ active_count|default:0 }}
+      </div>
+
+      <p>Currently in progress</p>
+    </article>
+
+    <article class="claimledger_projects_summary_card">
+      <div class="claimledger_projects_summary_top">
+        <span class="claimledger_projects_summary_label"> ON HOLD </span>
+        <span
+          class="claimledger_projects_summary_icon claimledger_projects_icon_hold"
+        >
+          <i class="bi bi-pause-circle"></i>
+        </span>
+      </div>
+
+      <div class="claimledger_projects_summary_value">
+        {{ on_hold_count|default:0 }}
+      </div>
+
+      <p>Temporarily paused</p>
+    </article>
+
+    <article class="claimledger_projects_summary_card">
+      <div class="claimledger_projects_summary_top">
+        <span class="claimledger_projects_summary_label"> COMPLETED </span>
+        <span
+          class="claimledger_projects_summary_icon claimledger_projects_icon_completed"
+        >
+          <i class="bi bi-check-circle"></i>
+        </span>
+      </div>
+
+      <div class="claimledger_projects_summary_value">
+        {{ completed_count|default:0 }}
+      </div>
+
+      <p>Successfully completed</p>
+    </article>
+  </section>
+
+  <!-- Projects list -->
+  <section class="claimledger_projects_panel">
+    <div class="claimledger_projects_panel_header">
+      <div>
+        <h2>All projects</h2>
+        <p>View and manage the projects belonging to your company.</p>
+      </div>
+
+      <span class="claimledger_projects_result_count">
+        {{ filtered_count }} result{{ filtered_count|pluralize }}
+      </span>
+    </div>
+
+    <!-- Search and filters -->
+    <form
+      method="get"
+      class="claimledger_projects_filters"
+      id="claimledgerProjectsFilterForm"
+    >
+      <div class="claimledger_projects_search">
+        <i class="bi bi-search"></i>
+
+        <input
+          type="search"
+          name="q"
+          value="{{ search_query }}"
+          placeholder="Search projects, references or clients..."
+          aria-label="Search projects"
+        />
+      </div>
+
+      <div class="claimledger_projects_filter_controls">
+        <select
+          name="status"
+          class="claimledger_projects_status_filter"
+          aria-label="Filter projects by status"
+        >
+          <option value="">All statuses</option>
+          <option
+            value="active"
+            {%
+            if
+            selected_status=""
+            ="active"
+            %}selected{%
+            endif
+            %}
+          >
+            Active
+          </option>
+          <option
+            value="on_hold"
+            {%
+            if
+            selected_status=""
+            ="on_hold"
+            %}selected{%
+            endif
+            %}
+          >
+            On hold
+          </option>
+          <option
+            value="completed"
+            {%
+            if
+            selected_status=""
+            ="completed"
+            %}selected{%
+            endif
+            %}
+          >
+            Completed
+          </option>
+          <option
+            value="cancelled"
+            {%
+            if
+            selected_status=""
+            ="cancelled"
+            %}selected{%
+            endif
+            %}
+          >
+            Cancelled
+          </option>
+        </select>
+
+        <button type="submit" class="claimledger_projects_filter_button">
+          <i class="bi bi-funnel"></i>
+          Filter
+        </button>
+
+        {% if search_query or selected_status %}
+        <a
+          href="{% url 'company_projects' %}"
+          class="claimledger_projects_clear_button"
+        >
+          Clear
+        </a>
+        {% endif %}
+      </div>
+    </form>
+
+    {% if projects %}
+
+    <!-- Desktop projects table -->
+    <div class="claimledger_projects_table_wrap">
+      <table class="claimledger_projects_table">
+        <thead>
+          <tr>
+            <th scope="col">PROJECT</th>
+            <th scope="col">CLIENT</th>
+            <th scope="col">LOCATION</th>
+            <th scope="col">TIMELINE</th>
+            <th scope="col">STATUS</th>
+            <th scope="col" class="claimledger_projects_action_heading">
+              ACTION
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for project in projects %}
+          <tr>
+            <td>
+              <div class="claimledger_projects_name_cell">
+                <div class="claimledger_projects_avatar">
+                  <i class="bi bi-building"></i>
+                </div>
+
+                <div class="claimledger_projects_name_content">
+                  <span class="claimledger_projects_name">
+                    {{ project.project_name|default:"Untitled project" }}
+                  </span>
+
+                  {% if project.site_reference %}
+                  <span class="claimledger_projects_reference">
+                    {{ project.site_reference }}
+                  </span>
+                  {% else %}
+                  <span class="claimledger_projects_reference">
+                    No site reference
+                  </span>
+                  {% endif %}
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="claimledger_projects_client">
+                {% if project.client_contact_name %}
+                <span>{{ project.client_contact_name }}</span>
+                {% else %}
+                <span class="claimledger_projects_muted">
+                  No client added
+                </span>
+                {% endif %}
+                <!-- divider  -->
+                {% if project.client_contact_email %}
+                <small>{{ project.client_contact_email }}</small>
+                {% endif %}
+              </div>
+            </td>
+
+            <td>
+              <div class="claimledger_projects_location">
+                {% if project.location %}
+                <!-- divider  -->
+                {% if project.location.city %}
+                <span>{{ project.location.city }}</span>
+                {% else %}
+                <span class="claimledger_projects_muted"> Location added </span>
+                {% endif %}
+                <!-- divider  -->
+                {% if project.location.province %}
+                <small>{{ project.location.get_province_display }}</small>
+                {% endif %}
+                <!-- divider  -->
+                {% else %}
+                <span class="claimledger_projects_muted"> Not specified </span>
+                {% endif %}
+              </div>
+            </td>
+
+            <td>
+              <div class="claimledger_projects_timeline">
+                {% if project.start_date %}
+                <span>{{ project.start_date|date:"d M Y" }}</span>
+                {% else %}
+                <span class="claimledger_projects_muted"> Not scheduled </span>
+                {% endif %}
+
+                <small>
+                  {% if project.end_date %} Until {{ project.end_date|date:"d M Y" }} 
+                  {% else %} 
+                  No end date 
+                  {% endif %}
+                </small>
+              </div>
+            </td>
+
+            <td>
+              <span
+                class="claimledger_projects_status claimledger_projects_status_{{ project.status }}"
+              >
+                <span class="claimledger_projects_status_dot"></span>
+                {{ project.get_status_display }}
+              </span>
+            </td>
+
+            <td class="claimledger_projects_action_cell">
+              <a
+                href="{% url 'projects:project' project.uuid %}"
+                hx-get="{% url 'projects:project' project.uuid %}"
+                hx-target="#content"
+                hx-push-url="true"
+                class="claimledger_projects_view_button"
+                aria-label="View {{ project.project_name }}"
+              >
+                View
+                <i class="bi bi-arrow-up-right"></i>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <!-- Empty state -->
+    <div class="claimledger_projects_empty">
+      <div class="claimledger_projects_empty_icon">
+        {% if search_query or selected_status %}
+        <i class="bi bi-search"></i>
+        {% else %}
+        <i class="bi bi-folder-plus"></i>
+        {% endif %}
+      </div>
+
+      {% if search_query or selected_status %}
+
+      <h3>No matching projects</h3>
+
+      <p>
+        Try another search term or change the status filter to find the project
+        you're looking for.
+      </p>
+
+      <a
+        href="{% url 'company_projects' %}"
+        class="claimledger_projects_empty_secondary"
+      >
+        Clear filters
+      </a>
+
+      {% else %}
+
+      <h3>No projects yet</h3>
+
+      <p>
+        Create your first project to start organising client details, payment
+        claims and project payment tracking in one place.
+      </p>
+
+      <button
+        type="button"
+        class="claimledger_projects_add_button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#addProjectOffcanvas"
+        aria-controls="addProjectOffcanvas"
+      >
+        <i class="bi bi-plus-lg"></i>
+        Create your first project
+      </button>
+
+      {% endif %}
+    </div>
+
+    {% endif %}
+
+    <div class="claimledger_projects_panel_footer">
+      <span>
+        Showing {{ filtered_count }} project{{ filtered_count|pluralize }}
+      </span>
+    </div>
+  </section>
+</div>

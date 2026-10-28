@@ -1,0 +1,284 @@
+<div class="claimledger-claims-page">
+
+    <!-- Header -->
+    <header class="claimledger-claims-header">
+        <div>
+            <span class="claimledger-claims-eyebrow">FINANCE / CLAIMS</span>
+            <h1>Payment claims</h1>
+            <p>Track claims, review progress and keep payments in view.</p>
+        </div>
+
+        <a 
+        href="{% url 'claims:create-claim' %}"
+        hx-get="{% url 'claims:create-claim' %}"
+        hx-target="#content"
+        hx-push-url="true"
+           class="claimledger-claims-create-btn">
+            <i class="bi bi-plus-lg"></i>
+            <span>New claim</span>
+        </a>
+    </header>
+
+    <!-- Summary cards -->
+    <section class="claimledger-claims-summary">
+
+        <article class="claimledger-claims-summary-card">
+            <div class="claimledger-claims-summary-top">
+                <span>Total claimed</span>
+                <span class="claimledger-claims-summary-icon">
+                    <i class="bi bi-receipt"></i>
+                </span>
+            </div>
+            <strong>R {{ total_claimed|floatformat:2 }}</strong>
+            <small>For the current results</small>
+        </article>
+
+        <article class="claimledger-claims-summary-card">
+            <div class="claimledger-claims-summary-top">
+                <span>Total paid</span>
+                <span class="claimledger-claims-summary-icon is-green">
+                    <i class="bi bi-check-circle"></i>
+                </span>
+            </div>
+            <strong>R {{ total_paid|floatformat:2 }}</strong>
+            <small>Payments recorded</small>
+        </article>
+
+        <article class="claimledger-claims-summary-card">
+            <div class="claimledger-claims-summary-top">
+                <span>Outstanding</span>
+                <span class="claimledger-claims-summary-icon is-amber">
+                    <i class="bi bi-wallet2"></i>
+                </span>
+            </div>
+            <strong>R {{ outstanding|floatformat:2 }}</strong>
+            <small>Not yet paid</small>
+        </article>
+
+        <article class="claimledger-claims-summary-card">
+            <div class="claimledger-claims-summary-top">
+                <span>Awaiting action</span>
+                <span class="claimledger-claims-summary-icon is-blue">
+                    <i class="bi bi-hourglass-split"></i>
+                </span>
+            </div>
+            <strong>{{ awaiting_action }}</strong>
+            <small>Submitted, under review or queried</small>
+        </article>
+
+    </section>
+
+    <!-- Claims panel -->
+    <section class="claimledger-claims-panel">
+
+        <div class="claimledger-claims-panel-heading">
+            <div>
+                <h2>All claims</h2>
+                <p>Find and open a payment claim.</p>
+            </div>
+            <span class="claimledger-claims-count">
+                {{ claims|length }} result{{ claims|length|pluralize }}
+            </span>
+        </div>
+
+        <!-- Search and status filter -->
+        <form method="GET" class="claimledger-claims-filters">
+            <label class="claimledger-claims-search">
+                <i class="bi bi-search"></i>
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ search_query }}"
+                    placeholder="Search claim or project..."
+                    aria-label="Search claims"
+                >
+            </label>
+
+            <select name="status"
+                    aria-label="Filter by status"
+                    class="claimledger-claims-status-filter">
+                <option value="">All statuses</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}"
+                        {% if status_filter == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="claimledger-claims-filter-btn">
+                Filter
+            </button>
+
+            {% if search_query or status_filter %}
+                <a href="{% url 'claims:payment-claims' %}"
+                   class="claimledger-claims-reset">
+                    Clear
+                </a>
+            {% endif %}
+        </form>
+
+        {% if claims %}
+            <!-- Desktop table -->
+            <div class="claimledger-claims-table-wrap">
+                <table class="claimledger-claims-table">
+                    <thead>
+                        <tr>
+                            <th>Claim</th>
+                            <th>Project</th>
+                            <th>Claim period</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for claim in claims %}
+                            <tr>
+                                <td>
+                                    <a  
+                                    href="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                                    hx-get="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                                    hx-target="#content"
+                                    hx-push-url="true"
+                                       class="claimledger-claims-number">
+                                        {{ claim.claim_number|default:"Unnumbered claim" }}
+                                    </a>
+                                    <span class="claimledger-claims-title">
+                                        {{ claim.claim_title|default:"Payment claim" }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="claimledger-claims-project">
+                                        {% if claim.project %}
+                                            {{ claim.project.project_name }}
+                                        {% else %}
+                                            <span class="claimledger-claims-muted">
+                                                No project
+                                            </span>
+                                        {% endif %}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="claimledger-claims-period">
+                                        {% if claim.claim_period_start %}
+                                            {{ claim.claim_period_start|date:"d M Y" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                        <span>to</span>
+                                        {% if claim.claim_period_end %}
+                                            {{ claim.claim_period_end|date:"d M Y" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <strong class="claimledger-claims-amount">
+                                        R {{ claim.total_amount|floatformat:2 }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="claimledger-status claimledger-status-{{ claim.status }}">
+                                        {{ claim.get_status_display }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a  href="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                                        hx-get="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                                        hx-target="#content"
+                                        hx-push-url="true"
+                                       class="claimledger-claims-open"
+                                       aria-label="Open {{ claim.claim_number }}">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile cards -->
+            <div class="claimledger-claims-mobile-list">
+                {% for claim in claims %}
+                    <a
+                        href="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                        hx-get="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+                        hx-target="#content"
+                        hx-push-url="true"
+                       class="claimledger-claims-mobile-card">
+
+                        <div class="claimledger-claims-mobile-top">
+                            <div>
+                                <strong class="claimledger-claims-number">
+                                    {{ claim.claim_number|default:"Unnumbered claim" }}
+                                </strong>
+                                <span class="claimledger-claims-title">
+                                    {{ claim.claim_title|default:"Payment claim" }}
+                                </span>
+                            </div>
+
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+
+                        <div class="claimledger-claims-mobile-project">
+                            <i class="bi bi-building"></i>
+                            {% if claim.project %}
+                                {{ claim.project.project_name }}
+                            {% else %}
+                                No project assigned
+                            {% endif %}
+                        </div>
+
+                        <div class="claimledger-claims-mobile-bottom">
+                            <div>
+                                <small>Claim amount</small>
+                                <strong>R {{ claim.total_amount|floatformat:2 }}</strong>
+                            </div>
+
+                            <span class="claimledger-status claimledger-status-{{ claim.status }}">
+                                {{ claim.get_status_display }}
+                            </span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <div class="claimledger-claims-empty">
+                <div class="claimledger-claims-empty-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                {% if search_query or status_filter %}
+                    <h3>No matching claims</h3>
+                    <p>Try a different search term or status filter.</p>
+                    <a href="{% url 'claims:payment-claims' %}">
+                        Clear filters
+                    </a>
+                {% else %}
+                    <h3>No payment claims yet</h3>
+                    <p>Create your first claim to start tracking amounts, evidence and payments.</p>
+                    <a 
+                    href="{% url 'claims:create-claim' %}"
+                    hx-get="{% url 'claims:create-claim' %}"
+                    hx-target="#content"
+                    hx-push-url="true"
+                       class="claimledger-claims-create-btn">
+                        <i class="bi bi-plus-lg"></i>
+                        Create your first claim
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </section>
+</div>

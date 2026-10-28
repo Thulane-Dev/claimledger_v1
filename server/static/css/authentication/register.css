@@ -1,0 +1,509 @@
+/* ========================= REGISTER CARD ========================== */
+
+body {
+  background-color: #f6f8fb;
+}
+
+input {
+  font-size: 16px;
+}
+
+select {
+  font-size: 16px;
+}
+
+.claimledger_register_card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid #e5eaf1;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #172033;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 12px 40px rgba(20, 35, 60, 0.055);
+}
+
+/* ========================= HEADER ========================== */
+
+.claimledger_register_header {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 28px;
+}
+
+.claimledger_register_brand_icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: #172033;
+  color: #ffffff;
+  font-size: 21px;
+}
+
+.claimledger_register_header_content {
+  flex: 1;
+  min-width: 0;
+}
+
+.claimledger_register_eyebrow {
+  margin: 2px 0 8px;
+  color: #66758c;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.claimledger_register_header h1 {
+  margin: 0 0 9px;
+  color: #172033;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.25;
+}
+
+.claimledger_register_header p {
+  margin: 0;
+  color: #748197;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ========================= FORM ERRORS ========================== */
+
+.claimledger_register_errors {
+  margin-bottom: 24px;
+  padding: 15px;
+  border: 1px solid #f2d1d1;
+  border-radius: 10px;
+  background: #fff8f8;
+  color: #9f3030;
+  font-size: 12px;
+}
+
+.claimledger_register_error_header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+
+.claimledger_register_error_content {
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.claimledger_register_error_content ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* ========================= SECTION ========================== */
+
+.claimledger_register_section {
+  margin-bottom: 25px;
+}
+
+.claimledger_register_section_heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 23px;
+}
+
+.claimledger_register_section_number {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  border: 1px solid #e5eaf1;
+  border-radius: 9px;
+  background: #f7f9fc;
+  color: #34445e;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.claimledger_register_section_heading h2 {
+  margin: 1px 0 5px;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.claimledger_register_section_heading p {
+  margin: 0;
+  color: #8290a4;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* ========================= FIELDS ========================== */
+
+.claimledger_register_field {
+  margin-bottom: 19px;
+}
+
+.claimledger_register_field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #344054;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.claimledger_register_field label span {
+  color: #b54747;
+}
+
+.claimledger_register_input_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.claimledger_register_input_wrapper > i.bi:first-child {
+  position: absolute;
+  left: 13px;
+  z-index: 2;
+  color: #8793a6;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.claimledger_register_input_wrapper input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 45px;
+  padding: 11px 42px 11px 39px;
+  border: 1px solid #dfe5ed;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 12px;
+  box-shadow: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.claimledger_register_input_wrapper input::placeholder {
+  color: #a2adbc;
+}
+
+.claimledger_register_input_wrapper input:hover {
+  border-color: #c5cedb;
+}
+
+.claimledger_register_input_wrapper input:focus {
+  border-color: #7188ae;
+  box-shadow: 0 0 0 3px rgba(77, 105, 150, 0.1);
+}
+
+.claimledger_register_input_wrapper input:focus-visible {
+  outline: none;
+}
+
+/* ========================= PASSWORD TOGGLE ========================== */
+
+.claimledger_register_password_toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #8290a4;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.claimledger_register_password_toggle:hover {
+  background: #f2f5f9;
+  color: #172033;
+}
+
+.claimledger_register_password_toggle:focus-visible {
+  outline: 2px solid #7188ae;
+  outline-offset: 2px;
+}
+
+.claimledger_register_password_hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 8px;
+  color: #8490a2;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.claimledger_register_password_hint i {
+  margin-top: 1px;
+  font-size: 12px;
+}
+
+/* ========================= FIELD VALIDATION ========================== */
+
+.claimledger_register_field_error {
+  margin-top: 8px;
+  color: #b42318;
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.claimledger_register_field_error ul {
+  margin: 0;
+  padding-left: 17px;
+}
+
+/* ========================= TERMS ========================== */
+
+.claimledger_register_terms {
+  margin: 25px 0 21px;
+  padding-top: 20px;
+  border-top: 1px solid #edf0f5;
+}
+
+.claimledger_register_terms_label {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  cursor: pointer;
+}
+
+.claimledger_register_terms_label input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.claimledger_register_checkbox {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  border: 1px solid #cbd4e0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #ffffff;
+  font-size: 12px;
+  transition:
+    background 0.18s,
+    border-color 0.18s;
+}
+
+.claimledger_register_checkbox i {
+  visibility: hidden;
+}
+
+.claimledger_register_terms_label
+  input:checked
+  + .claimledger_register_checkbox {
+  border-color: #172033;
+  background: #172033;
+}
+
+.claimledger_register_terms_label
+  input:checked
+  + .claimledger_register_checkbox
+  i {
+  visibility: visible;
+}
+
+.claimledger_register_terms_label
+  input:focus-visible
+  + .claimledger_register_checkbox {
+  outline: 2px solid #7188ae;
+  outline-offset: 3px;
+}
+
+.claimledger_register_terms_text {
+  color: #778398;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.claimledger_register_terms_text a {
+  color: #34445e;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.claimledger_register_terms_text a:hover {
+  text-decoration: underline;
+}
+
+/* ========================= SUBMIT ========================== */
+
+.claimledger_register_submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 18px;
+  border: 1px solid #172033;
+  border-radius: 9px;
+  background: #172033;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.claimledger_register_submit i {
+  font-size: 15px;
+  transition: transform 0.2s;
+}
+
+.claimledger_register_submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: #293851;
+  background: #293851;
+}
+
+.claimledger_register_submit:hover:not(:disabled) i {
+  transform: translateX(3px);
+}
+
+.claimledger_register_submit:focus-visible {
+  outline: 3px solid rgba(77, 105, 150, 0.25);
+  outline-offset: 3px;
+}
+
+.claimledger_register_submit:disabled {
+  border-color: #aab4c3;
+  background: #aab4c3;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* ========================= LOGIN ========================== */
+
+.claimledger_register_login {
+  margin-top: 22px;
+  color: #8290a4;
+  font-size: 11px;
+  text-align: center;
+}
+
+.claimledger_register_login a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 4px;
+  color: #34445e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.claimledger_register_login a:hover {
+  color: #172033;
+}
+
+.claimledger_register_login a i {
+  font-size: 12px;
+}
+
+/* ========================= FOOTER ========================== */
+
+.claimledger_register_footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 480px;
+  margin: 22px auto 0;
+  padding: 0 12px;
+  color: #8993a3;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.claimledger_register_footer i {
+  color: #6c8c7c;
+  font-size: 14px;
+}
+
+/* ========================= MOBILE ========================== */
+
+@media (max-width: 575.98px) {
+  .claimledger_register_card {
+    padding: 23px 19px;
+    border-radius: 15px;
+  }
+
+  .claimledger_register_header {
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .claimledger_register_brand_icon {
+    width: 41px;
+    height: 41px;
+    border-radius: 11px;
+    font-size: 19px;
+  }
+
+  .claimledger_register_header h1 {
+    font-size: 23px;
+    letter-spacing: -0.8px;
+  }
+
+  .claimledger_register_header p {
+    font-size: 11px;
+  }
+
+  .claimledger_register_section_heading {
+    margin-bottom: 20px;
+  }
+
+  .claimledger_register_field {
+    margin-bottom: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claimledger_register_input_wrapper input,
+  .claimledger_register_checkbox,
+  .claimledger_register_submit,
+  .claimledger_register_submit i {
+    transition: none;
+  }
+}

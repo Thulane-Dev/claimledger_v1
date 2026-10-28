@@ -1,0 +1,162 @@
+<style>
+  .coreva-toast-position {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1080;
+  }
+
+  .coreva-toast {
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    overflow: hidden;
+    box-shadow:
+      0 12px 30px rgba(15, 23, 42, 0.12),
+      0 3px 8px rgba(15, 23, 42, 0.06);
+  }
+
+  .coreva-toast-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 15px 16px;
+  }
+
+  .coreva-toast-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+  }
+
+  .coreva-toast-content {
+    min-width: 0;
+    flex: 1;
+    padding-top: 1px;
+  }
+
+  .coreva-toast-title {
+    display: block;
+    margin-bottom: 3px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .coreva-toast-message {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .coreva-toast-close {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    margin: -2px -2px 0 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .coreva-toast-close:hover {
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  .coreva-toast-close i {
+    font-size: 11px;
+  }
+
+  .coreva-toast-progress {
+    height: 3px;
+    width: 100%;
+    background: #2563eb;
+  }
+
+  /* Mobile */
+  @media (max-width: 576px) {
+    .coreva-toast-position {
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+    }
+
+    .coreva-toast {
+      width: 100%;
+      max-width: none;
+    }
+  }
+</style>
+
+<!-- GLOBAL TOAST -->
+<div class="coreva-toast-position">
+  <div
+    id="corevaToast"
+    class="toast coreva-toast"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="coreva-toast-inner">
+      <div class="coreva-toast-icon">
+        <i class="bi bi-check-lg"></i>
+      </div>
+
+      <div class="coreva-toast-content">
+        <strong class="coreva-toast-title" id="corevaToastTitle">
+          Success
+        </strong>
+
+        <div class="coreva-toast-message" id="corevaToastMessage">
+          Action completed successfully.
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="coreva-toast-close"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      >
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="coreva-toast-progress"></div>
+  </div>
+</div>
+
+<!-- GLOBAL TOAST  -->
+<script>
+  document.body.addEventListener("corevaToast", function (event) {
+    const toastElement = document.getElementById("corevaToast");
+    const toastTitle = document.getElementById("corevaToastTitle");
+    const toastMessage = document.getElementById("corevaToastMessage");
+
+    const data = event.detail;
+
+    toastTitle.textContent = data.title || "Success";
+    toastMessage.textContent = data.message || "Action completed successfully.";
+
+    const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
+
+    toast.show();
+  });
+</script>

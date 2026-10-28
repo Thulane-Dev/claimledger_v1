@@ -1,0 +1,330 @@
+<!-- ==================== CLAIMLEDGER ADD PROJECT ==================== -->
+
+<div
+  class="offcanvas offcanvas-end claimledger_project_offcanvas"
+  tabindex="-1"
+  id="editProjectOffcanvas"
+  aria-labelledby="editProjectOffcanvasLabel"
+>
+  <!-- Header -->
+  <div class="offcanvas-header claimledger_project_header">
+    <div>
+      <span class="claimledger_project_eyebrow">PROJECT MANAGEMENT</span>
+      <h5
+        class="offcanvas-title claimledger_project_title"
+        id="editProjectOffcanvasLabel"
+      >
+        Update project
+      </h5>
+      <p class="claimledger_project_subtitle">
+        update project to manage its payment claims.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-close claimledger_project_close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <!-- Form -->
+  <form
+    method="POST"
+    enctype="multipart/form-data"
+    hx-post="{% url 'projects:update-project' project.uuid %}"
+    hx-target="#ProjectDetailsPartial"
+    hx-swap="innerHTML"
+    hx-push-url="false"
+    hx-on::after-request="
+            if (event.detail.successful) {
+            closeeditProjectOffcanvas();
+            }
+        "
+    class="claimledger_project_form"
+  >
+    {% csrf_token %}
+
+    <div class="offcanvas-body claimledger_project_body">
+      <!-- Project information -->
+      <section class="claimledger_project_section">
+        <div class="claimledger_project_section_heading">
+          <div class="claimledger_project_section_icon">
+            <i class="bi bi-folder2-open"></i>
+          </div>
+          <div>
+            <h6>Project information</h6>
+            <p>Identify the project and site.</p>
+          </div>
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_project_name">
+            Project name <span>*</span>
+          </label>
+          <input
+            type="text"
+            id="claimledger_project_name"
+            name="project_name"
+            class="form-control claimledger_project_input"
+            placeholder="e.g. Riverside Office Development"
+            required
+            value="{{project.project_name}}"
+          />
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_site_reference"> Site reference </label>
+          <input
+            type="text"
+            id="claimledger_site_reference"
+            name="site_reference"
+            class="form-control claimledger_project_input"
+            placeholder="e.g. PRJ-001"
+            value="{{project.site_reference}}"
+          />
+          <small>Optional internal reference for this project.</small>
+        </div>
+      </section>
+
+      <div class="claimledger_project_divider"></div>
+
+      <!-- Client details -->
+      <section class="claimledger_project_section">
+        <div class="claimledger_project_section_heading">
+          <div class="claimledger_project_section_icon">
+            <i class="bi bi-building"></i>
+          </div>
+          <div>
+            <h6>Client details</h6>
+            <p>Who is the project being completed for?</p>
+          </div>
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_client_name">
+            Client or company name <span>*</span>
+          </label>
+          <input
+            type="text"
+            id="claimledger_client_name"
+            name="client_contact_name"
+            class="form-control claimledger_project_input"
+            placeholder="e.g. ABC Construction"
+            required
+            value="{{project.client_contact_name}}"
+          />
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_client_phone"> Contact phone </label>
+          <input
+            type="tel"
+            id="claimledger_client_phone"
+            name="client_contact_phone"
+            class="form-control claimledger_project_input"
+            placeholder="e.g. 082 123 4567"
+            value="{{project.client_contact_phone}}"
+          />
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_client_email"> Contact email </label>
+          <input
+            type="email"
+            id="claimledger_client_email"
+            name="client_contact_email"
+            class="form-control claimledger_project_input"
+            placeholder="name@company.co.za"
+            value="{{project.client_contact_email}}"
+          />
+        </div>
+      </section>
+
+      <div class="claimledger_project_divider"></div>
+
+      <!-- Project dates -->
+      <section class="claimledger_project_section">
+        <div class="claimledger_project_section_heading">
+          <div class="claimledger_project_section_icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+          <div>
+            <h6>Project timeline</h6>
+            <p>Set the planned project dates.</p>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="claimledger_project_field">
+              <label for="claimledger_start_date"> Start date </label>
+              <input
+                type="date"
+                id="claimledger_start_date"
+                name="start_date"
+                onfocus="this.showPicker()"
+                onclick="this.showPicker()"
+                value="{{project.start_date|date:'Y-m-d'}}"
+                class="form-control claimledger_project_input"
+              />
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="claimledger_project_field">
+              <label for="claimledger_end_date"> End date </label>
+              <input
+                type="date"
+                id="claimledger_end_date"
+                name="end_date"
+                onfocus="this.showPicker()"
+                onclick="this.showPicker()"
+                value="{{project.end_date|date:'Y-m-d'}}"
+                class="form-control claimledger_project_input"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="claimledger_project_divider"></div>
+
+      <!-- Site address -->
+      <section class="claimledger_project_section">
+        <div class="claimledger_project_section_heading">
+          <div class="claimledger_project_section_icon">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+          <div>
+            <h6>Site address</h6>
+            <p>Where is the project located?</p>
+          </div>
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_street">Street address</label>
+          <input
+            type="text"
+            id="claimledger_street"
+            name="street"
+            class="form-control claimledger_project_input"
+            placeholder="Street name and number"
+            value="{{project.location.street }}"
+          />
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_suburb">Suburb</label>
+          <input
+            type="text"
+            id="claimledger_suburb"
+            name="suburb"
+            class="form-control claimledger_project_input"
+            placeholder="Suburb"
+            value="{{project.location.suburb }}"
+          />
+        </div>
+
+        <div class="row g-3">
+          <div class="col-7">
+            <div class="claimledger_project_field">
+              <label for="claimledger_city">City</label>
+              <input
+                type="text"
+                id="claimledger_city"
+                name="city"
+                class="form-control claimledger_project_input"
+                placeholder="City"
+                value="{{project.location.city}}"
+              />
+            </div>
+          </div>
+
+          <div class="col-5">
+            <div class="claimledger_project_field">
+              <label for="claimledger_postal_code">Postal code</label>
+              <input
+                type="text"
+                id="claimledger_postal_code"
+                name="postal_code"
+                class="form-control claimledger_project_input"
+                placeholder="0000"
+                value="{{project.location.postal_code}}"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_province">Province</label>
+          <select
+            id="claimledger_province"
+            name="province"
+            class="form-select claimledger_project_input"
+          >
+            {% if project.location.province %}
+            <option selected value="{{project.location.province}}">
+              {{project.location.province}} - selected
+            </option>
+            {% else %}
+            <option value="">Select province</option>
+            {% endif %}
+
+            <option value="Eastern Cape">Eastern Cape</option>
+            <option value="Free State">Free State</option>
+            <option value="Gauteng">Gauteng</option>
+            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+            <option value="Limpopo">Limpopo</option>
+            <option value="Mpumalanga">Mpumalanga</option>
+            <option value="Northern Cape">Northern Cape</option>
+            <option value="North West">North West</option>
+            <option value="Western Cape">Western Cape</option>
+          </select>
+        </div>
+
+        <div class="claimledger_project_field">
+          <label for="claimledger_country">Country</label>
+          <input
+            type="text"
+            id="claimledger_country"
+            name="country"
+            class="form-control claimledger_project_input"
+            value="{{project.location.country}}"
+          />
+        </div>
+      </section>
+    </div>
+
+    <!-- Fixed footer -->
+    <div class="claimledger_project_footer">
+      <button
+        type="button"
+        class="btn claimledger_project_cancel"
+        data-bs-dismiss="offcanvas"
+      >
+        Cancel
+      </button>
+
+      <button type="submit" class="btn claimledger_project_submit">
+        <i class="bi bi-floppy"></i>
+        Update project
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- CLOSE DELIVERY OFFCANVAS  -->
+<script>
+  function closeeditProjectOffcanvas() {
+    var offcanvasElement = document.getElementById("editProjectOffcanvas");
+    var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+    if (!offcanvasInstance) {
+      offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+    }
+
+    offcanvasInstance.hide();
+  }
+</script>

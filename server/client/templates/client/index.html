@@ -1,0 +1,26 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ClaimLedger</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body>
+    <h1>Hello from Django</h1>
+
+    <p>Your project is working.</p>
+
+    <a href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'register' %}">Register</a>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

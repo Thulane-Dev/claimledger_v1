@@ -1,0 +1,289 @@
+/* ==================== CLAIMLEDGER ADD PROJECT ==================== */
+
+.claimledger_project_offcanvas {
+  width: 520px !important;
+  max-width: 100%;
+  border: 0;
+  background: #ffffff;
+  color: #172033;
+  box-shadow: -12px 0 40px rgba(23, 32, 51, 0.08);
+}
+
+.claimledger_project_header {
+  flex-shrink: 0;
+  align-items: flex-start;
+  padding: 26px 28px 22px;
+  border-bottom: 1px solid #edf0f5;
+  background: #ffffff;
+}
+
+.claimledger_project_eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.15px;
+}
+
+.claimledger_project_title {
+  margin: 0;
+  color: #172033;
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+}
+
+.claimledger_project_subtitle {
+  margin: 7px 0 0;
+  color: #7b8495;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.claimledger_project_close {
+  margin-top: 2px;
+  padding: 9px;
+  border-radius: 8px;
+  background-color: #f4f6f9;
+  opacity: 0.7;
+}
+
+.claimledger_project_close:hover {
+  background-color: #e9edf3;
+  opacity: 1;
+}
+
+.claimledger_project_form {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.claimledger_project_body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 26px 28px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: #d8dee8 transparent;
+}
+
+.claimledger_project_body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.claimledger_project_body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #d8dee8;
+}
+
+.claimledger_project_section {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.claimledger_project_section_heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.claimledger_project_section_icon {
+  display: flex;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e6ebf3;
+  border-radius: 11px;
+  background: #f6f8fb;
+  color: #263b60;
+  font-size: 17px;
+}
+
+.claimledger_project_section_heading h6 {
+  margin: 0;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.claimledger_project_section_heading p {
+  margin: 4px 0 0;
+  color: #8790a0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.claimledger_project_field {
+  min-width: 0;
+}
+
+.claimledger_project_field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.claimledger_project_field label span {
+  color: #d9485f;
+}
+
+.claimledger_project_field small {
+  display: block;
+  margin-top: 6px;
+  color: #8790a0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger_project_input {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid #dfe5ee;
+  border-radius: 9px;
+  background-color: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 13px;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.claimledger_project_input::placeholder {
+  color: #a0a8b6;
+  opacity: 1;
+}
+
+.claimledger_project_input:hover {
+  border-color: #c6cfdd;
+}
+
+.claimledger_project_input:focus {
+  border-color: #647da7;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(49, 77, 119, 0.09);
+  outline: none;
+}
+
+.claimledger_project_input[readonly] {
+  background-color: #f7f8fa;
+  color: #64748b;
+}
+
+.claimledger_project_input[type="date"] {
+  padding-right: 9px;
+}
+
+.claimledger_project_divider {
+  height: 1px;
+  margin: 25px 0;
+  background: #edf0f5;
+}
+
+.claimledger_project_footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 17px 28px;
+  border-top: 1px solid #edf0f5;
+  background: #ffffff;
+}
+
+.claimledger_project_cancel,
+.claimledger_project_submit {
+  display: inline-flex;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 17px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.claimledger_project_cancel {
+  border: 1px solid #dfe5ee;
+  background: #ffffff;
+  color: #475467;
+}
+
+.claimledger_project_cancel:hover {
+  border-color: #c8d0dc;
+  background: #f7f8fa;
+  color: #172033;
+}
+
+.claimledger_project_submit {
+  border: 1px solid #172033;
+  background: #172033;
+  color: #ffffff;
+}
+
+.claimledger_project_submit:hover {
+  border-color: #283953;
+  background: #283953;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.claimledger_project_submit:focus-visible,
+.claimledger_project_cancel:focus-visible {
+  outline: 3px solid rgba(49, 77, 119, 0.2);
+  outline-offset: 2px;
+}
+
+@media (max-width: 575.98px) {
+  .claimledger_project_offcanvas {
+    max-width: 100%;
+  }
+
+  .claimledger_project_header {
+    padding: 22px 20px 19px;
+  }
+
+  .claimledger_project_body {
+    padding: 22px 20px 26px;
+  }
+
+  .claimledger_project_footer {
+    padding: 14px 20px;
+  }
+
+  .claimledger_project_title {
+    font-size: 21px;
+  }
+
+  .claimledger_project_cancel,
+  .claimledger_project_submit {
+    flex: 1;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claimledger_project_input,
+  .claimledger_project_cancel,
+  .claimledger_project_submit {
+    transition: none;
+  }
+}

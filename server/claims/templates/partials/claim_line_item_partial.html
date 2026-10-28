@@ -1,0 +1,329 @@
+{% load static %}
+
+{{ attachment.file.url }}
+
+<div class="cl-item-page">
+
+    <!-- PAGE HEADER -->
+    <div class="cl-item-header">
+        <div>
+            <a href="{% url 'claims:claim' claim_uuid=claim.uuid %}"
+               class="cl-back-link">
+                <i class="bi bi-arrow-left"></i>
+                Back to payment claim
+            </a>
+
+            <div class="cl-eyebrow">PAYMENT CLAIM LINE ITEM</div>
+            <h1>{{ item.description|default:"Untitled line item" }}</h1>
+
+            <p class="cl-muted">
+                {{ claim.claim_number }}
+                {% if claim.project %}
+                    <span class="cl-dot">·</span> {{ claim.project }}
+                {% endif %}
+            </p>
+        </div>
+
+        <span class="cl-status cl-status-{{ claim.status }}">
+            {{ claim.get_status_display }}
+        </span>
+    </div>
+
+    <!-- FLASH MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+                 role="alert">
+                {{ message }}
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- AMOUNT SUMMARY -->
+    <section class="cl-item-summary">
+        <div class="cl-summary-heading">
+            <div>
+                <span class="cl-eyebrow">CLAIMED AMOUNT</span>
+                <div class="cl-total">
+                    R{{ item.amount|default_if_none:0|floatformat:2 }}
+                </div>
+            </div>
+
+            {% if can_edit_item %}
+                <button type="button" class="btn cl-btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editLineItemModal">
+                    <i class="bi bi-pencil"></i>
+                    Update item
+                </button>
+            {% endif %}
+        </div>
+
+        <div class="cl-metrics">
+            <div>
+                <span>Quantity</span>
+                <strong>{{ item.quantity|default_if_none:0|floatformat:3 }}</strong>
+            </div>
+            <div>
+                <span>Unit</span>
+                <strong>
+                    {% if item.unit == "other" %}
+                        {{ item.custom_unit|default:"Other" }}
+                    {% else %}
+                        {{ item.get_unit_display }}
+                    {% endif %}
+                </strong>
+            </div>
+            <div>
+                <span>Rate</span>
+                <strong>R{{ item.rate|default_if_none:0|floatformat:2 }}</strong>
+            </div>
+        </div>
+
+        <div class="cl-description">
+            <span class="cl-field-label">Description</span>
+            <p>{{ item.description|default:"No description provided." }}</p>
+        </div>
+    </section>
+
+    <!-- CERTIFICATION -->
+    <section class="cl-panel cl-certification-panel">
+
+        <!-- SECTION HEADER -->
+        <div class="cl-panel-heading">
+            <div>
+                <h2>
+                    <i class="bi bi-patch-check"></i>
+                    Certification
+                </h2>
+                <p>
+                    Review the amount approved by the main contractor
+                    and the supporting documents for the decision.
+                </p>
+            </div>
+
+            {% if item.certified_amount != None %}
+                <span class="cl-certification-badge">
+                    <i class="bi bi-check-circle"></i>
+                    Amount recorded
+                </span>
+            {% else %}
+                <span class="cl-certification-pending">
+                    Awaiting certification
+                </span>
+            {% endif %}
+        </div>
+
+        <!-- CLAIMED VS CERTIFIED -->
+        <div class="cl-certification-amounts">
+            <div class="cl-cert-amount-card">
+                <span>Claimed amount</span>
+                <strong>
+                    R{{ item.amount|default_if_none:0|floatformat:2 }}
+                </strong>
+                <small>Submitted by the subcontractor</small>
+            </div>
+
+            <div class="cl-cert-amount-card cl-certified-amount-card">
+                <span>Certified amount</span>
+
+                {% if item.certified_amount != None %}
+                    <strong>
+                        R{{ item.certified_amount|floatformat:2 }}
+                    </strong>
+                    <small>Recorded by the main contractor</small>
+                {% else %}
+                    <strong class="cl-cert-not-recorded">
+                        Not recorded
+                    </strong>
+                    <small>Awaiting the certification decision</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- DIFFERENCE -->
+        {% if certification_difference != None %}
+            <div class="cl-certification-difference
+                {% if certification_difference > 0 %}
+                    cl-certification-reduced
+                {% elif certification_difference < 0 %}
+                    cl-certification-increased
+                {% else %}
+                    cl-certification-matched
+                {% endif %}">
+
+                <div>
+                    <span class="cl-field-label">Difference</span>
+                    <strong>
+                        {% if certification_difference > 0 %}−{% elif certification_difference < 0 %}+{% endif %}R{{ certification_difference|floatformat:2 }}
+                    </strong>
+                </div>
+
+                <span>
+                    {% if certification_difference > 0 %}
+                        Certified below the claimed amount
+                    {% elif certification_difference < 0 %}
+                        Certified above the claimed amount
+                    {% else %}
+                        Fully certified at the claimed amount
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+        <!-- CERTIFICATION NOTES -->
+        <div class="cl-certification-notes">
+            <span class="cl-field-label">Certification notes</span>
+
+            {% if item.certification_notes %}
+                <p>{{ item.certification_notes }}</p>
+            {% else %}
+                <p class="cl-cert-no-notes">
+                    No certification explanation has been recorded.
+                </p>
+            {% endif %}
+        </div>
+
+        <!-- SUPPORTING DOCUMENTS -->
+        <div class="cl-certification-documents">
+            <div class="cl-certification-documents-heading">
+                <div>
+                    <h3>
+                        <i class="bi bi-paperclip"></i>
+                        Supporting documents
+                    </h3>
+                    <p>Documents attached to the certification decision.</p>
+                </div>
+
+                <span class="cl-cert-document-count">
+                    {{ item.certification_attachments.count }}
+                </span>
+            </div>
+
+            {% for attachment in item.certification_attachments.all %}
+                {% if attachment.photo %}
+                    <div
+                        
+                        class="cl-cert-document"
+                    >
+                        <span class="cl-cert-document-icon">
+                            <i class="bi bi-file-earmark-image"></i>
+                        </span>
+
+                        <span class="cl-cert-document-info">
+                            <strong>{{ attachment.original_filename }}</strong>
+                            <small>
+                                Uploaded {{ attachment.uploaded_at|date:"d M Y, H:i" }}
+                            </small>
+                        </span>
+                        <a 
+                         href="{{ attachment.photo.url }}"
+                         target="_blank"
+                         rel="noopener noreferrer">
+                            <i class="bi bi-download cl-cert-document-download"></i>
+                        </a>
+                        <form 
+                        hx-post="{% url 'claims:delete-certificate-attachment' item.uuid attachment.id %}"
+                        hx-target="#ClaimLineItemPartial"
+                        hx-swap="innerHTML"
+                        hx-push-url="false"
+                        hx-confirm="Are you sure you want to delete this attachment?"
+                        >
+                            {% csrf_token %}
+                            <button class="transparent_button">
+                                <i class="bi bi-trash3 cl-cert-document-download"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                {% elif attachment.file %}
+                    <div
+                        
+                        class="cl-cert-document"
+                        >
+                        <span class="cl-cert-document-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </span>
+
+                        <span class="cl-cert-document-info">
+                            <strong>{{ attachment.original_filename }}</strong>
+                            <small>
+                                Uploaded {{ attachment.uploaded_at|date:"d M Y, H:i" }}
+                            </small>
+                        </span>
+
+                        <!-- Download File  -->
+                        <a 
+                            href="{{ attachment.file.url }}"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <i class="bi bi-download cl-cert-document-download"></i>
+                        </a>
+
+                        <!-- Delete File  -->
+                        <form 
+                        hx-post="{% url 'claims:delete-certificate-attachment' item.uuid attachment.id %}"
+                        hx-target="#ClaimLineItemPartial"
+                        hx-swap="innerHTML"
+                        hx-push-url="false"
+                        hx-confirm="Are you sure you want to delete this attachment?"
+                        >
+                            {% csrf_token %}
+                            <button class="transparent_button">
+                                <i class="bi bi-trash3 cl-cert-document-download"></i>
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="cl-cert-no-documents">
+                    <i class="bi bi-folder2-open"></i>
+                    <span>No supporting documents have been uploaded.</span>
+                </div>
+            {% endfor %}
+        </div>
+
+       <!-- ACTION BUTTON -->
+        <div class="cl-certification-actions">
+            <button
+                type="button"
+                class="btn cl-btn-primary cl-certification-action-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#certificationModal"
+                onclick="clearCertificationAttachments()"
+            >
+                <i class="bi bi-patch-check"></i>
+                {% if item.certified_amount != None %}
+                    Update certification
+                {% else %}
+                    Record certification
+                {% endif %}
+            </button>
+        </div>
+
+    </section>
+
+    <!-- EVIDENCE -->
+    <div id="LineItemEvidencePartial">
+        {% include 'partials/line_item_evidence_partial.html' %}
+    </div>
+
+    <!-- QUERIES -->
+    <div id="LineItemQueriesPartial">
+        {% include 'partials/line_item_queries_partial.html' %}
+    </div>
+
+    <!-- DISPUTES -->
+    <div id="LineItemDisputesPartial">
+        {% include 'partials/line_item_dispute_partial.html' %}
+    </div>
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,413 @@
+{% load static %}
+<!-- divider  -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Coreva</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+
+    <!-- Google Icons  -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+
+    <!-- bootstrap-icons  -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+
+    <!-- Inter Google Font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- HTMX SCRIPT  -->
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+
+    <!-- Inter  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- account_setup css  -->
+    <link
+      rel="stylesheet"
+      href="{% static '/css/account/account_setup.css' %}"
+    />
+  </head>
+  <body class="account_setup_page">
+    <!-- ======= Page Loading spinner  ======= -->
+    <div
+      id="loading-spinner"
+      style="
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      "
+    >
+      <div class="spinner"></div>
+    </div>
+
+    <div class="onboarding-page">
+      <div class="onboarding-wrapper">
+        <!-- Brand -->
+        <div class="onboarding-brand">
+          <div class="brand-mark">
+            <svg
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 5.5h10l6 6v7H4z" />
+              <path d="M14 5.5v6h6" />
+              <path d="M8 15h8M8 18h5" />
+            </svg>
+          </div>
+          ClaimLedger
+        </div>
+
+        <!-- Welcome heading -->
+        <header class="onboarding-intro">
+          <div class="onboarding-eyebrow">Account setup</div>
+          <h1>Let's set up your company.</h1>
+          <p>
+            Welcome to ClaimLedger. Add your company details to get your
+            workspace ready for managing payment claims, tracking amounts and
+            keeping your supporting records organised.
+          </p>
+        </header>
+
+        <!-- Form card -->
+        <div class="onboarding-card">
+          <div class="onboarding-card-header">
+            <h2>Company profile</h2>
+            <p>
+              Enter your business information below. Fields marked with * are
+              required.
+            </p>
+          </div>
+
+          <form
+            method="POST"
+            action="{% url 'account:save-account-setup' %}"
+            class="onboarding-form"
+          >
+            {% csrf_token %}
+
+            <!-- Company information -->
+            <section class="onboarding-section">
+              <div class="onboarding-section-title">
+                <div class="onboarding-section-icon">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="4" y="3" width="16" height="18" rx="2" />
+                    <path
+                      d="M9 7h2M9 11h2M9 15h2M15 7h.01M15 11h.01M15 15h.01M9 21v-3h6v3"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3>Business information</h3>
+                  <p>Tell us about the company using ClaimLedger.</p>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <label for="companyName" class="form-label">
+                    Company name *
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="companyName"
+                    name="name"
+                    placeholder="e.g. Thulane Construction (Pty) Ltd"
+                    autocomplete="organization"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="phone" class="form-label">
+                    Business phone number *
+                  </label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    placeholder="e.g. 011 123 4567"
+                    autocomplete="tel"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="companyEmail" class="form-label">
+                    Company email address *
+                  </label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="companyEmail"
+                    name="email"
+                    placeholder="accounts@company.co.za"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="registration_number" class="form-label">
+                    Company registration number
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="registration_number"
+                    name="registration_number"
+                    placeholder="e.g. 2024/123456/07"
+                  />
+                  <div class="form-text">Leave blank if not applicable.</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="vat_number" class="form-label">
+                    VAT registration number
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="vat_number"
+                    name="vat_number"
+                    placeholder="Enter VAT number if registered"
+                  />
+                  <div class="form-text">
+                    Optional — for VAT-registered businesses.
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Business address -->
+            <section class="onboarding-section">
+              <div class="onboarding-section-title">
+                <div class="onboarding-section-icon">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                </div>
+                <div>
+                  <h3>Business address</h3>
+                  <p>
+                    Add your company's registered or primary business address.
+                  </p>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <label for="street_address" class="form-label">
+                    Street address *
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="street_address"
+                    name="street"
+                    placeholder="Street number and street name"
+                    autocomplete="address-line1"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="suburb" class="form-label">Suburb</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="suburb"
+                    name="suburb"
+                    placeholder="e.g. Boksburg"
+                    autocomplete="address-level3"
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="city" class="form-label">City / Town *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="city"
+                    name="city"
+                    placeholder="e.g. Johannesburg"
+                    autocomplete="address-level2"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="province" class="form-label">Province *</label>
+                  <select
+                    name="province"
+                    id="province"
+                    class="form-select"
+                    required
+                    autocomplete="address-level1"
+                  >
+                    <option value="">Select province</option>
+                    <option value="Eastern Cape">Eastern Cape</option>
+                    <option value="Free State">Free State</option>
+                    <option value="Gauteng">Gauteng</option>
+                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                    <option value="Limpopo">Limpopo</option>
+                    <option value="Mpumalanga">Mpumalanga</option>
+                    <option value="Northern Cape">Northern Cape</option>
+                    <option value="North West">North West</option>
+                    <option value="Western Cape">Western Cape</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="postal_code" class="form-label"
+                    >Postal code *</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="postal_code"
+                    name="postal_code"
+                    placeholder="e.g. 1459"
+                    inputmode="numeric"
+                    autocomplete="postal-code"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="country" class="form-label">Country</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="country"
+                    name="country"
+                    value="South Africa"
+                    autocomplete="country-name"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <!-- Submit -->
+            <div class="onboarding-actions">
+              <div class="onboarding-privacy">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="4" y="10" width="16" height="11" rx="2" />
+                  <path d="M8 10V7a4 4 0 1 1 8 0v3" />
+                </svg>
+                <span>
+                  Your company information is used to set up your ClaimLedger
+                  workspace.
+                </span>
+              </div>
+
+              <button type="submit" class="btn onboarding-submit">
+                Save &amp; Continue
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <footer class="onboarding-footer">
+          ClaimLedger · Simplifying construction payment claims
+        </footer>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- javascript  -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      window.addEventListener("load", function () {
+        const spinner = document.getElementById("loading-spinner");
+        spinner.style.display = "none";
+      });
+    </script>
+  </body>
+</html>

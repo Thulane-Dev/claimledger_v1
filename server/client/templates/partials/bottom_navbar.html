@@ -1,0 +1,63 @@
+
+{% with current_url=request.resolver_match.url_name %}
+<nav class="claimledger-mobile-nav" aria-label="Mobile navigation">
+    <a
+        href="{% url 'dashboard:dashboard' %}"
+        hx-get="{% url 'dashboard:dashboard' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-mobile-nav__item {% if current_url == 'dashboard' %}is-active{% endif %}"
+        {% if current_url == 'dashboard' %}aria-current="page"{% endif %}
+    >
+        <i class="bi bi-house-door"></i>
+        <span>Home</span>
+    </a>
+
+    <a
+        href="{% url 'projects:projects' %}"
+        hx-get="{% url 'projects:projects' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-mobile-nav__item {% if current_url == 'projects' %}is-active{% endif %}"
+        {% if current_url == 'projects' %}aria-current="page"{% endif %}
+    >
+        <i class="bi bi-folder2-open"></i>
+        <span>Projects</span>
+    </a>
+
+    <a
+        href="{% url 'claims:create-claim' %}"
+        hx-get="{% url 'claims:create-claim' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-mobile-nav__item claimledger-mobile-nav__item--primary {% if current_url == 'create-claim' %}is-active{% endif %}"
+        {% if current_url == 'create-claim' %}aria-current="page"{% endif %}
+    >
+        <span class="claimledger-mobile-nav__add">
+            <i class="bi bi-plus-lg"></i>
+        </span>
+        <span>New claim</span>
+    </a>
+
+    <a
+        href="{% url 'claims:payment-claims'  %}"
+        hx-get="{% url 'claims:payment-claims'  %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-mobile-nav__item {% if current_url == 'claims' %}is-active{% endif %}"
+        {% if current_url == 'claims' %}aria-current="page"{% endif %}
+    >
+        <i class="bi bi-receipt"></i>
+        <span>Claims</span>
+    </a>
+
+    <a
+        href="#"
+        class="claimledger-mobile-nav__item {% if current_url == 'more' %}is-active{% endif %}"
+        {% if current_url == 'more' %}aria-current="page"{% endif %}
+    >
+        <i class="bi bi-grid"></i>
+        <span>More</span>
+    </a>
+</nav>
+{% endwith %}

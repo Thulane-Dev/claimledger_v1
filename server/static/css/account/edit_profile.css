@@ -1,0 +1,620 @@
+/* =========================================
+     CLAIMLEDGER — EDIT PROFILE OFFCANVAS
+  ========================================= */
+
+.claimledger-profile-offcanvas {
+  width: 480px !important;
+  max-width: 100%;
+  border: 0;
+  background: #f8fafc;
+  color: #172033;
+  box-shadow: -12px 0 40px rgba(23, 32, 51, 0.08);
+}
+
+.claimledger-profile-offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 21px 23px;
+  border-bottom: 1px solid #e7ebf0;
+  background: #ffffff;
+}
+
+.claimledger-profile-offcanvas-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.claimledger-profile-offcanvas-icon {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  background: #f8fafc;
+  color: #172033;
+  font-size: 18px;
+}
+
+.claimledger-profile-offcanvas-heading h5 {
+  margin: 0;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+}
+
+.claimledger-profile-offcanvas-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.claimledger-profile-offcanvas-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  padding: 0;
+  border: 1px solid #e7ebf0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.claimledger-profile-offcanvas-close:hover {
+  background: #f1f5f9;
+  color: #172033;
+}
+
+.claimledger-profile-offcanvas-body {
+  padding: 22px;
+  overflow-x: hidden;
+}
+
+/* Profile identity */
+.claimledger-profile-edit-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid #e7ebf0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.claimledger-profile-edit-avatar {
+  display: flex;
+  flex: 0 0 46px;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #dbe3f0;
+  border-radius: 12px;
+  background: #f0f4fa;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.claimledger-profile-edit-identity {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 4px;
+}
+
+.claimledger-profile-edit-identity strong {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-profile-edit-identity span {
+  color: #64748b;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-profile-edit-status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border: 1px solid #bbf7d0;
+  border-radius: 7px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.claimledger-profile-edit-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Sections */
+.claimledger-profile-edit-section {
+  margin-bottom: 25px;
+  padding: 19px;
+  border: 1px solid #e7ebf0;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.claimledger-profile-edit-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 21px;
+}
+
+.claimledger-profile-edit-section-number {
+  display: flex;
+  flex: 0 0 31px;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.claimledger-profile-edit-section-heading h6 {
+  margin: 1px 0 0;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.claimledger-profile-edit-section-heading p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Inputs */
+.claimledger-profile-edit-field {
+  margin-bottom: 17px;
+}
+
+.claimledger-profile-edit-field:last-child {
+  margin-bottom: 0;
+}
+
+.claimledger-profile-edit-field > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.claimledger-profile-edit-optional {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.claimledger-profile-edit-input-wrap {
+  position: relative;
+}
+
+.claimledger-profile-edit-input-wrap > i:first-child {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 12px;
+  color: #94a3b8;
+  font-size: 14px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.claimledger-profile-edit-input {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 12px;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.claimledger-profile-edit-input-wrap .claimledger-profile-edit-input-with-icon {
+  padding-left: 37px;
+}
+
+.claimledger-profile-edit-input:focus {
+  border-color: #64748b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.12);
+}
+
+.claimledger-profile-edit-input[readonly] {
+  padding-right: 37px;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: default;
+}
+
+.claimledger-profile-edit-input-wrap .claimledger-profile-edit-lock {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: #94a3b8;
+  font-size: 12px;
+  transform: translateY(-50%);
+}
+
+.claimledger-profile-edit-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 7px;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.claimledger-profile-edit-help i {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+/* Read-only account details */
+.claimledger-profile-edit-account-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 0;
+  border-top: 1px solid #edf0f4;
+}
+
+.claimledger-profile-edit-account-icon {
+  display: flex;
+  flex: 0 0 34px;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e7ebf0;
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.claimledger-profile-edit-account-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 4px;
+}
+
+.claimledger-profile-edit-account-info span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.claimledger-profile-edit-account-info strong {
+  color: #172033;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.claimledger-profile-edit-account-lock {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Save footer */
+.claimledger-profile-edit-footer {
+  position: sticky;
+  bottom: -22px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  margin: 0 -22px -22px;
+  padding: 16px 22px;
+  border-top: 1px solid #e7ebf0;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+}
+
+.claimledger-profile-edit-cancel,
+.claimledger-profile-edit-save {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 43px;
+  padding: 10px 14px;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.claimledger-profile-edit-cancel {
+  background: #ffffff;
+  color: #475569;
+}
+
+.claimledger-profile-edit-cancel:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.claimledger-profile-edit-save {
+  border-color: #172033;
+  background: #172033;
+  color: #ffffff;
+}
+
+.claimledger-profile-edit-save:hover {
+  border-color: #293851;
+  background: #293851;
+}
+
+.claimledger-profile-edit-save:focus-visible,
+.claimledger-profile-edit-cancel:focus-visible,
+.claimledger-profile-deactivate-button:focus-visible {
+  outline: 3px solid rgba(100, 116, 139, 0.25);
+  outline-offset: 2px;
+}
+
+/* Danger zone */
+.claimledger-profile-danger-zone {
+  margin-top: 39px;
+  padding: 19px;
+  border: 1px solid #fecaca;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.claimledger-profile-danger-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+.claimledger-profile-danger-icon {
+  display: flex;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 15px;
+}
+
+.claimledger-profile-danger-heading h6 {
+  margin: 0;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.claimledger-profile-danger-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-profile-danger-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 0;
+  border-top: 1px solid #fee2e2;
+  border-bottom: 1px solid #fee2e2;
+}
+
+.claimledger-profile-danger-action strong {
+  display: block;
+  color: #172033;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.claimledger-profile-danger-action p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-profile-deactivate-button {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #b91c1c;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.claimledger-profile-deactivate-button:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.claimledger-profile-danger-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 13px 0 0;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.claimledger-profile-danger-note i {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+/* Confirmation modal */
+.claimledger-profile-confirm-modal .modal-content {
+  align-items: center;
+  padding: 27px 23px 23px;
+  border: 1px solid #e7ebf0;
+  border-radius: 16px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(23, 32, 51, 0.15);
+}
+
+.claimledger-profile-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 21px;
+}
+
+.claimledger-profile-confirm-modal h5 {
+  margin: 0;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.claimledger-profile-confirm-modal p {
+  margin: 10px 0 22px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.claimledger-profile-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+}
+
+.claimledger-profile-confirm-actions form {
+  display: flex;
+}
+
+.claimledger-profile-confirm-cancel,
+.claimledger-profile-confirm-danger {
+  min-height: 39px;
+  padding: 9px 12px;
+  border: 1px solid #dfe5ec;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.claimledger-profile-confirm-danger {
+  border-color: #b91c1c;
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+.claimledger-profile-confirm-danger:hover {
+  border-color: #991b1b;
+  background: #991b1b;
+}
+
+@media (max-width: 480px) {
+  .claimledger-profile-offcanvas-body {
+    padding: 15px;
+  }
+
+  .claimledger-profile-offcanvas-header {
+    padding: 17px 15px;
+  }
+
+  .claimledger-profile-edit-summary {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .claimledger-profile-edit-status {
+    margin-left: 58px;
+  }
+
+  .claimledger-profile-edit-section {
+    padding: 15px;
+  }
+
+  .claimledger-profile-edit-footer {
+    bottom: -15px;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-bottom: -15px;
+    padding: 13px 15px;
+  }
+
+  .claimledger-profile-danger-zone {
+    padding: 15px;
+  }
+
+  .claimledger-profile-danger-action {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

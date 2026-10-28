@@ -1,0 +1,590 @@
+<!-- QUERIES -->
+<section class="cl-panel" id="queries">
+  <div class="cl-panel-heading">
+    <div>
+      <h2>Queries & responses</h2>
+      <p>Discuss questions about this specific line item.</p>
+    </div>
+    <span class="cl-count">{{ open_query_count }} open</span>
+  </div>
+
+  <!-- CREATE QUERY -->
+  <details class="cl-create-query">
+    <summary>
+      <i class="bi bi-plus-circle"></i>
+      Raise a query
+    </summary>
+
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      hx-post="{% url 'claims:create-item-query' item.uuid %}"
+      hx-target="#LineItemQueriesPartial"
+      hx-swap="innerHTML"
+      hx-push-url="false"
+      class="cl-query-form"
+    >
+      {% csrf_token %}
+      <input type="text" value="create_new_query" name="form_action" hidden/>
+      <label for="queryReason">Query reason</label>
+      <input
+        id="queryReason"
+        type="text"
+        name="reason"
+        maxlength="150"
+        required
+        placeholder="e.g. Quantity clarification"
+      />
+
+      <label for="queryDescription">Details</label>
+      <textarea
+        id="queryDescription"
+        name="query_description"
+        rows="4"
+        required
+        placeholder="Explain the question or discrepancy..."
+      ></textarea>
+
+      <!-- QUERY EVIDENCE -->
+      <div class="cl-query-evidence">
+        <label for="queryEvidence">
+          Supporting evidence
+          <span class="cl-query-optional">Optional</span>
+        </label>
+
+        <p class="cl-query-evidence-help">
+          Upload photos, measurement sheets, certificates or other documents
+          that support your query.
+        </p>
+
+        <label for="queryEvidence" class="cl-query-upload">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>
+            <strong>Add evidence</strong>
+            <small>PDF, images, Word or Excel · Max 10 MB per file</small>
+          </span>
+        </label>
+
+        <input
+          id="queryEvidence"
+          type="file"
+          name="supporting_documents"
+          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+          multiple
+        />
+
+        <div id="cl-query-selected-files" class="cl-query-selected-files"></div>
+      </div>
+
+      <button type="submit" class="btn cl-btn-primary">
+        <i class="bi bi-send"></i>
+        Submit query
+      </button>
+    </form>
+  </details>
+
+  {% for query in queries %}
+  <article class="cl-query-card">
+    <div class="cl-query-top">
+      <div>
+        <span class="cl-eyebrow">QUERY</span>
+        <h3>{{ query.reason }}</h3>
+      </div>
+
+      <span class="cl-query-status cl-query-{{ query.status }}">
+        {{ query.get_status_display }}
+      </span>
+    </div>
+
+    <p class="cl-query-description">{{ query.description }}</p>
+
+    <!-- QUERY EVIDENCE -->
+    {% with evidence=query.query_attachments.all %}
+        {% if evidence %}
+            <div class="cl-query-attachments">
+                <strong class="cl-attachments-heading">
+                    <i class="bi bi-paperclip"></i>
+                    Query evidence ({{ evidence|length }})
+                </strong>
+
+                <div class="cl-attachments-list">
+                    {% for attachment in evidence %}
+                        {% if attachment.photo %}
+                            <a
+                                href="{{ attachment.photo.url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="cl-query-attachment"
+                            >
+                                <i class="bi bi-file-earmark-image"></i>
+                                <span>
+                                    <strong>{{ attachment.original_filename }}</strong>
+                                    <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                                </span>
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        {% elif attachment.file %}
+                            <a
+                                href="{{ attachment.file.url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="cl-query-attachment"
+                            >
+                                <i class="bi bi-file-earmark-text"></i>
+                                <span>
+                                    <strong>{{ attachment.original_filename }}</strong>
+                                    <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                                </span>
+                                <i class="bi bi-download"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="cl-query-meta">
+      {% if query.created_by_contractor %}
+      <!-- divider  -->
+      {{ query.created_by_contractor }}
+      <!-- divider  -->
+      {% elif query.created_by_user %}
+      <!-- divider  -->
+      {{ query.created_by_user }}
+      <!-- divider  -->
+      {% else %}
+      <!-- divider  -->
+      Claim participant
+      <!-- divider  -->
+      {% endif %}
+      <span>·</span>
+      {{ query.created_at|date:"d M Y, H:i" }}
+    </div>
+
+    <!-- RESPONSE THREAD -->
+    <div class="cl-response-thread">
+      {% for response in query.responses.all %}
+      <div class="cl-response">
+        <div class="cl-response-heading">
+          <strong>
+            {% if response.created_by_contractor %}
+            <!-- divider  -->
+            {{response.created_by_contractor }}
+            <!-- divider  -->
+            {% elif response.created_by_user%}
+            <!-- divider  -->
+            {{ response.created_by_user }}
+            <!-- divider  -->
+            {% else %}
+            <!-- divider  -->
+            Claim participant
+            <!-- divider  -->
+            {% endif %}
+          </strong>
+          <time>{{ response.created_at|date:"d M Y, H:i" }}</time>
+        </div>
+        <p class="mb-1">{{ response.message }}</p>
+
+        <!-- RESPONSE EVIDENCE -->
+        {% with evidence=response.response_attachments.all %}
+            {% if evidence %}
+                <div class="cl-query-attachments">
+                    <strong class="cl-attachments-heading">
+                        <i class="bi bi-paperclip"></i>
+                        Response evidence ({{ evidence|length }})
+                    </strong>
+
+                    <div class="cl-attachments-list">
+                        {% for attachment in evidence %}
+                            {% if attachment.photo %}
+                                <a
+                                    href="{{ attachment.photo.url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="cl-query-attachment"
+                                >
+                                    <i class="bi bi-file-earmark-image"></i>
+                                    <span>
+                                        <strong>{{ attachment.original_filename }}</strong>
+                                        <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                                    </span>
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            {% elif attachment.file %}
+                                <a
+                                    href="{{ attachment.file.url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="cl-query-attachment"
+                                >
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>
+                                        <strong>{{ attachment.original_filename }}</strong>
+                                        <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                                    </span>
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form 
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:create-item-query' item.uuid %}"
+        hx-target="#LineItemQueriesPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+        hx-confirm="Are you sure you want to delete this response?"
+      >
+        {% csrf_token %}
+        <input type="text" value="delete_response" name="form_action" hidden/>
+        <input type="hidden" name="response_uuid" value="{{ response.uuid }}" />
+
+        <button class="transparent_button" type="submit">
+            <p class="m-0 p-0" style="color: #842029 !important;font-weight: 500;font-size: 12px;">Delete Response</p>
+        </button>
+      </form>
+
+
+      </div>
+      {% empty %}
+      <p class="cl-no-responses">No responses yet.</p>
+      {% endfor %}
+    </div>
+
+    <!-- REPLY -->
+    {% if query.status != "resolved" %}
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      hx-post="{% url 'claims:create-item-query' item.uuid %}"
+      hx-target="#LineItemQueriesPartial"
+      hx-swap="innerHTML"
+      hx-push-url="false"
+      class="cl-query-form"
+    >
+      {% csrf_token %}
+      <input
+        type="text"
+        value="create_response"
+        name="form_action"
+        hidden
+        class="cl-reply-form"
+      />
+        
+      <input type="hidden" name="query_uuid" value="{{ query.uuid }}" />
+      <label for="reply-{{ query.uuid }}">Your response</label>
+      <textarea
+        id="reply-{{ query.uuid }}"
+        name="message"
+        rows="3"
+        required
+        placeholder="Write a response..."
+      ></textarea>
+
+      
+      <!-- RESPONSE EVIDENCE -->
+      <div class="cl-query-evidence">
+        <label for="responseEvidence-{{ query.uuid }}">
+          Response evidence
+          <span class="cl-query-optional">Optional</span>
+        </label>
+
+        <p class="cl-query-evidence-help">
+          Upload photos, measurement sheets, certificates or other documents
+          that support your response.
+        </p>
+
+        <label for="responseEvidence-{{ query.uuid }}" class="cl-query-upload">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>
+            <strong>Add evidence</strong>
+            <small>PDF, images, Word or Excel · Max 10 MB per file</small>
+          </span>
+        </label>
+
+        <input
+          id="responseEvidence-{{ query.uuid }}"
+          class="cl-response-evidence-input"
+          data-preview-target="cl-response-selected-files-{{ query.uuid }}"
+          type="file"
+          name="supporting_documents"
+          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+          multiple
+          hidden
+        />
+
+        <div
+          id="cl-response-selected-files-{{ query.uuid }}"
+          class="cl-response-selected-files"
+        ></div>
+      </div>
+
+      <button type="submit" class="btn cl-btn-secondary">
+        <i class="bi bi-reply"></i>
+        Send response
+      </button>
+    </form>
+    {% endif %}
+
+    <!-- QUERY STATUS -->
+    <div class="cl-query-actions">
+    <form 
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:create-item-query' item.uuid %}"
+        hx-target="#LineItemQueriesPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+        hx-confirm="Are you sure you want to delete this query?"
+      >
+        {% csrf_token %}
+        <input type="text" value="delete_query" name="form_action" hidden/>
+        <input type="hidden" name="query_uuid" value="{{ query.uuid }}" />
+
+        <button type="submit" class="btn cl-btn-resolve" style="margin-right: 6px;background-color: #F8D7DA !important;color: #842029 !important;">
+          <i class="bi bi-trash3"></i>
+          Delete Query
+        </button>
+      </form>
+      {% if query.status == "resolved" %}
+      <form 
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:create-item-query' item.uuid %}"
+        hx-target="#LineItemQueriesPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+      >
+        {% csrf_token %}
+        <input type="text" value="update_query_status" name="form_action" hidden/>
+        <input type="hidden" name="query_uuid" value="{{ query.uuid }}" />
+        <input type="hidden" name="new_status" value="reopened" />
+
+        <button type="submit" class="btn cl-btn-secondary">
+          <i class="bi bi-arrow-counterclockwise"></i>
+          Reopen query
+        </button>
+      </form>
+      {% else %}
+      <form 
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:create-item-query' item.uuid %}"
+        hx-target="#LineItemQueriesPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+      >
+        {% csrf_token %}
+        <input type="text" value="update_query_status" name="form_action" hidden/>
+        <input type="hidden" name="query_uuid" value="{{ query.uuid }}" />
+        <input type="hidden" name="new_status" value="resolved" />
+
+        <button type="submit" class="btn cl-btn-resolve">
+          <i class="bi bi-check2-circle"></i>
+          Mark resolved
+        </button>
+      </form>
+      {% endif %}
+
+
+    </div>
+  </article>
+  {% empty %}
+  <div class="cl-empty-state">
+    <i class="bi bi-chat-square-text"></i>
+    <strong>No queries yet</strong>
+    <span>Raise a query if this line item needs clarification.</span>
+  </div>
+  {% endfor %}
+</section>
+
+
+<script>
+  function initQueryEvidence() {
+    const input = document.getElementById("queryEvidence");
+    const container = document.getElementById("cl-query-selected-files");
+
+    if (!input || !container || input.dataset.initialized === "true") {
+      return;
+    }
+
+    input.dataset.initialized = "true";
+
+    let selectedFiles = [];
+
+    function renderFiles() {
+      container.replaceChildren();
+
+      selectedFiles.forEach((file, index) => {
+        const row = document.createElement("div");
+        row.className = "cl-query-selected-file";
+
+        const icon = document.createElement("i");
+        icon.className = file.type.startsWith("image/")
+          ? "bi bi-file-earmark-image"
+          : "bi bi-file-earmark-text";
+
+        const name = document.createElement("span");
+        name.style.flex = "1";
+        name.textContent = `${file.name} · ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "cl-query-remove-file";
+        remove.textContent = "Remove";
+
+        remove.addEventListener("click", () => {
+          selectedFiles.splice(index, 1);
+          updateInput();
+        });
+
+        row.append(icon, name, remove);
+        container.appendChild(row);
+      });
+    }
+
+    function updateInput() {
+      const transfer = new DataTransfer();
+      selectedFiles.forEach((file) => transfer.items.add(file));
+      input.files = transfer.files;
+      renderFiles();
+    }
+
+    input.addEventListener("change", () => {
+      Array.from(input.files).forEach((file) => {
+        const exists = selectedFiles.some(
+          (existing) =>
+            existing.name === file.name &&
+            existing.size === file.size &&
+            existing.lastModified === file.lastModified,
+        );
+
+        if (!exists) selectedFiles.push(file);
+      });
+
+      updateInput();
+    });
+
+    // Allow other scripts to clear the selection after submission.
+    window.clearQueryEvidence = function () {
+      selectedFiles = [];
+      input.value = "";
+      input.files = new DataTransfer().files;
+      container.replaceChildren();
+    };
+  }
+
+  document.addEventListener("DOMContentLoaded", initQueryEvidence);
+
+  document.addEventListener("htmx:afterSwap", function (event) {
+    if (
+      event.detail.target &&
+      (event.detail.target.id === "content" ||
+        event.detail.target.querySelector("#queryEvidence"))
+    ) {
+      initQueryEvidence();
+    }
+  });
+</script>
+
+
+<script>
+  function initResponseEvidence() {
+    document.querySelectorAll(".cl-response-evidence-input").forEach((input) => {
+      if (input.dataset.initialized === "true") {
+        return;
+      }
+
+      const container = document.getElementById(
+        input.dataset.previewTarget
+      );
+
+      if (!container) {
+        return;
+      }
+
+      input.dataset.initialized = "true";
+
+      let selectedFiles = [];
+
+      function renderFiles() {
+        container.replaceChildren();
+
+        selectedFiles.forEach((file, index) => {
+          const row = document.createElement("div");
+          row.className = "cl-query-selected-file";
+
+          const icon = document.createElement("i");
+          icon.className = file.type.startsWith("image/")
+            ? "bi bi-file-earmark-image"
+            : "bi bi-file-earmark-text";
+
+          const name = document.createElement("span");
+          name.style.flex = "1";
+          name.style.overflowWrap = "anywhere";
+          name.textContent =
+            `${file.name} · ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "cl-query-remove-file";
+          remove.textContent = "Remove";
+
+          remove.addEventListener("click", () => {
+            selectedFiles.splice(index, 1);
+            updateInput();
+          });
+
+          row.append(icon, name, remove);
+          container.appendChild(row);
+        });
+      }
+
+      function updateInput() {
+        const transfer = new DataTransfer();
+
+        selectedFiles.forEach((file) => {
+          transfer.items.add(file);
+        });
+
+        input.files = transfer.files;
+        renderFiles();
+      }
+
+      input.addEventListener("change", () => {
+        Array.from(input.files).forEach((file) => {
+          const exists = selectedFiles.some(
+            (existing) =>
+              existing.name === file.name &&
+              existing.size === file.size &&
+              existing.lastModified === file.lastModified
+          );
+
+          if (!exists) {
+            selectedFiles.push(file);
+          }
+        });
+
+        updateInput();
+      });
+
+      // Make it possible to clear this input after a successful submission.
+      input.clearSelectedEvidence = function () {
+        selectedFiles = [];
+        input.value = "";
+        input.files = new DataTransfer().files;
+        container.replaceChildren();
+      };
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initResponseEvidence);
+
+  document.addEventListener("htmx:afterSwap", initResponseEvidence);
+</script>

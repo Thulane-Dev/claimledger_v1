@@ -1,0 +1,451 @@
+{% load static %}
+
+<!-- ================= CLAIM LINE ITEM DETAILS PAGE ================= -->
+<div id="ClaimLineItemPartial">
+  {% include 'partials/claim_line_item_partial.html' %}
+</div>
+
+<!-- EDIT LINE ITEM MODAL -->
+<div
+  class="modal fade"
+  id="editLineItemModal"
+  tabindex="-1"
+  aria-labelledby="editLineItemModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content cl-edit-modal">
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:update-line-item' item.uuid %}"
+        hx-target="#ClaimLineItemPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+        hx-on::after-request="
+        if (event.detail.successful) {
+            closeUpdateClaimItemModal();
+        }
+    "
+      >
+        {% csrf_token %}
+        <input type="hidden" name="action" value="edit_item" />
+
+        <div class="modal-header">
+          <div>
+            <span class="cl-eyebrow">CLAIM ITEM</span>
+            <h2 class="modal-title" id="editLineItemModalLabel">
+              Edit line item
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- DESCRIPTION -->
+          <label for="editDescription">Description</label>
+          <input
+            id="editDescription"
+            type="text"
+            name="description"
+            maxlength="255"
+            required
+            value="{{ item.description }}"
+          />
+
+          <!-- QUANTITY AND RATE -->
+          <div class="cl-form-grid">
+            <div>
+              <label for="editQuantity">Quantity</label>
+              <input
+                id="editQuantity"
+                type="number"
+                name="quantity"
+                min="0.001"
+                step="0.001"
+                required
+                value="{{ item.quantity|default_if_none:'' }}"
+              />
+            </div>
+
+            <div>
+              <label for="editRate">Rate (R)</label>
+              <input
+                id="editRate"
+                type="number"
+                name="rate"
+                min="0"
+                step="0.01"
+                required
+                value="{{ item.rate|default_if_none:'' }}"
+              />
+            </div>
+          </div>
+
+          <!-- UNIT -->
+          <label for="editUnit">Unit</label>
+          <select id="editUnit" name="unit" required>
+            {% for value, label in item.UNIT_CHOICES %}
+            <option
+              value="{{ value }}"
+              {%
+              if
+              item.unit=""
+              ="value"
+              %}selected{%
+              endif
+              %}
+            >
+              {{ label }}
+            </option>
+            {% endfor %}
+          </select>
+
+          <!-- CUSTOM UNIT -->
+          <div
+            id="customUnitWrapper"
+            {%
+            if
+            item.unit
+            !="other"
+            %}hidden{%
+            endif
+            %}
+          >
+            <label for="editCustomUnit">Custom unit</label>
+            <input
+              id="editCustomUnit"
+              type="text"
+              name="custom_unit"
+              maxlength="50"
+              value="{{ item.custom_unit }}"
+            />
+          </div>
+
+          <!-- CLAIMED AMOUNT -->
+          <div class="cl-edit-total">
+            <span>Calculated amount claimed</span>
+            <strong id="editCalculatedAmount">—</strong>
+          </div>
+
+          <p class="cl-form-note">
+            The claimed amount is calculated from the quantity and rate.
+          </p>
+
+          <hr class="my-4" />
+
+          <!-- CERTIFICATION SECTION -->
+          <div class="mb-3">
+            <span class="cl-eyebrow">CERTIFICATION</span>
+            <h3 class="h6 mt-1">Assessment details</h3>
+            <p class="cl-form-note">
+              Record the amount approved for this item after reviewing the
+              claimed work and its supporting evidence.
+            </p>
+          </div>
+
+          <!-- CERTIFIED AMOUNT -->
+          <label for="editCertifiedAmount"> Certified amount (R) </label>
+
+          <input
+            id="editCertifiedAmount"
+            type="number"
+            name="certified_amount"
+            min="0"
+            step="0.01"
+            value="{{ item.certified_amount|default_if_none:'' }}"
+            placeholder="Not yet assessed"
+          />
+
+          <p class="cl-form-note">
+            Leave blank until the item has been assessed. Enter 0.00 if none of
+            the claimed amount is certified.
+          </p>
+
+          <!-- CERTIFICATION NOTES -->
+          <label for="editCertificationNotes"> Certification notes </label>
+
+          <textarea
+            id="editCertificationNotes"
+            name="certification_notes"
+            rows="3"
+            placeholder="Explain the assessment or any difference in the amounts..."
+          >
+{{ item.certification_notes }}</textarea
+          >
+
+          <p class="cl-form-note">
+            A reason is required when the certified amount is lower than the
+            calculated claimed amount.
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn cl-btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+
+          <button type="submit" class="btn cl-btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSE CLAIM ITEM MODAL  -->
+<script>
+  function closeUpdateClaimItemModal() {
+    const modalElement = document.getElementById("editLineItemModal");
+
+    if (!modalElement) return;
+
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+
+    // Clean up after Bootstrap finishes its closing transition
+    modalElement.addEventListener(
+      "hidden.bs.modal",
+      function () {
+        document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+          backdrop.remove();
+        });
+
+        document.body.classList.remove("modal-open");
+        document.body.style.removeProperty("overflow");
+        document.body.style.removeProperty("padding-right");
+      },
+      { once: true },
+    );
+  }
+</script>
+
+
+
+<!-- CERTIFICATION MODAL -->
+<div
+  class="modal fade cl-certification-modal"
+  id="certificationModal"
+  tabindex="-1"
+  aria-labelledby="certificationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable cl-certification-dialog">
+    <div class="modal-content cl-certification-content">
+      <!-- MODAL HEADER -->
+      <div class="modal-header">
+        <div>
+          <span class="cl-cert-modal-eyebrow"> CLAIM REVIEW </span>
+
+          <h2 class="modal-title" id="certificationModalLabel">
+            <i class="bi bi-patch-check"></i>
+            {% if item.certified_amount != None %} 
+            Update certification 
+            {% else %} 
+            Record certification
+             {% endif %}
+          </h2>
+
+          <p>
+            Record the approved amount and attach the documents supporting your
+            decision.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- MODAL BODY -->
+      <form
+        class="cl-certification-form"
+        enctype="multipart/form-data"
+        hx-post="{% url 'claims:create-certified-item-amount' item.uuid %}"
+        hx-target="#ClaimLineItemPartial"
+        hx-swap="innerHTML"
+        hx-push-url="false"
+        hx-on::after-request="
+          if (event.detail.successful) {
+              closeCertifiedItemModal();
+              initCertificationModal();
+          }
+      "
+      >
+        {% csrf_token %}
+
+        <input type="hidden" name="action" value="certify_item" />
+
+        <div class="modal-body">
+          <!-- CLAIMED AMOUNT -->
+          <div class="cl-cert-claimed-reference">
+            <span>Subcontractor's claimed amount</span>
+            <strong>
+              R{{ item.amount|default_if_none:0|floatformat:2 }}
+            </strong>
+            <small>This amount is read-only during certification.</small>
+          </div>
+
+          <!-- CERTIFIED AMOUNT -->
+          <div class="cl-cert-form-group">
+            <label for="certifiedAmount">
+              Certified amount <span>*</span>
+            </label>
+
+            <div class="cl-cert-currency-input">
+              <span>R</span>
+              <input
+                type="number"
+                id="certifiedAmount"
+                name="certified_amount"
+                min="0"
+                max="999999999999.99"
+                step="0.01"
+                required
+                value="{{ item.certified_amount|default_if_none:'' }}"
+                placeholder="0.00"
+              />
+            </div>
+
+            <small> Enter the amount approved for this line item. </small>
+          </div>
+
+          <!-- CERTIFICATION NOTES -->
+          <div class="cl-cert-form-group">
+            <label for="certificationNotes"> Certification notes </label>
+
+            <textarea
+              id="certificationNotes"
+              name="certification_notes"
+              rows="4"
+              placeholder="Explain any reduction, adjustment, incomplete work or other relevant decision..."
+            >
+{{ item.certification_notes }}</textarea
+            >
+
+            <small>
+              Explain any difference between the claimed and certified amounts.
+            </small>
+          </div>
+
+          <!-- MULTIPLE SUPPORTING DOCUMENTS -->
+          <div class="cl-cert-form-group">
+            <label for="certificationDocuments"> Supporting documents </label>
+
+            <div class="cl-cert-upload-box">
+              <i class="bi bi-cloud-arrow-up"></i>
+
+              <strong>Add supporting documents</strong>
+
+              <p>
+                Upload certificates, measurement sheets, inspection records or
+                other relevant files.
+              </p>
+
+              <input
+                type="file"
+                id="certificationDocuments"
+                name="supporting_documents"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+              />
+
+              <small>
+                PDF, images, Word and Excel files. Maximum 10 MB per file.
+              </small>
+            </div>
+
+            <div
+              id="cl-cert-selected-files"
+              class="cl-cert-selected-files"
+              aria-live="polite"
+            ></div>
+          </div>
+
+          <!-- EXISTING DOCUMENTS -->
+          {% if item.certification_attachments.exists %}
+          <div class="cl-cert-existing-files">
+            <span class="cl-field-label"> Previously uploaded documents </span>
+
+            {% for attachment in item.certification_attachments.all %}
+            <div class="cl-cert-existing-file">
+              <i class="bi bi-file-earmark-check"></i>
+              <span>{{ attachment.original_filename }}</span>
+            </div>
+            {% endfor %}
+
+            <small>
+              New files will be added to these documents; existing files will
+              not be replaced.
+            </small>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- MODAL FOOTER -->
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn cl-cert-cancel-btn"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+
+          <button type="submit" class="btn cl-btn-primary">
+            <i class="bi bi-check2-circle"></i>
+            Save certification
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- CLOSE ITEM CERTIFICATION MODAL  -->
+<script>
+  function closeCertifiedItemModal() {
+    const modalElement = document.getElementById("certificationModal");
+
+    if (!modalElement) return;
+
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+
+    // Clean up after Bootstrap finishes its closing transition
+    modalElement.addEventListener(
+      "hidden.bs.modal",
+      function () {
+        document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+          backdrop.remove();
+        });
+
+        document.body.classList.remove("modal-open");
+        document.body.style.removeProperty("overflow");
+        document.body.style.removeProperty("padding-right");
+      },
+      { once: true },
+    );
+  }
+</script>
+
+

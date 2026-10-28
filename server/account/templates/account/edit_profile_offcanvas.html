@@ -1,0 +1,323 @@
+
+<!-- EDIT PROFILE OFFCANVAS -->
+<div
+  class="offcanvas offcanvas-end claimledger-profile-offcanvas"
+  tabindex="-1"
+  id="editProfileOffcanvas"
+  aria-labelledby="editProfileOffcanvasLabel"
+>
+  <!-- Header -->
+  <div class="claimledger-profile-offcanvas-header">
+    <div class="claimledger-profile-offcanvas-heading">
+      <div class="claimledger-profile-offcanvas-icon">
+        <i class="bi bi-person-gear" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <h5 id="editProfileOffcanvasLabel">Edit profile</h5>
+        <p>Manage your personal details.</p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="claimledger-profile-offcanvas-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    >
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="offcanvas-body claimledger-profile-offcanvas-body">
+
+    <!-- Profile identity -->
+    <div class="claimledger-profile-edit-summary">
+      <div class="claimledger-profile-edit-avatar">
+        {{ profile.first_name|default:"U"|first|upper }}{{ profile.last_name|default:""|first|upper }}
+      </div>
+
+      <div class="claimledger-profile-edit-identity">
+        <strong>
+          {% if profile.first_name or profile.last_name %}
+            {{ profile.first_name|default:"" }} {{ profile.last_name|default:"" }}
+          {% else %}
+            Your profile
+          {% endif %}
+        </strong>
+        <span>{{ profile.email }}</span>
+      </div>
+
+      <span class="claimledger-profile-edit-status">
+        <span class="claimledger-profile-edit-status-dot"></span>
+        {{ profile.get_status_display }}
+      </span>
+    </div>
+
+    <!-- PERSONAL DETAILS -->
+    <form
+
+      method="post"
+      hx-post="{% url 'account:update-profile'%}"
+      hx-target="#ProfileAccountPartial"
+      hx-swap="innerHTML"
+      hx-push-url="false"
+      hx-on::after-request="
+            if (event.detail.successful) {
+            closeEditProfileOffcanvas();
+            }
+        "
+        id="claimledgerEditProfileForm"
+    >
+      {% csrf_token %}
+
+      <div class="claimledger-profile-edit-section">
+        <div class="claimledger-profile-edit-section-heading">
+          <span class="claimledger-profile-edit-section-number">01</span>
+          <div>
+            <h6>Personal details</h6>
+            <p>Keep your contact information up to date.</p>
+          </div>
+        </div>
+
+        <div class="claimledger-profile-edit-field">
+          <label for="claimledgerProfileFirstName">First name</label>
+          <input
+            type="text"
+            class="form-control claimledger-profile-edit-input"
+            id="claimledgerProfileFirstName"
+            name="first_name"
+            value="{{ profile.first_name|default:'' }}"
+            placeholder="Enter your first name"
+            maxlength="200"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+
+        <div class="claimledger-profile-edit-field">
+          <label for="claimledgerProfileLastName">Last name</label>
+          <input
+            type="text"
+            class="form-control claimledger-profile-edit-input"
+            id="claimledgerProfileLastName"
+            name="last_name"
+            value="{{ profile.last_name|default:'' }}"
+            placeholder="Enter your last name"
+            maxlength="200"
+            autocomplete="family-name"
+            required
+          />
+        </div>
+
+        <div class="claimledger-profile-edit-field">
+          <label for="claimledgerProfileEmail">Email address</label>
+
+          <div class="claimledger-profile-edit-input-wrap">
+            <i class="bi bi-envelope" aria-hidden="true"></i>
+            <input
+              type="email"
+              class="form-control claimledger-profile-edit-input claimledger-profile-edit-input-with-icon"
+              id="claimledgerProfileEmail"
+              value="{{ profile.email }}"
+              readonly
+              aria-describedby="claimledgerProfileEmailHelp"
+            />
+            <i
+              class="bi bi-lock-fill claimledger-profile-edit-lock"
+              aria-hidden="true"
+            ></i>
+          </div>
+
+          <span
+            class="claimledger-profile-edit-help"
+            id="claimledgerProfileEmailHelp"
+          >
+            <i class="bi bi-info-circle" aria-hidden="true"></i>
+            Contact your administrator if you need to change your email.
+          </span>
+        </div>
+
+        <div class="claimledger-profile-edit-field">
+          <label for="claimledgerProfilePhone">
+            Phone number
+            <span class="claimledger-profile-edit-optional">Optional</span>
+          </label>
+
+          <div class="claimledger-profile-edit-input-wrap">
+            <i class="bi bi-telephone" aria-hidden="true"></i>
+            <input
+              type="tel"
+              class="form-control claimledger-profile-edit-input claimledger-profile-edit-input-with-icon"
+              id="claimledgerProfilePhone"
+              name="phone"
+              value="{{ profile.phone|default:'' }}"
+              placeholder="e.g. 082 123 4567"
+              maxlength="20"
+              autocomplete="tel"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT INFORMATION -->
+      <div class="claimledger-profile-edit-section">
+        <div class="claimledger-profile-edit-section-heading">
+          <span class="claimledger-profile-edit-section-number">02</span>
+          <div>
+            <h6>Account information</h6>
+            <p>These details are managed by ClaimLedger.</p>
+          </div>
+        </div>
+
+        <div class="claimledger-profile-edit-account-row">
+          <div class="claimledger-profile-edit-account-icon">
+            <i class="bi bi-person-badge" aria-hidden="true"></i>
+          </div>
+          <div class="claimledger-profile-edit-account-info">
+            <span>Account role</span>
+            <strong>{{ profile.get_role_display }}</strong>
+          </div>
+          <i class="bi bi-lock claimledger-profile-edit-account-lock"
+             aria-hidden="true"></i>
+        </div>
+
+        <div class="claimledger-profile-edit-account-row">
+          <div class="claimledger-profile-edit-account-icon">
+            <i class="bi bi-calendar3" aria-hidden="true"></i>
+          </div>
+          <div class="claimledger-profile-edit-account-info">
+            <span>Member since</span>
+            <strong>
+              {% if profile.date_created %}
+                {{ profile.date_created|date:"d M Y" }}
+              {% else %}
+                Not available
+              {% endif %}
+            </strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="claimledger-profile-edit-footer">
+        <button
+          type="button"
+          class="claimledger-profile-edit-cancel"
+          data-bs-dismiss="offcanvas"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="claimledger-profile-edit-save"
+        >
+          <i class="bi bi-check2" aria-hidden="true"></i>
+          Save changes
+        </button>
+      </div>
+    </form>
+
+    <!-- DANGER ZONE: SEPARATE FROM PROFILE FORM -->
+    <div class="claimledger-profile-danger-zone">
+      <div class="claimledger-profile-danger-heading">
+        <div class="claimledger-profile-danger-icon">
+          <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+        </div>
+        <div>
+          <h6>Account actions</h6>
+          <p>Actions that affect your access to ClaimLedger.</p>
+        </div>
+      </div>
+
+      <div class="claimledger-profile-danger-action">
+        <div>
+          <strong>Deactivate account</strong>
+          <p>Restrict access to your account.</p>
+        </div>
+
+        <button
+          type="button"
+          class="claimledger-profile-deactivate-button"
+          data-bs-toggle="modal"
+          data-bs-target="#claimledgerDeactivateAccountModal"
+        >
+          Deactivate
+        </button>
+      </div>
+
+      <p class="claimledger-profile-danger-note">
+        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+        Account deletion is not available here. Contact support to request
+        deletion and review any company records that must be retained.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- DEACTIVATE CONFIRMATION MODAL -->
+<div
+  class="modal fade claimledger-profile-confirm-modal"
+  id="claimledgerDeactivateAccountModal"
+  tabindex="-1"
+  aria-labelledby="claimledgerDeactivateAccountTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="claimledger-profile-confirm-icon">
+        <i class="bi bi-person-lock" aria-hidden="true"></i>
+      </div>
+
+      <h5 id="claimledgerDeactivateAccountTitle">
+        Deactivate your account?
+      </h5>
+
+      <p>
+        You may lose access to ClaimLedger. Make sure you understand how
+        deactivation affects your company and its claim records before
+        continuing.
+      </p>
+
+      <div class="claimledger-profile-confirm-actions">
+        <button
+          type="button"
+          class="claimledger-profile-confirm-cancel"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+
+        <!-- Connect this button to a protected Django POST endpoint. -->
+        <form method="post" action="#">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="claimledger-profile-confirm-danger"
+          >
+            Confirm deactivation
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CLOSE DELIVERY OFFCANVAS  -->
+<script>
+  function closeEditProfileOffcanvas() {
+    var offcanvasElement = document.getElementById("editProfileOffcanvas");
+    var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+    if (!offcanvasInstance) {
+      offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+    }
+
+    offcanvasInstance.hide();
+  }
+</script>

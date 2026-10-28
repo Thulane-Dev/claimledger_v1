@@ -1,0 +1,632 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/claims/claim_details.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cl-detail">
+
+    <!-- Breadcrumb and header -->
+    <a href="{% url 'claims:payment-claims' %}" class="cl-back">
+        <i class="bi bi-arrow-left"></i> Back to payment claims
+    </a>
+
+    <header class="cl-header">
+        <div class="cl-heading">
+            <div class="cl-eyebrow">
+                {{ claim.claim_number|default:"UNNUMBERED CLAIM" }}
+            </div>
+            <div class="cl-title-row">
+                <h1>{{ claim.claim_title|default:"Payment claim" }}</h1>
+                <span class="cl-status cl-status-{{ claim.status }}">
+                    {{ claim.get_status_display }}
+                </span>
+            </div>
+            <p>
+                {% if claim.project %}
+                    {{ claim.project.project_name }}
+                {% else %}
+                    No project assigned
+                {% endif %}
+                <span class="cl-dot">·</span>
+                Created {{ claim.created_at|date:"d M Y" }}
+            </p>
+        </div>
+
+        <div class="cl-actions">
+            <button type="button" class="cl-btn cl-btn-light"
+                    onclick="window.print()">
+                <i class="bi bi-printer"></i> Print
+            </button>
+
+            {% if claim.status == "draft" %}
+                <span class="cl-action-note">
+                    Submit action needs a dedicated view.
+                </span>
+            {% endif %}
+
+            <button type="button" class="cl-btn cl-btn-primary"
+                    disabled title="Connect this action when submission is implemented">
+                <i class="bi bi-send"></i>
+                {% if claim.status == "draft" %}
+                    Submit claim
+                {% elif claim.status == "queried" %}
+                    Resubmit claim
+                {% else %}
+                    Claim actions
+                {% endif %}
+            </button>
+        </div>
+    </header>
+
+    <!-- Financial summary -->
+    <section class="cl-financial-grid">
+        <article class="cl-financial-card">
+            <span class="cl-card-label">Total claimed</span>
+            <strong>R {{ total_claimed|floatformat:2 }}</strong>
+            <span class="cl-card-foot">Value of all line items</span>
+        </article>
+
+        <article class="cl-financial-card">
+            <span class="cl-card-label">Paid to date</span>
+            <strong>R {{ total_paid|floatformat:2 }}</strong>
+            <span class="cl-card-foot">Recorded payments only</span>
+        </article>
+
+        <article class="cl-financial-card cl-outstanding-card">
+            <span class="cl-card-label">Outstanding</span>
+            <strong>R {{ outstanding_amount|floatformat:2 }}</strong>
+            <span class="cl-card-foot">Claimed less recorded payments</span>
+        </article>
+
+        <article class="cl-financial-card">
+            <span class="cl-card-label">Line items</span>
+            <strong>{{ line_items|length }}</strong>
+            <span class="cl-card-foot">Work items in this claim</span>
+        </article>
+    </section>
+
+    <!-- Navigation -->
+    <div class="cl-workspace">
+        <ul class="nav cl-tabs" id="claimDetailTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab"
+                        data-bs-toggle="tab" data-bs-target="#overview"
+                        type="button" role="tab">
+                    <i class="bi bi-grid"></i> Overview
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="items-tab"
+                        data-bs-toggle="tab" data-bs-target="#items"
+                        type="button" role="tab">
+                    <i class="bi bi-list-check"></i> Line items
+                    <span class="cl-tab-count">{{ line_items|length }}</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="evidence-tab"
+                        data-bs-toggle="tab" data-bs-target="#evidence"
+                        type="button" role="tab">
+                    <i class="bi bi-paperclip"></i> Evidence
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payments-tab"
+                        data-bs-toggle="tab" data-bs-target="#payments"
+                        type="button" role="tab">
+                    <i class="bi bi-cash-stack"></i> Payments
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="issues-tab"
+                        data-bs-toggle="tab" data-bs-target="#issues"
+                        type="button" role="tab">
+                    <i class="bi bi-chat-square-text"></i> Disputes & follow-ups
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="activity-tab"
+                        data-bs-toggle="tab" data-bs-target="#activity"
+                        type="button" role="tab">
+                    <i class="bi bi-clock-history"></i> Activity
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content cl-tab-content">
+
+            <!-- OVERVIEW -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                <div class="cl-overview-grid">
+                    <div class="cl-panel">
+                        <div class="cl-panel-heading">
+                            <div>
+                                <h2>Claim information</h2>
+                                <p>Core details and parties.</p>
+                            </div>
+                        </div>
+
+                        <div class="cl-info-grid">
+                            <div class="cl-info-item">
+                                <span>Claim number</span>
+                                <strong>{{ claim.claim_number|default:"—" }}</strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Claim status</span>
+                                <strong>{{ claim.get_status_display }}</strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Claimant</span>
+                                <strong>
+                                    {% if claim.claimant_company %}
+                                        {{ claim.claimant_company.name }}
+                                    {% else %}—{% endif %}
+                                </strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Recipient</span>
+                                <strong>
+                                    {% if claim.recipient_company %}
+                                        {{ claim.recipient_company.name }}
+                                    {% else %}—{% endif %}
+                                </strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Period starts</span>
+                                <strong>
+                                    {{ claim.claim_period_start|date:"d M Y"|default:"—" }}
+                                </strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Period ends</span>
+                                <strong>
+                                    {{ claim.claim_period_end|date:"d M Y"|default:"—" }}
+                                </strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Submitted by</span>
+                                <strong>
+                                    {% if claim.submitted_by %}
+                                        {{ claim.submitted_by }}
+                                    {% else %}Not recorded{% endif %}
+                                </strong>
+                            </div>
+                            <div class="cl-info-item">
+                                <span>Submitted on</span>
+                                <strong>
+                                    {{ claim.submitted_at|date:"d M Y, H:i"|default:"Not submitted" }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="cl-notes">
+                            <span class="cl-section-label">Claim notes</span>
+                            {% if claim.notes %}
+                                <p>{{ claim.notes|linebreaksbr }}</p>
+                            {% else %}
+                                <p class="cl-muted">No notes have been added.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="cl-side-stack">
+                        <div class="cl-panel">
+                            <div class="cl-panel-heading">
+                                <div>
+                                    <h2>Supporting documents</h2>
+                                    <p>Files attached to this claim.</p>
+                                </div>
+                                <span class="cl-count">{{ claim_attachments|length }}</span>
+                            </div>
+
+                            {% for attachment in claim_attachments|slice:":4" %}
+                                <div class="cl-file-row">
+                                    <div class="cl-file-icon">
+                                        <i class="bi bi-file-earmark"></i>
+                                    </div>
+                                    <div class="cl-file-info">
+                                        <strong>
+                                            {% if attachment.file %}
+                                                {{ attachment.file.name|cut:"media/project_files/" }}
+                                            {% elif attachment.photo %}
+                                                {{ attachment.photo.name|cut:"media/project_photos/" }}
+                                            {% else %}
+                                                {{ attachment.caption|default:"Attachment" }}
+                                            {% endif %}
+                                        </strong>
+                                        <span>{{ attachment.filesize }}</span>
+                                    </div>
+                                    {% if attachment.file %}
+                                        <a href="{{ attachment.file.url }}" target="_blank"
+                                           rel="noopener" class="cl-icon-link"
+                                           aria-label="Open attachment">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% elif attachment.photo %}
+                                        <a href="{{ attachment.photo.url }}" target="_blank"
+                                           rel="noopener" class="cl-icon-link"
+                                           aria-label="Open photo">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% empty %}
+                                <div class="cl-empty-mini">
+                                    <i class="bi bi-folder2-open"></i>
+                                    <span>No claim documents uploaded.</span>
+                                </div>
+                            {% endfor %}
+
+                            {% if claim_attachments %}
+                                <button type="button" class="cl-text-action"
+                                        data-bs-toggle="tab" data-bs-target="#evidence"
+                                        onclick="document.getElementById('evidence-tab').click()">
+                                    View all evidence <i class="bi bi-arrow-right"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+
+                        <div class="cl-panel">
+                            <div class="cl-panel-heading">
+                                <div>
+                                    <h2>Issues & follow-ups</h2>
+                                    <p>Prototype section</p>
+                                </div>
+                                <span class="cl-demo-label">DEMO</span>
+                            </div>
+                            <div class="cl-issue-row">
+                                <span class="cl-issue-dot"></span>
+                                <div>
+                                    <strong>Quantity clarification</strong>
+                                    <p>Example issue · Not saved</p>
+                                </div>
+                                <span class="cl-issue-status">Open</span>
+                            </div>
+                            <div class="cl-issue-row">
+                                <span class="cl-issue-dot is-blue"></span>
+                                <div>
+                                    <strong>Review follow-up</strong>
+                                    <p>Example reminder · Not saved</p>
+                                </div>
+                                <span class="cl-issue-status">Pending</span>
+                            </div>
+                            <p class="cl-demo-note">
+                                Disputes and reminders will become real records when their models are added.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINE ITEMS -->
+            <div class="tab-pane fade" id="items" role="tabpanel">
+                <div class="cl-panel">
+                    <div class="cl-panel-heading">
+                        <div>
+                            <h2>Claim line items</h2>
+                            <p>Amounts are calculated from each item's quantity and rate.</p>
+                        </div>
+                        <span class="cl-count">{{ line_items|length }} items</span>
+                    </div>
+
+                    {% if line_items %}
+                        <div class="cl-table-wrap">
+                            <table class="cl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th class="text-end">Rate</th>
+                                        <th class="text-end">Amount</th>
+                                        <th>Evidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in line_items %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ item.description|default:"Untitled work item" }}</strong>
+                                                <span class="cl-cell-subtitle">Item {{ forloop.counter }}</span>
+                                            </td>
+                                            <td>{{ item.quantity|default_if_none:"—" }}</td>
+                                            <td>
+                                                {% if item.unit == "other" %}
+                                                    {{ item.custom_unit|default:"Other" }}
+                                                {% else %}
+                                                    {{ item.get_unit_display }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">R {{ item.rate|default_if_none:0|floatformat:2 }}</td>
+                                            <td class="text-end cl-amount">R {{ item.amount|default_if_none:0|floatformat:2 }}</td>
+                                            <td>
+                                                <span class="cl-evidence-count">
+                                                    <i class="bi bi-paperclip"></i>
+                                                    {{ item.claimLineItem_attachments.count }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% if item.claimLineItem_attachments.all %}
+                                            <tr class="cl-evidence-detail-row">
+                                                <td colspan="6">
+                                                    <div class="cl-inline-files">
+                                                        {% for file in item.claimLineItem_attachments.all %}
+                                                            {% if file.file %}
+                                                                <a href="{{ file.file.url }}" target="_blank" rel="noopener">
+                                                                    <i class="bi bi-file-earmark"></i>
+                                                                    {{ file.caption|default:file.file.name }}
+                                                                </a>
+                                                            {% elif file.photo %}
+                                                                <a href="{{ file.photo.url }}" target="_blank" rel="noopener">
+                                                                    <i class="bi bi-image"></i>
+                                                                    {{ file.caption|default:file.photo.name }}
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4">Total claimed</td>
+                                        <td class="text-end">R {{ total_claimed|floatformat:2 }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="cl-empty-state">
+                            <i class="bi bi-list-check"></i>
+                            <h3>No line items yet</h3>
+                            <p>This claim has no work items.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- EVIDENCE -->
+            <div class="tab-pane fade" id="evidence" role="tabpanel">
+                <div class="cl-panel">
+                    <div class="cl-panel-heading">
+                        <div>
+                            <h2>Claim supporting documents</h2>
+                            <p>Documents attached to the overall payment claim.</p>
+                        </div>
+                        <span class="cl-count">{{ claim_attachments|length }} files</span>
+                    </div>
+
+                    <div class="cl-file-list">
+                        {% for attachment in claim_attachments %}
+                            <div class="cl-evidence-card">
+                                <div class="cl-file-icon">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <div class="cl-file-info">
+                                    <strong>
+                                        {{ attachment.caption|default:attachment.reference|default:"Supporting document" }}
+                                    </strong>
+                                    <span>
+                                        {{ attachment.filesize }} ·
+                                        {{ attachment.created_at|date:"d M Y" }}
+                                    </span>
+                                    {% if attachment.uploaded_by_user %}
+                                        <span>Uploaded by {{ attachment.uploaded_by_user }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if attachment.file %}
+                                    <a href="{{ attachment.file.url }}" target="_blank" rel="noopener"
+                                       class="cl-btn cl-btn-light">Open file</a>
+                                {% elif attachment.photo %}
+                                    <a href="{{ attachment.photo.url }}" target="_blank" rel="noopener"
+                                       class="cl-btn cl-btn-light">View photo</a>
+                                {% else %}
+                                    <span class="cl-muted">No file attached</span>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <div class="cl-empty-state">
+                                <i class="bi bi-paperclip"></i>
+                                <h3>No supporting documents</h3>
+                                <p>Claim-level invoices and documents will appear here after upload.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="cl-panel-subheading">
+                        <h2>Line-item evidence</h2>
+                        <p>Files grouped by the work item they support.</p>
+                    </div>
+
+                    {% for item in line_items %}
+                        <div class="cl-line-evidence">
+                            <div class="cl-line-evidence-heading">
+                                <strong>{{ item.description|default:"Untitled work item" }}</strong>
+                                <span>{{ item.claimLineItem_attachments.count }} files</span>
+                            </div>
+                            {% for file in item.claimLineItem_attachments.all %}
+                                <div class="cl-file-row">
+                                    <div class="cl-file-icon">
+                                        <i class="bi bi-paperclip"></i>
+                                    </div>
+                                    <div class="cl-file-info">
+                                        <strong>
+                                            {{ file.caption|default:file.reference|default:"Line-item evidence" }}
+                                        </strong>
+                                        <span>{{ file.filesize }}</span>
+                                    </div>
+                                    {% if file.file %}
+                                        <a href="{{ file.file.url }}" target="_blank" rel="noopener"
+                                           class="cl-icon-link" aria-label="Open evidence">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% elif file.photo %}
+                                        <a href="{{ file.photo.url }}" target="_blank" rel="noopener"
+                                           class="cl-icon-link" aria-label="Open evidence photo">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% empty %}
+                                <p class="cl-empty-inline">No evidence linked to this work item.</p>
+                            {% endfor %}
+                        </div>
+                    {% empty %}
+                        <p class="cl-empty-inline">No line items to show.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- PAYMENTS -->
+            <div class="tab-pane fade" id="payments" role="tabpanel">
+                <div class="cl-panel">
+                    <div class="cl-panel-heading">
+                        <div>
+                            <h2>Payments</h2>
+                            <p>Track receipts and outstanding balances.</p>
+                        </div>
+                        <span class="cl-demo-label">DEMO DATA</span>
+                    </div>
+
+                    <div class="cl-demo-banner">
+                        <i class="bi bi-info-circle"></i>
+                        Payments are not connected to a payment model yet. No actual payment is recorded on this page.
+                    </div>
+
+                    <div class="cl-payment-summary">
+                        <div><span>Total claimed</span><strong>R {{ total_claimed|floatformat:2 }}</strong></div>
+                        <div><span>Paid in database</span><strong>R {{ total_paid|floatformat:2 }}</strong></div>
+                        <div><span>Outstanding</span><strong>R {{ outstanding_amount|floatformat:2 }}</strong></div>
+                    </div>
+
+                    {% for payment in demo_payments %}
+                        <div class="cl-payment-row">
+                            <div class="cl-file-icon"><i class="bi bi-bank"></i></div>
+                            <div class="cl-file-info">
+                                <strong>{{ payment.description }}</strong>
+                                <span>{{ payment.reference }} · {{ payment.status }}</span>
+                            </div>
+                            <strong>R {{ payment.amount|floatformat:2 }}</strong>
+                        </div>
+                    {% endfor %}
+
+                    <p class="cl-demo-note">
+                        Add a Payment model before enabling “Record payment” or using payment records to calculate paid amounts.
+                    </p>
+                    <button class="cl-btn cl-btn-light" type="button" disabled>
+                        <i class="bi bi-plus-lg"></i> Record payment (coming soon)
+                    </button>
+                </div>
+            </div>
+
+            <!-- DISPUTES & FOLLOW-UPS -->
+            <div class="tab-pane fade" id="issues" role="tabpanel">
+                <div class="cl-overview-grid">
+                    <div class="cl-panel">
+                        <div class="cl-panel-heading">
+                            <div>
+                                <h2>Disputes and queries</h2>
+                                <p>Record disagreements, queried quantities and responses.</p>
+                            </div>
+                            <span class="cl-demo-label">DEMO</span>
+                        </div>
+
+                        <div class="cl-demo-banner">
+                            These are examples only. Dispute records are not stored yet.
+                        </div>
+
+                        {% for dispute in demo_disputes %}
+                            <div class="cl-issue-card">
+                                <div class="cl-issue-card-top">
+                                    <strong>{{ dispute.title }}</strong>
+                                    <span class="cl-issue-status">{{ dispute.status }}</span>
+                                </div>
+                                <p>{{ dispute.description }}</p>
+                                <span class="cl-muted">No dispute date recorded</span>
+                            </div>
+                        {% endfor %}
+
+                        <button class="cl-btn cl-btn-light" type="button" disabled>
+                            <i class="bi bi-plus-lg"></i> Add dispute (coming soon)
+                        </button>
+                    </div>
+
+                    <div class="cl-panel">
+                        <div class="cl-panel-heading">
+                            <div>
+                                <h2>Follow-ups</h2>
+                                <p>Keep outstanding actions visible.</p>
+                            </div>
+                            <span class="cl-demo-label">DEMO</span>
+                        </div>
+
+                        <div class="cl-demo-banner">
+                            Follow-ups are illustrative and will not send reminders.
+                        </div>
+
+                        {% for follow_up in demo_follow_ups %}
+                            <div class="cl-issue-card">
+                                <div class="cl-issue-card-top">
+                                    <strong>{{ follow_up.title }}</strong>
+                                    <span class="cl-issue-status">{{ follow_up.status }}</span>
+                                </div>
+                                <p>{{ follow_up.description }}</p>
+                                <span class="cl-muted">No due date recorded</span>
+                            </div>
+                        {% endfor %}
+
+                        <button class="cl-btn cl-btn-light" type="button" disabled>
+                            <i class="bi bi-plus-lg"></i> Add follow-up (coming soon)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTIVITY -->
+            <div class="tab-pane fade" id="activity" role="tabpanel">
+                <div class="cl-panel">
+                    <div class="cl-panel-heading">
+                        <div>
+                            <h2>Claim activity</h2>
+                            <p>A record of important events associated with this claim.</p>
+                        </div>
+                        <span class="cl-demo-label">PARTIAL HISTORY</span>
+                    </div>
+
+                    <div class="cl-demo-banner">
+                        Creation and submission dates come from your real claim record. Other example events are not persisted.
+                    </div>
+
+                    <div class="cl-timeline">
+                        {% for event in demo_activity %}
+                            <div class="cl-timeline-event">
+                                <span class="cl-timeline-dot {% if event.demo %}is-demo{% endif %}"></span>
+                                <div class="cl-timeline-content">
+                                    <strong>{{ event.title }}</strong>
+                                    <p>{{ event.description }}</p>
+                                    <span>
+                                        {% if event.date %}
+                                            {{ event.date|date:"d M Y, H:i" }}
+                                        {% else %}
+                                            Example only · no timestamp
+                                        {% endif %}
+                                        {% if event.demo %}<span class="cl-demo-inline"> · DEMO</span>{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

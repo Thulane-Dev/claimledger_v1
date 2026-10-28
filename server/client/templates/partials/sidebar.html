@@ -1,0 +1,224 @@
+{% load static %}
+
+<aside class="claimledger-sidebar d-none d-lg-flex">
+  <!-- Brand -->
+  <a href="{% url 'dashboard:dashboard' %}" class="claimledger-sidebar-brand">
+    <div class="claimledger-brand-mark">C</div>
+
+    <div class="claimledger-brand-text">
+      <span class="claimledger-brand-name">ClaimLedger</span>
+      <span class="claimledger-brand-subtitle">Payment management</span>
+    </div>
+  </a>
+
+  <!-- Navigation -->
+  <nav class="claimledger-sidebar-nav" aria-label="Main navigation">
+    <!-- Workspace -->
+    <div class="claimledger-nav-section">
+      <span class="claimledger-nav-label">Workspace</span>
+
+      <a
+        href="{% url 'dashboard:dashboard' %}"
+        hx-get="{% url 'dashboard:dashboard' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link {% if request.resolver_match.namespace == 'dashboard' %}is-active{% endif %}"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-house-door"></i>
+        </span>
+        <span class="claimledger-nav-text">Home</span>
+      </a>
+
+      <a
+        href="{% url 'projects:projects' %}"
+        hx-get="{% url 'projects:projects' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link {% if request.resolver_match.namespace == 'projects' %}is-active{% endif %}"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-folder2-open"></i>
+        </span>
+        <span class="claimledger-nav-text">Projects</span>
+      </a>
+
+      <a
+        href="{% url 'claims:payment-claims'  %}"
+        hx-get="{% url 'claims:payment-claims'  %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Payment Claims page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-receipt"></i>
+        </span>
+        <span class="claimledger-nav-text">Payment Claims</span>
+      </a>
+
+      <a
+        href="{% url 'certificates:certificates'  %}"
+        hx-get="{% url 'certificates:certificates'  %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Payment Claims page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-receipt"></i>
+        </span>
+        <span class="claimledger-nav-text">Certificates</span>
+      </a>
+
+      <a
+        href="{% url 'claims:create-claim' %}"
+        hx-get="{% url 'claims:create-claim' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link claimledger-nav-link--primary claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="New Claim page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-plus-circle"></i>
+        </span>
+        <span class="claimledger-nav-text">New Claim</span>
+        <span class="claimledger-nav-badge">+</span>
+      </a>
+    </div>
+
+    <!-- Financial tracking -->
+    <div class="claimledger-nav-section">
+      <span class="claimledger-nav-label">Financial tracking</span>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Payments page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-cash-stack"></i>
+        </span>
+        <span class="claimledger-nav-text">Payments</span>
+      </a>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Outstanding amounts page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-hourglass-split"></i>
+        </span>
+        <span class="claimledger-nav-text">Outstanding Amounts</span>
+      </a>
+    </div>
+
+    <!-- Company -->
+    <div class="claimledger-nav-section">
+      <span class="claimledger-nav-label">Company</span>
+
+      <a
+        href="{% url 'account:company' company.uuid %}"
+        hx-get="{% url 'account:company' company.uuid %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link {% if request.resolver_match.url_name == 'company' %}is-active{% endif %}"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-building"></i>
+        </span>
+        <span class="claimledger-nav-text">Company Details</span>
+      </a>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Team Members page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-people"></i>
+        </span>
+        <span class="claimledger-nav-text">Team Members</span>
+      </a>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Subcontractor Access page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-person-lock"></i>
+        </span>
+        <span class="claimledger-nav-text">Subcontractor Access</span>
+      </a>
+    </div>
+
+    <!-- Preferences -->
+    <div class="claimledger-nav-section">
+      <span class="claimledger-nav-label">Preferences</span>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Notifications page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-bell"></i>
+        </span>
+        <span class="claimledger-nav-text">Notifications</span>
+      </a>
+
+      <a
+        href="{% url 'account:account' %}"
+        hx-get="{% url 'account:account' %}"
+        hx-target="#content"
+        hx-push-url="true"
+        class="claimledger-nav-link {% if request.resolver_match.url_name == 'account' %}is-active{% endif %}"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-gear"></i>
+        </span>
+        <span class="claimledger-nav-text">Settings</span>
+      </a>
+
+      <a
+        href="#"
+        class="claimledger-nav-link claimledger-nav-link--placeholder"
+        aria-disabled="true"
+        title="Help and Support page coming soon"
+      >
+        <span class="claimledger-nav-icon">
+          <i class="bi bi-question-circle"></i>
+        </span>
+        <span class="claimledger-nav-text">Help & Support</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Sidebar footer -->
+  <div class="claimledger-sidebar-bottom">
+    <div class="claimledger-sidebar-footer-note">
+      <span class="claimledger-footer-indicator"></span>
+      <span>ClaimLedger workspace</span>
+    </div>
+
+    <a
+      href="{% url 'logout' %}"
+      class="claimledger-nav-link claimledger-logout-link"
+    >
+      <span class="claimledger-nav-icon">
+        <i class="bi bi-box-arrow-left"></i>
+      </span>
+      <span class="claimledger-nav-text">Log out</span>
+    </a>
+  </div>
+</aside>

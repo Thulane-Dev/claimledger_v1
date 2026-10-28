@@ -1,0 +1,109 @@
+{% load static %}
+
+<!-- ================= CREATE CLAIM PARTIAL ================= -->
+<div id="ClaimDetailsPartial">
+  {% include 'partials/claim_details_partial.html' %}
+</div>
+
+<!-- ========================= EDIT CLAIM OFFCANVAS ========================== -->
+{% include 'claims_offcanvas/edit_claim_offcanvas.html' %}
+
+<!-- Delete Claim Confirmation Modal -->
+<div
+  class="modal fade claimledger-delete-modal"
+  id="deleteClaimModal"
+  tabindex="-1"
+  aria-labelledby="deleteClaimModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="claimledger-delete-icon">
+        <i class="bi bi-trash3"></i>
+      </div>
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteClaimModalLabel">
+          Delete this claim?
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <p>Are you sure you want to delete this payment claim?</p>
+
+        <div class="claimledger-delete-warning">
+          <i class="bi bi-exclamation-triangle"></i>
+          This action cannot be undone. Any line items belonging to this claim
+          will also be deleted.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn claimledger-btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Keep Claim
+        </button>
+
+        <form
+          method="POST"
+          action="{% url 'claims:delete-claim' claim.uuid %}"
+          hx-post="{% url 'claims:delete-claim' claim.uuid %}"
+          hx-target="#content"
+          hx-swap="innerHTML"
+          hx-push-url="{% url 'claims:payment-claims' %}"
+        >
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="btn claimledger-btn-danger"
+            onclick="closeDeleteClaimModal()"
+          >
+            <i class="bi bi-trash3"></i>
+            Yes, Delete Claim
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeDeleteClaimModal() {
+    const modalElement = document.getElementById("deleteClaimModal");
+
+    if (!modalElement) return;
+
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+
+    // Clean up after Bootstrap finishes its closing transition
+    modalElement.addEventListener(
+      "hidden.bs.modal",
+      function () {
+        document.querySelectorAll(".modal-backdrop").forEach((backdrop) => {
+          backdrop.remove();
+        });
+
+        document.body.classList.remove("modal-open");
+        document.body.style.removeProperty("overflow");
+        document.body.style.removeProperty("padding-right");
+      },
+      { once: true },
+    );
+  }
+</script>
+
+

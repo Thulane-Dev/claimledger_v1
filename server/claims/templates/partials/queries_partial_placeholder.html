@@ -1,0 +1,306 @@
+<!-- DISPUTES -->
+<section class="cl-panel" id="LineItemDisputesPartial">
+  <div class="cl-panel-heading">
+    <div>
+      <h2>Disputes</h2>
+      <p>
+        Record disagreements about the claimed amount, certified quantities,
+        rates or deductions for this line item.
+      </p>
+    </div>
+
+    <span class="cl-count">{{ open_dispute_count }} open</span>
+  </div>
+
+  <!-- RAISE A DISPUTE -->
+  <details class="cl-create-query">
+    <summary>
+      <i class="bi bi-plus-circle"></i>
+      Raise a dispute
+    </summary>
+
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      hx-post="{% url 'claims:create-item-query' item.uuid %}"
+      hx-target="#LineItemDisputesPartial"
+      hx-swap="outerHTML"
+      hx-push-url="false"
+      class="cl-query-form"
+    >
+      {% csrf_token %}
+
+      <input
+        type="hidden"
+        name="form_action"
+        value="create_new_dispute"
+      />
+
+      <label for="disputeReason">Dispute reason</label>
+      <select id="disputeReason" name="reason" required>
+        <option value="">Select a reason</option>
+        <option value="Quantity disagreement">Quantity disagreement</option>
+        <option value="Rate disagreement">Rate disagreement</option>
+        <option value="Certification disagreement">Certification disagreement</option>
+        <option value="Unjustified deduction">Unjustified deduction</option>
+        <option value="Work not recognised">Work not recognised</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="disputeAmount">
+        Amount in dispute
+        <span class="cl-query-optional">Optional</span>
+      </label>
+
+      <input
+        id="disputeAmount"
+        type="number"
+        name="dispute_amount"
+        min="0.01"
+        step="0.01"
+        placeholder="e.g. 2500.00"
+      />
+
+      <label for="disputeDescription">Explain your disagreement</label>
+
+      <textarea
+        id="disputeDescription"
+        name="query_description"
+        rows="4"
+        required
+        placeholder="Explain what you disagree with, why, and what you believe should be corrected..."
+      ></textarea>
+
+      <!-- DISPUTE EVIDENCE -->
+      <div class="cl-query-evidence">
+        <label for="disputeEvidence">
+          Supporting evidence
+          <span class="cl-query-optional">Optional</span>
+        </label>
+
+        <p class="cl-query-evidence-help">
+          Upload measurement sheets, certificates, photos or documents
+          supporting your position.
+        </p>
+
+        <label for="disputeEvidence" class="cl-query-upload">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>
+            <strong>Add evidence</strong>
+            <small>PDF, images, Word or Excel · Max 10 MB per file</small>
+          </span>
+        </label>
+
+        <input
+          id="disputeEvidence"
+          type="file"
+          name="supporting_documents"
+          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+          multiple
+        />
+
+        <div
+          id="cl-dispute-selected-files"
+          class="cl-query-selected-files"
+        ></div>
+      </div>
+
+      <button type="submit" class="btn cl-btn-primary">
+        <i class="bi bi-flag"></i>
+        Submit dispute
+      </button>
+    </form>
+  </details>
+
+  <!-- EXISTING DISPUTES -->
+  {% for dispute in disputes %}
+    <article class="cl-query-card">
+      <div class="cl-query-top">
+        <div>
+          <span class="cl-eyebrow">DISPUTE</span>
+          <h3>{{ dispute.reason }}</h3>
+        </div>
+
+        <span class="cl-query-status cl-query-{{ dispute.status }}">
+          {{ dispute.get_status_display }}
+        </span>
+      </div>
+
+      {% if dispute.dispute_amount %}
+        <p>
+          <strong>Amount in dispute:</strong>
+          R{{ dispute.dispute_amount|floatformat:2 }}
+        </p>
+      {% endif %}
+
+      <p class="cl-query-description">{{ dispute.description }}</p>
+
+      <!-- DISPUTE EVIDENCE -->
+      {% with evidence=dispute.query_attachments.all %}
+        {% if evidence %}
+          <div class="cl-query-attachments">
+            <strong class="cl-attachments-heading">
+              <i class="bi bi-paperclip"></i>
+              Supporting evidence ({{ evidence|length }})
+            </strong>
+
+            <div class="cl-attachments-list">
+              {% for attachment in evidence %}
+                {% if attachment.photo %}
+                  <a
+                    href="{{ attachment.photo.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cl-query-attachment"
+                  >
+                    <i class="bi bi-file-earmark-image"></i>
+                    <span>
+                      <strong>{{ attachment.original_filename }}</strong>
+                      <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                    </span>
+                    <i class="bi bi-box-arrow-up-right"></i>
+                  </a>
+                {% elif attachment.file %}
+                  <a
+                    href="{{ attachment.file.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cl-query-attachment"
+                  >
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>
+                      <strong>{{ attachment.original_filename }}</strong>
+                      <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                    </span>
+                    <i class="bi bi-download"></i>
+                  </a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="cl-query-meta">
+        {% if dispute.created_by_contractor %}
+          {{ dispute.created_by_contractor }}
+        {% elif dispute.created_by_user %}
+          {{ dispute.created_by_user }}
+        {% else %}
+          Claim participant
+        {% endif %}
+        <span>·</span>
+        {{ dispute.created_at|date:"d M Y, H:i" }}
+      </div>
+
+      <!-- RESPONSES -->
+      <div class="cl-response-thread">
+        {% for response in dispute.responses.all %}
+          <div class="cl-response">
+            <div class="cl-response-heading">
+              <strong>
+                {% if response.created_by_contractor %}
+                  {{ response.created_by_contractor }}
+                {% elif response.created_by_user %}
+                  {{ response.created_by_user }}
+                {% else %}
+                  Claim participant
+                {% endif %}
+              </strong>
+
+              <time>{{ response.created_at|date:"d M Y, H:i" }}</time>
+            </div>
+
+            <p class="mb-1">{{ response.message }}</p>
+
+            {% with evidence=response.response_attachments.all %}
+              {% if evidence %}
+                <div class="cl-query-attachments">
+                  <strong class="cl-attachments-heading">
+                    <i class="bi bi-paperclip"></i>
+                    Response evidence ({{ evidence|length }})
+                  </strong>
+
+                  <div class="cl-attachments-list">
+                    {% for attachment in evidence %}
+                      {% if attachment.photo %}
+                        <a href="{{ attachment.photo.url }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="cl-query-attachment">
+                          <i class="bi bi-file-earmark-image"></i>
+                          <span>
+                            <strong>{{ attachment.original_filename }}</strong>
+                            <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                          </span>
+                          <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                      {% elif attachment.file %}
+                        <a href="{{ attachment.file.url }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="cl-query-attachment">
+                          <i class="bi bi-file-earmark-text"></i>
+                          <span>
+                            <strong>{{ attachment.original_filename }}</strong>
+                            <small>{{ attachment.uploaded_at|date:"d M Y, H:i" }}</small>
+                          </span>
+                          <i class="bi bi-download"></i>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+        {% empty %}
+          <p class="cl-no-responses">No responses yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- RESPOND TO DISPUTE -->
+      {% if dispute.status != "resolved" %}
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          hx-post="{% url 'claims:create-item-query' item.uuid %}"
+          hx-target="#LineItemDisputesPartial"
+          hx-swap="outerHTML"
+          hx-push-url="false"
+          class="cl-query-form"
+        >
+          {% csrf_token %}
+
+          <input type="hidden" name="form_action" value="create_response" />
+          <input type="hidden" name="query_uuid" value="{{ dispute.uuid }}" />
+
+          <label for="disputeReply-{{ dispute.uuid }}">Your response</label>
+
+          <textarea
+            id="disputeReply-{{ dispute.uuid }}"
+            name="message"
+            rows="3"
+            required
+            placeholder="Explain your position or provide a response..."
+          ></textarea>
+
+          <button type="submit" class="btn cl-btn-secondary">
+            <i class="bi bi-reply"></i>
+            Send response
+          </button>
+        </form>
+      {% endif %}
+    </article>
+  {% empty %}
+    <div class="cl-empty-state">
+      <i class="bi bi-scale"></i>
+      <strong>No disputes raised</strong>
+      <span>
+        Disagreements about this line item's claim or assessment will appear here.
+      </span>
+    </div>
+  {% endfor %}
+</section>
+
+

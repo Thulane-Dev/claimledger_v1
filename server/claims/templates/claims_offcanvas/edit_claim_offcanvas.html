@@ -1,0 +1,253 @@
+{% load static %}
+
+<div
+  class="offcanvas offcanvas-end claimledger-claim-offcanvas"
+  tabindex="-1"
+  id="EditClaimOffcanvas"
+  aria-labelledby="EditClaimOffcanvasLabel"
+>
+  <!-- Header -->
+  <div class="offcanvas-header claimledger-claim-header">
+    <div>
+      <span class="claimledger-claim-eyebrow">PAYMENT MANAGEMENT</span>
+      <h5 class="offcanvas-title" id="EditClaimOffcanvasLabel">
+        {{ claim.claim_title|default:"Payment claim" }}
+      </h5>
+      <p class="claimledger-claim-subtitle">Update claim information.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <!-- Form -->
+  <div class="offcanvas-body claimledger-claim-body">
+    <form
+      id="claimledgerCreateClaimForm"
+      method="POST"
+      enctype="multipart/form-data"
+      hx-post="{% url 'claims:update-claim-info' claim.uuid %}"
+      hx-target="#ClaimDetailsPartial"
+      hx-swap="innerHTML"
+      hx-push-url="false"
+      hx-on::after-request="
+          if (event.detail.successful) {
+          closeEditClaimOffcanvas();
+          }
+      "
+    >
+      {% csrf_token %}
+
+      <!-- Claim details -->
+      <section class="claimledger-form-section">
+        <div class="claimledger-form-section-heading">
+          <span class="claimledger-section-number">01</span>
+          <div>
+            <h6>Claim details</h6>
+            <p>Choose the project and identify this claim.</p>
+          </div>
+        </div>
+
+        <div class="claimledger-form-field">
+          <label for="claimProject" class="claimledger-form-label">
+            Project <span class="claimledger-required">*</span>
+          </label>
+
+          <select
+            class="form-select claimledger-form-control"
+            id="claimProject"
+            name="project_uuid"
+            disabled
+          >
+            <option value="{{ claim.project.uuid }}" selected>
+              {{ claim.project.project_name }}
+            </option>
+          </select>
+
+          <span class="claimledger-field-hint">
+            Select the project this payment claim belongs to.
+          </span>
+        </div>
+
+        <div class="claimledger-form-field">
+          <label for="claimNumber" class="claimledger-form-label">
+            Claim reference
+          </label>
+
+          <input
+            type="text"
+            class="form-control claimledger-form-control"
+            id="claimNumber"
+            name="claim_number"
+            maxlength="100"
+            placeholder="e.g. CL-001"
+            value="{{claim.claim_number}}"
+          />
+
+          <span class="claimledger-field-hint">
+            Optional if your system generates claim references.
+          </span>
+        </div>
+
+        <div class="claimledger-form-field">
+          <label for="claimTitle" class="claimledger-form-label">
+            Claim title <span class="claimledger-required">*</span>
+          </label>
+
+          <input
+            type="text"
+            class="form-control claimledger-form-control"
+            id="claimTitle"
+            name="claim_title"
+            maxlength="255"
+            placeholder="e.g. October progress claim"
+            value="{{claim.claim_title}}"
+            required
+          />
+        </div>
+      </section>
+
+      <div class="claimledger-form-divider"></div>
+
+      <!-- Claim period -->
+      <section class="claimledger-form-section">
+        <div class="claimledger-form-section-heading">
+          <span class="claimledger-section-number">02</span>
+          <div>
+            <h6>Claim period</h6>
+            <p>Specify the period covered by this claim.</p>
+          </div>
+        </div>
+
+        <div class="claimledger-date-grid">
+          <div class="claimledger-form-field">
+            <label for="claimPeriodStart" class="claimledger-form-label">
+              Start date
+            </label>
+
+            <input
+              type="date"
+              class="form-control claimledger-form-control"
+              id="claimPeriodStart"
+              name="claim_period_start"
+              onfocus="this.showPicker()"
+              onclick="this.showPicker()"
+              value="{{claim.claim_period_start|date:'Y-m-d'}}"
+            />
+          </div>
+
+          <div class="claimledger-form-field">
+            <label for="claimPeriodEnd" class="claimledger-form-label">
+              End date
+            </label>
+
+            <input
+              type="date"
+              class="form-control claimledger-form-control"
+              id="claimPeriodEnd"
+              name="claim_period_end"
+              onfocus="this.showPicker()"
+              onclick="this.showPicker()"
+              value="{{claim.claim_period_end|date:'Y-m-d'}}"
+            />
+          </div>
+        </div>
+
+        <p
+          class="claimledger-form-error"
+          id="claimPeriodError"
+          role="alert"
+          hidden
+        >
+          The end date cannot be before the start date.
+        </p>
+      </section>
+
+      <div class="claimledger-form-divider"></div>
+
+      <!-- Notes -->
+      <section class="claimledger-form-section">
+        <div class="claimledger-form-section-heading">
+          <span class="claimledger-section-number">03</span>
+          <div>
+            <h6>Notes</h6>
+            <p>Add any relevant context for this claim.</p>
+          </div>
+        </div>
+
+        <div class="claimledger-form-field">
+          <label for="claimNotes" class="claimledger-form-label">
+            Claim notes
+          </label>
+
+          <textarea
+            class="form-control claimledger-form-control claimledger-notes"
+            id="claimNotes"
+            name="notes"
+            rows="4"
+            maxlength="5000"
+            placeholder="Add a description, clarification or message for the reviewer..."
+          >
+{{claim.notes|linebreaksbr }}</textarea
+          >
+
+          <div class="claimledger-character-hint">
+            Keep notes clear and relevant to the claim.
+          </div>
+        </div>
+      </section>
+
+      <div class="claimledger-form-divider"></div>
+
+      <!-- Footer actions -->
+      <div class="claimledger-claim-footer">
+        <button
+          type="button"
+          class="btn claimledger-btn-secondary"
+          data-bs-dismiss="offcanvas"
+        >
+          Cancel
+        </button>
+
+        <!-- Delete button opens confirmation modal -->
+        <button
+          type="button"
+          class="btn claimledger-btn-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteClaimModal"
+        >
+          <i class="bi bi-trash3"></i>
+          Delete Claim
+        </button>
+
+        <button
+          type="submit"
+          class="btn claimledger-btn-primary"
+          name="action"
+          value="submit"
+        >
+          Save Updates
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CLOSE DELIVERY OFFCANVAS  -->
+<script>
+  function closeEditClaimOffcanvas() {
+    var offcanvasElement = document.getElementById("EditClaimOffcanvas");
+    var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+    if (!offcanvasInstance) {
+      offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+    }
+
+    offcanvasInstance.hide();
+  }
+</script>

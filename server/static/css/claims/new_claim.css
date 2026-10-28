@@ -1,0 +1,485 @@
+/* =========================================================
+   CLAIMLEDGER CREATE PAYMENT CLAIM
+   ========================================================= */
+
+.claimledger-claim-offcanvas {
+  --claimledger-navy: #172033;
+  --claimledger-muted: #8490a3;
+  --claimledger-border: #e7ebf1;
+
+  width: min(100%, 620px) !important;
+  max-width: 100%;
+  background: #ffffff;
+  border-left: 1px solid var(--claimledger-border);
+}
+
+/* Header */
+
+.claimledger-claim-header {
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-claim-header .btn-close {
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.claimledger-claim-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #7d899d;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.claimledger-claim-header .offcanvas-title {
+  color: var(--claimledger-navy);
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.55px;
+}
+
+.claimledger-claim-subtitle {
+  margin: 6px 0 0;
+  color: #7b8698;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Body */
+
+.claimledger-claim-body {
+  padding: 24px 26px 0;
+}
+
+.claimledger-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.claimledger-form-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 2px;
+}
+
+.claimledger-section-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+
+  border: 1px solid #e4e8ef;
+  border-radius: 9px;
+  background: #f6f8fb;
+  color: var(--claimledger-navy);
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.claimledger-form-section-heading h6 {
+  margin: 2px 0 4px;
+  color: var(--claimledger-navy);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.claimledger-form-section-heading p {
+  margin: 0;
+  color: #8993a4;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-form-divider {
+  height: 1px;
+  margin: 25px 0;
+  background: #edf0f4;
+}
+
+/* Form fields */
+
+.claimledger-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.claimledger-form-label {
+  color: #364154;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.claimledger-required {
+  color: #c2413b;
+}
+
+.claimledger-form-control {
+  min-height: 43px;
+  padding: 10px 12px;
+
+  border: 1px solid #dfe4ec;
+  border-radius: 9px;
+  background-color: #ffffff;
+  color: #172033;
+
+  font-family: inherit;
+  font-size: 13px;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.claimledger-form-control:focus {
+  border-color: #64748b;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.12);
+}
+
+.claimledger-form-control::placeholder {
+  color: #a0a8b6;
+}
+
+.claimledger-form-control.is-invalid {
+  border-color: #c2413b;
+}
+
+.claimledger-field-hint,
+.claimledger-character-hint {
+  color: #8b95a6;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-notes {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.claimledger-date-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.claimledger-form-error {
+  margin: -6px 0 0;
+  color: #b42318;
+  font-size: 12px;
+}
+
+/* Upload area */
+
+.claimledger-upload-box {
+  overflow: hidden;
+  border: 1px dashed #cbd3df;
+  border-radius: 12px;
+  background: #fafbfd;
+}
+
+.claimledger-upload-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 158px;
+  padding: 22px 14px;
+  margin: 0;
+
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.18s ease;
+}
+
+.claimledger-upload-trigger:hover {
+  background: #f3f5f9;
+}
+
+.claimledger-upload-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  margin-bottom: 3px;
+
+  border: 1px solid #e1e6ee;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--claimledger-navy);
+  font-size: 21px;
+}
+
+.claimledger-upload-title {
+  color: #253147;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.claimledger-upload-description,
+.claimledger-upload-limit {
+  color: #8993a4;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Attachment summary and list */
+
+.claimledger-attachment-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+
+  color: #647084;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.claimledger-attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.claimledger-attachment-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 10px;
+
+  border: 1px solid #e6eaf0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.claimledger-attachment-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+  background: #f5f7fa;
+  color: #536176;
+  font-size: 22px;
+}
+
+.claimledger-attachment-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.claimledger-attachment-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.claimledger-attachment-name {
+  display: block;
+  overflow: hidden;
+
+  color: #253147;
+  font-size: 12px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.claimledger-attachment-meta {
+  display: block;
+  margin-top: 4px;
+  color: #8993a4;
+  font-size: 10px;
+}
+
+.claimledger-attachment-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.claimledger-attachment-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  border: 1px solid #e6eaf0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #667287;
+
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.claimledger-attachment-action:hover {
+  background: #f4f6f9;
+  color: #172033;
+}
+
+.claimledger-attachment-action--delete:hover {
+  border-color: #f0d3d0;
+  background: #fff5f4;
+  color: #b42318;
+}
+
+/* Footer */
+
+.claimledger-claim-footer {
+  position: sticky;
+  bottom: -1px;
+  z-index: 2;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+
+  margin: 27px -26px 0;
+  padding: 16px 26px calc(16px + env(safe-area-inset-bottom));
+
+  border-top: 1px solid #e8ebf0;
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.claimledger-claim-footer .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 40px;
+  padding: 9px 13px;
+
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.claimledger-btn-secondary {
+  border: 1px solid #e0e5ed;
+  background: #ffffff;
+  color: #586579;
+}
+
+.claimledger-btn-secondary:hover {
+  background: #f6f8fb;
+  color: #172033;
+}
+
+.claimledger-btn-draft {
+  border: 1px solid #dce2eb;
+  background: #f4f6f9;
+  color: #253147;
+}
+
+.claimledger-btn-draft:hover {
+  background: #e9edf3;
+  color: #172033;
+}
+
+.claimledger-btn-primary {
+  border: 1px solid #172033;
+  background: #172033;
+  color: #ffffff;
+}
+
+.claimledger-btn-primary:hover {
+  border-color: #293952;
+  background: #293952;
+  color: #ffffff;
+}
+
+.claimledger-claim-footer .btn:focus-visible {
+  outline: 2px solid #64748b;
+  outline-offset: 2px;
+}
+
+/* Responsive */
+
+@media (max-width: 575.98px) {
+  .claimledger-claim-offcanvas {
+    width: 100% !important;
+  }
+
+  .claimledger-claim-header {
+    padding: 20px 18px 17px;
+  }
+
+  .claimledger-claim-header .offcanvas-title {
+    font-size: 19px;
+  }
+
+  .claimledger-claim-body {
+    padding: 20px 18px 0;
+  }
+
+  .claimledger-claim-footer {
+    margin-right: -18px;
+    margin-left: -18px;
+    padding-right: 18px;
+    padding-left: 18px;
+    gap: 7px;
+  }
+
+  .claimledger-claim-footer .btn {
+    flex: 1 1 auto;
+    padding-right: 9px;
+    padding-left: 9px;
+    font-size: 11px;
+  }
+
+  .claimledger-date-grid {
+    gap: 9px;
+  }
+
+  .claimledger-attachment-card {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .claimledger-attachment-preview {
+    width: 40px;
+    height: 40px;
+  }
+
+  .claimledger-attachment-actions {
+    gap: 4px;
+  }
+
+  .claimledger-attachment-action {
+    width: 29px;
+    height: 29px;
+  }
+}

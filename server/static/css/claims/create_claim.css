@@ -1,0 +1,993 @@
+
+/* =========================================
+   CLAIMLEDGER - CREATE PAYMENT CLAIM
+========================================= */
+
+.claimledger-create-page {
+    --cl-create-navy: #172033;
+    --cl-create-blue: #263ed8;
+    --cl-create-muted: #687386;
+    --cl-create-border: #e5e9f0;
+    --cl-create-bg: #f6f8fb;
+    --cl-create-green: #087f5b;
+    --cl-create-danger: #c03939;
+
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 30px 28px 40px;
+    color: var(--cl-create-navy);
+    font-family: "Inter", sans-serif;
+}
+
+.claimledger-create-page,
+.claimledger-create-page *,
+.claimledger-create-page *::before,
+.claimledger-create-page *::after {
+    box-sizing: border-box;
+}
+
+.claimledger-create-page button,
+.claimledger-create-page input,
+.claimledger-create-page select,
+.claimledger-create-page textarea {
+    font: inherit;
+}
+
+.claimledger-create-page button {
+    cursor: pointer;
+}
+
+.claimledger-create-page [hidden] {
+    display: none !important;
+}
+
+/* HEADER */
+
+.claimledger-create-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.claimledger-create-header-copy {
+    min-width: 0;
+}
+
+.claimledger-create-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #687386;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.claimledger-create-back:hover {
+    color: var(--cl-create-blue);
+}
+
+.claimledger-create-eyebrow {
+    margin-bottom: 8px;
+    color: var(--cl-create-blue);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.claimledger-create-header h1 {
+    margin: 0;
+    color: var(--cl-create-navy);
+    font-size: clamp(25px, 3vw, 34px);
+    font-weight: 750;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.claimledger-create-header-copy > p {
+    max-width: 650px;
+    margin: 10px 0 0;
+    color: var(--cl-create-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.claimledger-create-header-icon {
+    display: flex;
+    flex: 0 0 64px;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border: 1px solid #e1e7ff;
+    border-radius: 18px;
+    background: #edf0ff;
+    color: var(--cl-create-blue);
+    font-size: 27px;
+}
+
+/* MAIN FORM */
+
+.claimledger-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.claimledger-create-card {
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid var(--cl-create-border);
+    border-radius: 17px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgb(23 32 51 / 3%);
+}
+
+.claimledger-create-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 26px;
+}
+
+.claimledger-create-section-heading-between {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.claimledger-create-section-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+}
+
+.claimledger-create-section-number {
+    display: flex;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e1e7ff;
+    border-radius: 11px;
+    background: #f0f2ff;
+    color: var(--cl-create-blue);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.claimledger-create-section-heading h2 {
+    margin: 1px 0 6px;
+    color: var(--cl-create-navy);
+    font-size: 17px;
+    font-weight: 750;
+    letter-spacing: -0.3px;
+}
+
+.claimledger-create-section-heading p {
+    margin: 0;
+    color: var(--cl-create-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.claimledger-create-item-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border: 1px solid var(--cl-create-border);
+    border-radius: 9px;
+    color: #566175;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+/* FORM GRID AND FIELDS */
+
+.claimledger-create-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+}
+
+.claimledger-create-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+}
+
+.claimledger-create-field-full {
+    grid-column: 1 / -1;
+}
+
+.claimledger-create-field label {
+    color: #293449;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.claimledger-required {
+    color: #d44949;
+}
+
+.claimledger-create-field small {
+    color: #8791a2;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.claimledger-create-control {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 11px 13px;
+    border: 1px solid #dfe4ec;
+    border-radius: 10px;
+    outline: none;
+    background-color: #fff;
+    color: var(--cl-create-navy);
+    font-size: 13px !important;
+    line-height: 1.5;
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.claimledger-create-control::placeholder {
+    color: #a1a9b7;
+    opacity: 1;
+}
+
+.claimledger-create-control:focus {
+    border-color: #7888f4;
+    box-shadow: 0 0 0 3px rgb(38 62 216 / 9%);
+}
+
+.claimledger-create-control:disabled {
+    background: #f3f5f8;
+    color: #8a93a3;
+    cursor: not-allowed;
+}
+
+.claimledger-create-control.is-invalid {
+    border-color: #d44949;
+}
+
+.claimledger-create-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* LINE ITEMS */
+
+.claimledger-create-line-items {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.claimledger-create-line-item {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid #e1e6ef;
+    border-radius: 14px;
+    background: #fcfdff;
+}
+
+.claimledger-create-line-item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 23px;
+}
+
+.claimledger-create-line-item-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.claimledger-create-line-item-number {
+    display: flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #edf0ff;
+    color: var(--cl-create-blue);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.claimledger-create-line-item-heading h3 {
+    margin: 0 0 5px;
+    color: var(--cl-create-navy);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.claimledger-create-line-item-heading p {
+    margin: 0;
+    color: var(--cl-create-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.claimledger-create-remove-item {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 1px solid #f0dede;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--cl-create-danger);
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.claimledger-create-remove-item:hover {
+    border-color: #e8baba;
+    background: #fff6f6;
+}
+
+.claimledger-create-input-prefix {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    border: 1px solid #dfe4ec;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.claimledger-create-input-prefix > span {
+    padding-left: 13px;
+    color: #7c8799;
+    font-size: 12px;
+}
+
+.claimledger-create-input-prefix .claimledger-create-control {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.claimledger-create-amount-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    min-height: 46px;
+    padding: 7px 12px;
+    border: 1px solid #e0e6ff;
+    border-radius: 10px;
+    background: #f3f5ff;
+}
+
+.claimledger-create-amount-display .item-amount {
+    color: var(--cl-create-blue);
+    font-size: 15px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.claimledger-create-amount-display small {
+    color: #7d87a3;
+    font-size: 10px;
+}
+
+/* ITEM EVIDENCE */
+
+.claimledger-create-item-evidence {
+    margin-top: 25px;
+    padding-top: 22px;
+    border-top: 1px solid #e8ebf1;
+}
+
+.claimledger-create-evidence-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 15px;
+}
+
+.claimledger-create-evidence-icon {
+    display: flex;
+    flex: 0 0 36px;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e5e9f2;
+    border-radius: 10px;
+    background: #fff;
+    color: #64718a;
+    font-size: 16px;
+}
+
+.claimledger-create-evidence-heading h4 {
+    margin: 0 0 4px;
+    color: #344055;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.claimledger-create-evidence-heading p {
+    margin: 0;
+    color: var(--cl-create-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* UPLOAD ZONES */
+
+.claimledger-create-upload-zone {
+    position: relative;
+    border: 1px dashed #cbd3e1;
+    border-radius: 12px;
+    background: #fafbfe;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.claimledger-create-upload-zone:hover,
+.claimledger-create-upload-zone.is-dragging {
+    border-color: #7182f2;
+    background: #f4f6ff;
+}
+
+.claimledger-create-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+.claimledger-create-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 180px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.claimledger-create-upload-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 4px;
+    border: 1px solid #e1e7ff;
+    border-radius: 14px;
+    background: #edf0ff;
+    color: var(--cl-create-blue);
+    font-size: 23px;
+}
+
+.claimledger-create-upload-title {
+    color: #344055;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.claimledger-create-upload-description {
+    color: #8791a2;
+    font-size: 11px;
+}
+
+.claimledger-create-upload-formats {
+    color: #98a1b0;
+    font-size: 10px;
+}
+
+.claimledger-create-upload-zone-compact .claimledger-create-upload-label {
+    min-height: 118px;
+    padding: 16px;
+}
+
+.claimledger-create-upload-zone-compact .claimledger-create-upload-icon {
+    width: 37px;
+    height: 37px;
+    border-radius: 11px;
+    font-size: 18px;
+}
+
+/* ATTACHMENT LISTS */
+
+.claimledger-create-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 12px;
+}
+
+.claimledger-create-attachment-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #e5e9f0;
+    border-radius: 11px;
+    background: #fff;
+}
+
+.claimledger-create-attachment-preview {
+    display: flex;
+    flex: 0 0 43px;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    overflow: hidden;
+    border: 1px solid #edf0f5;
+    border-radius: 9px;
+    background: #f6f8fb;
+    color: #66738b;
+    font-size: 20px;
+}
+
+.claimledger-create-attachment-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.claimledger-create-attachment-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.claimledger-create-attachment-name {
+    overflow: hidden;
+    color: #344055;
+    font-size: 11px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.claimledger-create-attachment-meta {
+    color: #8a94a5;
+    font-size: 10px;
+}
+
+.claimledger-create-attachment-actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 5px;
+}
+
+.claimledger-create-attachment-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33px;
+    height: 33px;
+    border: 1px solid #e4e8ef;
+    border-radius: 8px;
+    background: #fff;
+    color: #687386;
+    font-size: 13px;
+}
+
+.claimledger-create-attachment-action:hover {
+    background: #f4f6fa;
+}
+
+.claimledger-create-attachment-action--delete {
+    color: var(--cl-create-danger);
+}
+
+.claimledger-create-attachment-action--delete:hover {
+    border-color: #f0dede;
+    background: #fff5f5;
+}
+
+.claimledger-create-attachment-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    color: #7b8596;
+    font-size: 11px;
+}
+
+/* ADD ITEM */
+
+.claimledger-create-add-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 17px;
+    padding: 12px 16px;
+    border: 1px dashed #bfc8df;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--cl-create-blue);
+    font-size: 12px;
+    font-weight: 750;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.claimledger-create-add-item:hover {
+    border-color: #7584ed;
+    background: #f6f7ff;
+}
+
+/* GRAND TOTAL */
+
+.claimledger-create-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid #e0e6ff;
+    border-radius: 12px;
+    background: #f5f6ff;
+}
+
+.claimledger-create-total > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.claimledger-create-total-label {
+    color: #3a4661;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.claimledger-create-total-note {
+    color: #858eaa;
+    font-size: 10px;
+}
+
+.claimledger-create-total > strong {
+    color: var(--cl-create-blue);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.claimledger-create-total-disclaimer {
+    margin: 12px 0 0;
+    color: #929bac;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+/* FOOTER ACTIONS */
+
+.claimledger-create-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 4px 0 10px;
+}
+
+.claimledger-create-footer-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #758093;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.claimledger-create-footer-note i {
+    flex-shrink: 0;
+    color: var(--cl-create-green);
+    font-size: 16px;
+}
+
+.claimledger-create-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.claimledger-create-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 11px 17px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 750;
+    text-decoration: none;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.claimledger-create-button:active {
+    transform: translateY(1px);
+}
+
+.claimledger-create-button-secondary {
+    border-color: #dfe4ec;
+    background: #fff;
+    color: #596579;
+}
+
+.claimledger-create-button-secondary:hover {
+    background: #f6f8fb;
+}
+
+.claimledger-create-button-draft {
+    border-color: #dce2ef;
+    background: #fff;
+    color: var(--cl-create-navy);
+}
+
+.claimledger-create-button-draft:hover {
+    border-color: #c3cce0;
+    background: #f7f8fc;
+}
+
+.claimledger-create-button-primary {
+    background: var(--cl-create-blue);
+    color: #fff;
+    box-shadow: 0 4px 10px rgb(38 62 216 / 16%);
+}
+
+.claimledger-create-button-primary:hover {
+    background: #1d30b8;
+    color: #fff;
+}
+
+/* RESPONSIVE: TABLETS */
+
+@media (max-width: 991.98px) {
+    .claimledger-create-page {
+        padding: 25px 20px 35px;
+    }
+
+    .claimledger-create-card {
+        padding: 23px;
+    }
+
+    .claimledger-create-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .claimledger-create-footer-actions {
+        width: 100%;
+    }
+}
+
+/* RESPONSIVE: MOBILE */
+
+@media (max-width: 767.98px) {
+    .claimledger-create-page {
+        padding: 20px 0 calc(105px + env(safe-area-inset-bottom));
+    }
+
+    .claimledger-create-header {
+        align-items: flex-start;
+        gap: 12px;
+        margin: 0 0 20px;
+        padding: 0 2px;
+    }
+
+    .claimledger-create-back {
+        margin-bottom: 17px;
+    }
+
+    .claimledger-create-header h1 {
+        font-size: 26px;
+        letter-spacing: -0.8px;
+    }
+
+    .claimledger-create-header-copy > p {
+        font-size: 12px;
+    }
+
+    .claimledger-create-header-icon {
+        flex-basis: 45px;
+        width: 45px;
+        height: 45px;
+        border-radius: 13px;
+        font-size: 20px;
+    }
+
+    .claimledger-create-form {
+        gap: 15px;
+    }
+
+    .claimledger-create-card {
+        padding: 19px 15px;
+        border-radius: 13px;
+    }
+
+    .claimledger-create-section-heading {
+        gap: 11px;
+        margin-bottom: 21px;
+    }
+
+    .claimledger-create-section-title {
+        gap: 11px;
+    }
+
+    .claimledger-create-section-number {
+        flex-basis: 33px;
+        width: 33px;
+        height: 33px;
+        border-radius: 9px;
+        font-size: 11px;
+    }
+
+    .claimledger-create-section-heading h2 {
+        font-size: 15px;
+    }
+
+    .claimledger-create-section-heading p {
+        font-size: 11px;
+    }
+
+    .claimledger-create-section-heading-between {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .claimledger-create-item-count {
+        padding: 6px 8px;
+        font-size: 10px;
+    }
+
+    .claimledger-create-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 17px;
+    }
+
+    .claimledger-create-field-full {
+        grid-column: auto;
+    }
+
+    .claimledger-create-line-item {
+        padding: 16px 12px;
+        border-radius: 12px;
+    }
+
+    .claimledger-create-line-item-header {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .claimledger-create-line-item-heading {
+        gap: 9px;
+    }
+
+    .claimledger-create-line-item-heading h3 {
+        font-size: 13px;
+    }
+
+    .claimledger-create-line-item-heading p {
+        font-size: 10px;
+    }
+
+    .claimledger-create-remove-item {
+        padding: 7px 8px;
+        font-size: 10px;
+    }
+
+    .claimledger-create-input-prefix .claimledger-create-control {
+        min-width: 0;
+    }
+
+    .claimledger-create-upload-label {
+        min-height: 155px;
+        padding: 20px 10px;
+    }
+
+    .claimledger-create-upload-title {
+        font-size: 11px;
+        overflow-wrap: anywhere;
+    }
+
+    .claimledger-create-upload-zone-compact .claimledger-create-upload-label {
+        min-height: 115px;
+    }
+
+    .claimledger-create-total {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 13px;
+        padding: 17px;
+    }
+
+    .claimledger-create-total > strong {
+        font-size: 25px;
+        text-align: left;
+    }
+
+    .claimledger-create-footer {
+        gap: 15px;
+    }
+
+    .claimledger-create-footer-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .claimledger-create-button {
+        min-width: 0;
+        min-height: 45px;
+        padding: 10px 9px;
+        font-size: 11px;
+    }
+
+    .claimledger-create-button-secondary {
+        grid-column: 1 / -1;
+    }
+
+    .claimledger-create-button-primary {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .claimledger-create-button-draft {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .claimledger-create-page *,
+    .claimledger-create-page *::before,
+    .claimledger-create-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+}

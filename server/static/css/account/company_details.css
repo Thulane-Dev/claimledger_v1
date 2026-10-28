@@ -1,0 +1,661 @@
+/* =========================================
+       CLAIMLEDGER — COMPANY DETAILS
+    ========================================= */
+
+.claimledger-company-page {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+  color: #172033;
+}
+
+.claimledger-company-page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.claimledger-company-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.claimledger-company-page-heading h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 27px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.claimledger-company-page-heading p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.claimledger-company-edit-button,
+.claimledger-company-save-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 15px;
+  border: 1px solid #172033;
+  border-radius: 9px;
+  background: #172033;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.claimledger-company-edit-button:hover,
+.claimledger-company-save-button:hover {
+  border-color: #293851;
+  background: #293851;
+  color: #ffffff;
+}
+
+.claimledger-company-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e7ebf0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(23, 32, 51, 0.025);
+}
+
+/* Company header */
+.claimledger-company-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.claimledger-company-avatar {
+  display: flex;
+  flex: 0 0 64px;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #dbe3f0;
+  border-radius: 16px;
+  background: #f0f4fa;
+  color: #172033;
+  font-size: 25px;
+}
+
+.claimledger-company-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.claimledger-company-header-info h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-company-header-info > p {
+  margin: 5px 0 12px;
+  color: #64748b;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-company-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.claimledger-company-type-badge,
+.claimledger-company-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 5px 9px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.claimledger-company-status-active {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.claimledger-company-status-inactive {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.claimledger-company-status-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.claimledger-company-reference {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  max-width: 240px;
+  margin-left: auto;
+  text-align: right;
+}
+
+.claimledger-company-reference > span {
+  color: #94a3b8;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.claimledger-company-reference > strong {
+  color: #475569;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Content grid */
+.claimledger-company-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 22px;
+}
+
+.claimledger-company-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 21px 22px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-company-section-icon {
+  display: flex;
+  flex: 0 0 39px;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 17px;
+}
+
+.claimledger-company-card-heading h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.claimledger-company-card-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.claimledger-company-details {
+  padding: 4px 22px;
+}
+
+.claimledger-company-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-company-detail:last-child {
+  border-bottom: 0;
+}
+
+.claimledger-company-detail > span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.claimledger-company-detail > strong {
+  max-width: 100%;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-company-detail a {
+  color: #172033;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-company-detail a:hover {
+  color: #475569;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.claimledger-company-break {
+  overflow-wrap: anywhere;
+}
+
+/* Owner */
+.claimledger-company-owner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.claimledger-company-owner-avatar {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #dbe3f0;
+  border-radius: 12px;
+  background: #f0f4fa;
+  color: #172033;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.claimledger-company-owner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.claimledger-company-owner-info strong {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.claimledger-company-owner-info span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* Missing address */
+.claimledger-company-empty-address {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 23px 0;
+}
+
+.claimledger-company-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  margin-bottom: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 18px;
+}
+
+.claimledger-company-empty-address > strong {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.claimledger-company-empty-address > p {
+  margin: 7px 0 13px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.claimledger-company-inline-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #172033;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.claimledger-company-inline-edit:hover {
+  color: #475569;
+}
+
+/* Note */
+.claimledger-company-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 14px 16px;
+  border: 1px solid #e7ebf0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.claimledger-company-note i {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 15px;
+}
+
+.claimledger-company-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* =========================================
+       EDIT COMPANY OFFCANVAS
+    ========================================= */
+
+.claimledger-company-offcanvas {
+  width: 480px !important;
+  max-width: 100%;
+  border: 0;
+  background: #f8fafc;
+  color: #172033;
+  box-shadow: -12px 0 40px rgba(23, 32, 51, 0.08);
+}
+
+.claimledger-company-offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 20px 22px;
+  border-bottom: 1px solid #e7ebf0;
+  background: #ffffff;
+}
+
+.claimledger-company-offcanvas-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.claimledger-company-offcanvas-heading h5 {
+  margin: 0;
+  color: #172033;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.claimledger-company-offcanvas-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-company-offcanvas-close {
+  display: flex;
+  flex: 0 0 34px;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e7ebf0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.claimledger-company-offcanvas-close:hover {
+  background: #f1f5f9;
+  color: #172033;
+}
+
+.claimledger-company-offcanvas-body {
+  padding: 21px 22px;
+  overflow-x: hidden;
+}
+
+.claimledger-company-form-section {
+  margin-bottom: 22px;
+  padding: 18px;
+  border: 1px solid #e7ebf0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.claimledger-company-form-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 20px;
+}
+
+.claimledger-company-form-heading > span {
+  display: flex;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.claimledger-company-form-heading h6 {
+  margin: 1px 0 0;
+  color: #172033;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.claimledger-company-form-heading p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.claimledger-company-form-field {
+  margin-bottom: 16px;
+}
+
+.claimledger-company-form-field:last-child {
+  margin-bottom: 0;
+}
+
+.claimledger-company-form-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.claimledger-company-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  background-color: #ffffff;
+  color: #172033;
+  font-family: inherit;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.claimledger-company-input:focus {
+  border-color: #64748b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.12);
+}
+
+.claimledger-company-form-footer {
+  position: sticky;
+  bottom: -21px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  margin: 0 -22px -21px;
+  padding: 15px 22px;
+  border-top: 1px solid #e7ebf0;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+}
+
+.claimledger-company-cancel-button,
+.claimledger-company-save-button {
+  flex: 1;
+  min-height: 42px;
+}
+
+.claimledger-company-cancel-button {
+  padding: 10px 14px;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.claimledger-company-cancel-button:hover {
+  background: #f8fafc;
+}
+
+@media (max-width: 900px) {
+  .claimledger-company-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .claimledger-company-reference {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .claimledger-company-page {
+    padding: 22px 14px 35px;
+  }
+
+  .claimledger-company-page-heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .claimledger-company-page-heading h1 {
+    font-size: 24px;
+  }
+
+  .claimledger-company-edit-button {
+    width: 100%;
+  }
+
+  .claimledger-company-header {
+    align-items: flex-start;
+    gap: 13px;
+    padding: 18px;
+  }
+
+  .claimledger-company-avatar {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 21px;
+  }
+
+  .claimledger-company-header-info h2 {
+    font-size: 16px;
+  }
+
+  .claimledger-company-card-heading {
+    padding: 17px;
+  }
+
+  .claimledger-company-details {
+    padding-right: 17px;
+    padding-left: 17px;
+  }
+
+  .claimledger-company-offcanvas-header {
+    padding: 17px 15px;
+  }
+
+  .claimledger-company-offcanvas-body {
+    padding: 15px;
+  }
+
+  .claimledger-company-form-section {
+    padding: 15px;
+  }
+
+  .claimledger-company-form-footer {
+    bottom: -15px;
+    margin-right: -15px;
+    margin-bottom: -15px;
+    margin-left: -15px;
+    padding: 13px 15px;
+  }
+}

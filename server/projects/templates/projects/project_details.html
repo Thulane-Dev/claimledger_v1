@@ -1,0 +1,97 @@
+{% load static %}
+
+<div id="ProjectDetailsPartial">
+  {% include 'partials/project_details_partial.html' %}
+</div>
+
+<!-- ================= NEW CLAIM PLACEHOLDER MODAL ================= -->
+<div
+  class="modal fade"
+  id="claimledgerCreateClaimModal"
+  tabindex="-1"
+  aria-labelledby="claimledgerCreateClaimModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content claimledger_detail_modal">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="claimledgerCreateClaimModalLabel">
+            Create a payment claim
+          </h5>
+          <p>
+            This is a prototype placeholder. Claim creation is not connected
+            yet.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="claimledger_detail_modal_notice">
+          <i class="bi bi-info-circle"></i>
+          <span>
+            Your next workflow will create a claim for this project, add claim
+            line items and evidence, then track submission and payment.
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="claimledger_detail_button_secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= EDIT PROJECT OFFCANVAS ========================== -->
+{% include 'projects/edit_project_offcanvas.html' %}
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll("[data-claimledger-tab]");
+    const panels = document.querySelectorAll("[data-claimledger-panel]");
+    const tabLinks = document.querySelectorAll("[data-claimledger-tab-link]");
+
+    function activateTab(tabName) {
+      tabs.forEach(function (tab) {
+        const isActive = tab.dataset.claimledgerTab === tabName;
+
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+      });
+
+      panels.forEach(function (panel) {
+        const isActive = panel.dataset.claimledgerPanel === tabName;
+
+        panel.classList.toggle("active", isActive);
+        panel.hidden = !isActive;
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        activateTab(tab.dataset.claimledgerTab);
+      });
+    });
+
+    tabLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        activateTab(link.dataset.claimledgerTabLink);
+      });
+    });
+  });
+</script>

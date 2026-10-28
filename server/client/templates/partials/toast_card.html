@@ -1,0 +1,268 @@
+<style>
+  /* ========================= TOAST CONTAINER ========================== */
+
+  .claimledger_toast_container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1090;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    pointer-events: none;
+    font-family: "Inter", sans-serif;
+  }
+
+  /* ========================= TOAST CARD ========================== */
+
+  .claimledger_toast_card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    width: 100%;
+    padding: 18px 15px 18px 18px;
+    overflow: hidden;
+    border: 1px solid #e5eaf1;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #172033;
+    box-shadow:
+      0 12px 32px rgba(20, 35, 60, 0.09),
+      0 2px 6px rgba(20, 35, 60, 0.035);
+    pointer-events: auto;
+    animation: claimledger_toast_enter 0.3s ease-out both;
+  }
+
+  /* ========================= STATUS INDICATOR ========================== */
+
+  .claimledger_toast_indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: #64748b;
+  }
+
+  .claimledger_toast_success .claimledger_toast_indicator {
+    background: #238566;
+  }
+
+  .claimledger_toast_error .claimledger_toast_indicator,
+  .claimledger_toast_danger .claimledger_toast_indicator {
+    background: #d14343;
+  }
+
+  .claimledger_toast_warning .claimledger_toast_indicator {
+    background: #d99a27;
+  }
+
+  .claimledger_toast_info .claimledger_toast_indicator,
+  .claimledger_toast_debug .claimledger_toast_indicator {
+    background: #5475a5;
+  }
+
+  /* ========================= STATUS ICON ========================== */
+
+  .claimledger_toast_icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #f1f4f8;
+    color: #526783;
+    font-size: 16px;
+  }
+
+  .claimledger_toast_success .claimledger_toast_icon {
+    background: #eaf6f0;
+    color: #238566;
+  }
+
+  .claimledger_toast_error .claimledger_toast_icon,
+  .claimledger_toast_danger .claimledger_toast_icon {
+    background: #fff0f0;
+    color: #c53b3b;
+  }
+
+  .claimledger_toast_warning .claimledger_toast_icon {
+    background: #fff6e5;
+    color: #a96d0a;
+  }
+
+  .claimledger_toast_info .claimledger_toast_icon {
+    background: #edf3fc;
+    color: #5475a5;
+  }
+
+  /* ========================= MESSAGE CONTENT ========================== */
+
+  .claimledger_toast_content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 1px;
+    overflow-wrap: anywhere;
+  }
+
+  .claimledger_toast_title {
+    margin-bottom: 5px;
+    color: #172033;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+  }
+
+  .claimledger_toast_message {
+    color: #68758a;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* ========================= CLOSE BUTTON ========================== */
+
+  .claimledger_toast_close {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: -3px -3px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #929daf;
+    font-size: 11px;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+
+  .claimledger_toast_close:hover {
+    background: #f1f4f8;
+    color: #172033;
+  }
+
+  .claimledger_toast_close:focus-visible {
+    outline: 2px solid #7188ae;
+    outline-offset: 2px;
+  }
+
+  /* ========================= ANIMATION ========================== */
+
+  @keyframes claimledger_toast_enter {
+    from {
+      opacity: 0;
+      transform: translate3d(12px, -5px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* ========================= MOBILE ========================== */
+
+  @media (max-width: 575.98px) {
+    .claimledger_toast_container {
+      right: 0;
+      left: 0;
+      max-width: none;
+      align-items: stretch;
+      padding: 12px;
+    }
+
+    .claimledger_toast_card {
+      gap: 10px;
+      padding: 15px 12px 15px 15px;
+      border-radius: 11px;
+    }
+
+    .claimledger_toast_icon {
+      width: 33px;
+      height: 33px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .claimledger_toast_card {
+      animation: none;
+    }
+
+    .claimledger_toast_close {
+      transition: none;
+    }
+  }
+</style>
+
+
+
+
+<!-- ========================= CLAIMLEDGER TOASTS ========================== -->
+<div class="claimledger_toast_container">
+  {% if messages %}
+    {% for message in messages %}
+
+      <div
+        class="claimledger_toast_card claimledger_toast_{{ message.tags|default:'info' }} show"
+        role="alert"
+        aria-live="{% if 'error' in message.tags or 'danger' in message.tags %}assertive{% else %}polite{% endif %}"
+        aria-atomic="true"
+      >
+        <div class="claimledger_toast_indicator"></div>
+
+        <div class="claimledger_toast_icon">
+          {% if 'success' in message.tags %}
+            <i class="bi bi-check-circle-fill"></i>
+          {% elif 'error' in message.tags or 'danger' in message.tags %}
+            <i class="bi bi-exclamation-circle-fill"></i>
+          {% elif 'warning' in message.tags %}
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          {% else %}
+            <i class="bi bi-info-circle-fill"></i>
+          {% endif %}
+        </div>
+
+        <div class="claimledger_toast_content">
+          <div class="claimledger_toast_title">
+            {% if 'success' in message.tags %}
+              Success
+            {% elif 'error' in message.tags or 'danger' in message.tags %}
+              Something went wrong
+            {% elif 'warning' in message.tags %}
+              Attention
+            {% else %}
+              Notification
+            {% endif %}
+          </div>
+
+          <div class="claimledger_toast_message">
+            {{ message }}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="claimledger_toast_close"
+          data-bs-dismiss="toast"
+          aria-label="Dismiss notification"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+    {% endfor %}
+  {% endif %}
+</div>

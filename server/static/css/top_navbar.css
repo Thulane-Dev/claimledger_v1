@@ -1,0 +1,339 @@
+/* =========================================================
+   CLAIMLEDGER TOP NAVBAR
+   ========================================================= */
+
+/* .claimledger-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  width: 100%;
+  min-height: 68px;
+  padding: 0 28px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e8ebf0;
+} */
+
+/* =========================================================
+   CLAIMLEDGER FIXED TOP NAVBAR
+   ========================================================= */
+
+.claimledger-topbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1040;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  width: 100%;
+  min-height: 68px;
+  padding: 0 28px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e8ebf0;
+}
+
+/* Desktop page context */
+
+.claimledger-topbar-context {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.claimledger-topbar-page-title {
+  overflow: hidden;
+
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mobile brand */
+
+.claimledger-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #172033;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+  text-decoration: none;
+}
+
+.claimledger-topbar-brand:hover {
+  color: #172033;
+  text-decoration: none;
+}
+
+.claimledger-topbar-brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+
+  border-radius: 9px;
+  background: #172033;
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 750;
+}
+
+/* Right actions */
+
+.claimledger-topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.claimledger-topbar-icon-button {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 39px;
+  height: 39px;
+
+  border: 1px solid #e8ebf0;
+  border-radius: 10px;
+
+  color: #687386;
+  background: #ffffff;
+  font-size: 17px;
+  text-decoration: none;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.claimledger-topbar-icon-button:hover {
+  color: #172033;
+  background: #f5f7fa;
+  text-decoration: none;
+}
+
+.claimledger-topbar-placeholder {
+  cursor: default;
+  opacity: 0.8;
+}
+
+/* Profile button */
+
+.claimledger-topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 3px 0 3px 5px;
+
+  border: 0;
+  background: transparent;
+  color: #172033;
+  text-align: left;
+}
+
+.claimledger-topbar-profile::after {
+  display: none;
+}
+
+.claimledger-topbar-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+
+  border: 1px solid #e0e5ed;
+  border-radius: 50%;
+
+  background: #f0f3f8;
+  color: #172033;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.claimledger-topbar-profile-text {
+  flex-direction: column;
+  gap: 3px;
+  max-width: 150px;
+}
+
+.claimledger-topbar-profile-name {
+  overflow: hidden;
+
+  color: #172033;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.claimledger-topbar-profile-label {
+  color: #8992a3;
+  font-size: 11px;
+}
+
+.claimledger-topbar-chevron {
+  color: #8992a3;
+  font-size: 10px;
+}
+
+/* Profile dropdown */
+
+.claimledger-profile-dropdown {
+  min-width: 225px;
+  margin-top: 10px !important;
+  padding: 7px;
+
+  border: 1px solid #e8ebf0;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(23, 32, 51, 0.1);
+}
+
+.claimledger-profile-dropdown-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 10px 10px 12px;
+}
+
+.claimledger-profile-dropdown-name {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.claimledger-profile-dropdown-email {
+  overflow-wrap: anywhere;
+
+  color: #8992a3;
+  font-size: 11px;
+}
+
+.claimledger-profile-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px;
+  border-radius: 7px;
+
+  color: #596579;
+  font-size: 13px;
+}
+
+.claimledger-profile-dropdown .dropdown-item i {
+  font-size: 16px;
+}
+
+.claimledger-profile-dropdown .dropdown-item:hover {
+  color: #172033;
+  background: #f3f5f8;
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+  .claimledger-topbar {
+    min-height: 60px;
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  .claimledger-topbar-actions {
+    gap: 9px;
+  }
+
+  .claimledger-topbar-icon-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .claimledger-topbar-avatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .claimledger-topbar-chevron {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .claimledger-topbar {
+    padding: 0 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  .claimledger-topbar {
+    padding: 0 28px;
+  }
+}
+
+/* Desktop: start after the sidebar */
+@media (min-width: 992px) {
+  .claimledger-topbar {
+    left: 260px;
+    width: calc(100% - 260px);
+  }
+
+  .claimledger-main-content {
+    margin-left: 260px;
+    padding-top: 68px;
+    min-width: 0;
+  }
+}
+
+/* Tablet and mobile: full-width navbar */
+@media (max-width: 991.98px) {
+  .claimledger-topbar {
+    left: 0;
+    width: 100%;
+    min-height: 60px;
+    padding: 0 16px;
+  }
+
+  .claimledger-main-content {
+    margin-left: 0;
+    padding-top: 60px;
+    min-width: 0;
+  }
+}
+
+/* =========================================================
+   CLAIMLEDGER MOBILE BOTTOM NAV SPACING
+   ========================================================= */
+
+

@@ -1,0 +1,302 @@
+{% load static %}
+<!-- divider  -->
+
+<div class="claimledger-company-page">
+
+    <!-- PAGE HEADING -->
+    <div class="claimledger-company-page-heading">
+        <div>
+            <span class="claimledger-company-eyebrow">COMPANY SETTINGS</span>
+            <h1>Company Details</h1>
+            <p>View your company's registered information and contact details.</p>
+        </div>
+
+        <button
+            type="button"
+            class="claimledger-company-edit-button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#EditCompanyOffcanvas"
+            aria-controls="EditCompanyOffcanvas"
+        >
+            <i class="bi bi-pencil-square" aria-hidden="true"></i>
+            Edit Company
+        </button>
+    </div>
+
+    <!-- COMPANY HEADER -->
+    <section class="claimledger-company-card claimledger-company-header">
+        <div class="claimledger-company-avatar">
+            <i class="bi bi-buildings" aria-hidden="true"></i>
+        </div>
+
+        <div class="claimledger-company-header-info">
+            <h2>
+                {{ company.name|default:"Company name not provided" }}
+            </h2>
+
+            <p>
+                {% if company.registration_number %}
+                    Registration no. {{ company.registration_number }}
+                {% else %}
+                    Company registration number not provided
+                {% endif %}
+            </p>
+
+            <div class="claimledger-company-badges">
+                <span class="claimledger-company-type-badge">
+                    <i class="bi bi-building" aria-hidden="true"></i>
+                    Company account
+                </span>
+
+                <span class="claimledger-company-status
+                    {% if company.status == 'active' %}
+                        claimledger-company-status-active
+                    {% else %}
+                        claimledger-company-status-inactive
+                    {% endif %}">
+                    <span class="claimledger-company-status-dot"></span>
+                    {{ company.get_status_display }}
+                </span>
+            </div>
+        </div>
+
+        <div class="claimledger-company-reference">
+            <span>COMPANY REFERENCE</span>
+            <strong>{{ company.uuid|stringformat:"s"|upper }}</strong>
+        </div>
+    </section>
+
+    <!-- COMPANY INFORMATION GRID -->
+    <div class="claimledger-company-grid">
+
+        <!-- GENERAL INFORMATION -->
+        <section class="claimledger-company-card">
+            <div class="claimledger-company-card-heading">
+                <div class="claimledger-company-section-icon">
+                    <i class="bi bi-building" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                    <h3>Business Information</h3>
+                    <p>Your company's registered details.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-company-details">
+                <div class="claimledger-company-detail">
+                    <span>Company name</span>
+                    <strong>
+                        {{ company.name|default:"Not provided" }}
+                    </strong>
+                </div>
+
+                <div class="claimledger-company-detail">
+                    <span>Registration number</span>
+                    <strong>
+                        {{ company.registration_number|default:"Not provided" }}
+                    </strong>
+                </div>
+
+                <div class="claimledger-company-detail">
+                    <span>VAT number</span>
+                    <strong>
+                        {{ company.vat_number|default:"Not provided" }}
+                    </strong>
+                </div>
+
+                <div class="claimledger-company-detail">
+                    <span>Date registered on ClaimLedger</span>
+                    <strong>
+                        {% if company.created_at %}
+                            {{ company.created_at|date:"d M Y" }}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT INFORMATION -->
+        <section class="claimledger-company-card">
+            <div class="claimledger-company-card-heading">
+                <div class="claimledger-company-section-icon">
+                    <i class="bi bi-telephone" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                    <h3>Contact Information</h3>
+                    <p>How clients and business contacts reach you.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-company-details">
+                <div class="claimledger-company-detail">
+                    <span>Company email</span>
+                    <strong class="claimledger-company-break">
+                        {% if company.email %}
+                            <a href="mailto:{{ company.email }}">
+                                {{ company.email }}
+                            </a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="claimledger-company-detail">
+                    <span>Company phone</span>
+                    <strong>
+                        {% if company.phone %}
+                            <a href="tel:{{ company.phone }}">
+                                {{ company.phone }}
+                            </a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- BUSINESS ADDRESS -->
+        <section class="claimledger-company-card claimledger-company-address-card">
+            <div class="claimledger-company-card-heading">
+                <div class="claimledger-company-section-icon">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                    <h3>Business Address</h3>
+                    <p>Your company's recorded address.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-company-details">
+                {% if company.address %}
+                    <div class="claimledger-company-detail">
+                        <span>Street address</span>
+                        <strong>
+                            {{ company.address.street|default:"Not provided" }}
+                        </strong>
+                    </div>
+
+                    <div class="claimledger-company-detail">
+                        <span>Suburb</span>
+                        <strong>
+                            {{ company.address.suburb|default:"Not provided" }}
+                        </strong>
+                    </div>
+
+                    <div class="claimledger-company-detail">
+                        <span>City / Town</span>
+                        <strong>
+                            {{ company.address.city|default:"Not provided" }}
+                        </strong>
+                    </div>
+
+                    <div class="claimledger-company-detail">
+                        <span>Province</span>
+                        <strong>
+                            {{ company.address.get_province_display|default:"Not provided" }}
+                        </strong>
+                    </div>
+
+                    <div class="claimledger-company-detail">
+                        <span>Postal code</span>
+                        <strong>
+                            {{ company.address.postal_code|default:"Not provided" }}
+                        </strong>
+                    </div>
+
+                    <div class="claimledger-company-detail">
+                        <span>Country</span>
+                        <strong>
+                            {{ company.address.country|default:"South Africa" }}
+                        </strong>
+                    </div>
+                {% else %}
+                    <div class="claimledger-company-empty-address">
+                        <div class="claimledger-company-empty-icon">
+                            <i class="bi bi-geo" aria-hidden="true"></i>
+                        </div>
+                        <strong>No business address added</strong>
+                        <p>
+                            Add your company's address to keep its
+                            business information complete.
+                        </p>
+                        <button
+                            type="button"
+                            class="claimledger-company-inline-edit"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#EditCompanyOffcanvas"
+                        >
+                            Add address
+                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- ACCOUNT OWNERSHIP -->
+        <section class="claimledger-company-card">
+            <div class="claimledger-company-card-heading">
+                <div class="claimledger-company-section-icon">
+                    <i class="bi bi-person-badge" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                    <h3>Account Ownership</h3>
+                    <p>The owner associated with this company.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-company-details">
+                <div class="claimledger-company-owner">
+                    <div class="claimledger-company-owner-avatar">
+                        {% if company.owner %}
+                            {{ company.owner.first_name|default:"U"|first|upper }}{{ company.owner.last_name|default:""|first|upper }}
+                        {% else %}
+                            <i class="bi bi-person" aria-hidden="true"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="claimledger-company-owner-info">
+                        <strong>
+                            {% if company.owner %}
+                                {{ company.owner.first_name|default:"" }}
+                                {{ company.owner.last_name|default:"" }}
+                            {% else %}
+                                No owner assigned
+                            {% endif %}
+                        </strong>
+                        <span>Company owner</span>
+                    </div>
+                </div>
+
+                <div class="claimledger-company-detail">
+                    <span>Owner email</span>
+                    <strong class="claimledger-company-break">
+                        {% if company.owner %}
+                            {{ company.owner.email|default:"Not provided" }}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTNOTE -->
+    <div class="claimledger-company-note">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        <p>
+            Keep your company details accurate so your business information
+            is ready when you manage projects and payment claims.
+        </p>
+    </div>
+
+</div>

@@ -1,0 +1,273 @@
+/* =========================================================
+   COREVA SIDEBAR
+   ========================================================= */
+
+.cr-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px 16px;
+
+    background: #172a46;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.cr-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 4px 10px 28px;
+}
+
+
+.cr-brand-mark {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+
+.cr-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+
+.cr-brand-name {
+    color: #ffffff;
+
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+
+.cr-brand-subtitle {
+    color: #94a3b8;
+
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.cr-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+    flex: 1;
+}
+
+
+.cr-nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.cr-nav-label {
+    display: block;
+
+    padding: 0 12px 8px;
+
+    color: #71839c;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   NAV LINKS
+   ========================================================= */
+
+.cr-nav-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 46px;
+
+    padding: 0 12px;
+
+    border-radius: 9px;
+
+    color: #cbd5e1;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.cr-nav-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+}
+
+
+.cr-nav-link.active {
+    color: #ffffff;
+    background: rgba(37, 99, 235, 0.18);
+}
+
+
+.cr-nav-link.active::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 9px;
+    bottom: 9px;
+
+    width: 3px;
+
+    border-radius: 0 3px 3px 0;
+
+    background: #2563eb;
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.cr-nav-icon {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #94a3b8;
+
+    font-size: 17px;
+
+    transition: color 0.18s ease;
+}
+
+
+.cr-nav-link:hover .cr-nav-icon {
+    color: #ffffff;
+}
+
+
+.cr-nav-link.active .cr-nav-icon {
+    color: #60a5fa;
+}
+
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.cr-nav-text {
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+   ========================================================= */
+
+.cr-sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.cr-logout-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 46px;
+
+    padding: 0 12px;
+
+    border-radius: 9px;
+
+    color: #94a3b8;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.cr-logout-link:hover {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.08);
+    text-decoration: none;
+}
+
+
+.cr-logout-link .cr-nav-icon {
+    color: #94a3b8;
+}
+
+
+.cr-logout-link:hover .cr-nav-icon {
+    color: #f87171;
+}

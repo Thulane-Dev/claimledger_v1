@@ -1,0 +1,279 @@
+<!-- EVIDENCE -->
+<section class="cl-panel" id="LineItemEvidencePartial">
+  <div class="cl-panel-heading">
+    <div>
+      <h2>Evidence & attachments</h2>
+      <p>Supporting documents and photos for this line item.</p>
+    </div>
+
+    <div class="cl-evidence-actions">
+      <span class="cl-count">{{ attachments|length }}</span>
+
+      <button
+        type="button"
+        class="btn cl-btn-secondary"
+        onclick="toggleLineItemEvidenceForm()"
+      >
+        <i class="bi bi-plus-lg"></i>
+        Add evidence
+      </button>
+    </div>
+  </div>
+
+  <!-- UPLOAD EVIDENCE FORM -->
+  <div id="LineItemEvidenceUploadForm" hidden>
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      hx-post="{% url 'claims:add-line-item-evidence' item.uuid%}"
+      hx-target="#LineItemEvidencePartial"
+      hx-swap="outerHTML"
+      hx-push-url="false"
+      class="cl-evidence-upload-form"
+    >
+      {% csrf_token %}
+      <div class="cl-query-evidence">
+        <label for="lineItemEvidenceFiles">Supporting documents</label>
+
+        <p class="cl-query-evidence-help">
+          Upload photos, measurement sheets, certificates or other documents
+          that support this line item.
+        </p>
+
+        <label for="lineItemEvidenceFiles" class="cl-query-upload">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>
+            <strong>Select files</strong>
+            <small>PDF, images, Word or Excel · Max 10 MB per file</small>
+          </span>
+        </label>
+
+        <input
+          id="lineItemEvidenceFiles"
+          type="file"
+          name="supporting_documents"
+          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"
+          multiple
+          required
+          hidden
+        />
+
+        <!-- SELECTED FILE PREVIEW -->
+        <div
+          id="lineItemEvidenceSelectedFiles"
+          class="cl-query-selected-files"
+          aria-live="polite"
+        ></div>
+      </div>
+
+      <div class="cl-evidence-form-actions">
+        <button
+          type="button"
+          class="btn cl-btn-secondary"
+          onclick="toggleLineItemEvidenceForm()"
+        >
+          Cancel
+        </button>
+
+        <button type="submit" class="btn cl-btn-primary">
+          <i class="bi bi-upload"></i>
+          Upload evidence
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- EXISTING EVIDENCE -->
+  {% if attachments %}
+    <div class="cl-evidence-list">
+      {% for attachment in attachments %}
+        <div class="cl-evidence-row">
+          <div class="cl-file-icon">
+            {% if attachment.photo %}
+              <i class="bi bi-image"></i>
+            {% else %}
+              <i class="bi bi-file-earmark-text"></i>
+            {% endif %}
+          </div>
+
+          <div class="cl-evidence-info">
+            <strong>
+              {{ attachment.caption|default:attachment.reference|default:"Attachment" }}
+            </strong>
+
+            <span>
+              {% if attachment.uploaded_by_contractor %}
+                {{ attachment.uploaded_by_contractor }}
+              {% elif attachment.uploaded_by_user %}
+                {{ attachment.uploaded_by_user }}
+              {% else %}
+                Uploaded evidence
+              {% endif %}
+              · {{ attachment.filesize }}
+            </span>
+          </div>
+
+          {% if attachment.photo %}
+            <a
+              href="{{ attachment.photo.url }}"
+              target="_blank"
+              rel="noopener"
+              class="cl-file-link"
+              aria-label="View photo"
+            >
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          {% elif attachment.file %}
+            <a
+              href="{{ attachment.file.url }}"
+              target="_blank"
+              rel="noopener"
+              class="cl-file-link"
+              aria-label="View file"
+            >
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          {% endif %}
+
+          <!-- DELETE FILE -->
+          <form
+            hx-post="{% url 'claims:delete-line-item-evidence' item.uuid attachment.id %}"
+            hx-target="#LineItemEvidencePartial"
+            hx-swap="outerHTML"
+            hx-push-url="false"
+            hx-confirm="Are you sure you want to delete this file?"
+          >
+            {% csrf_token %}
+            <input type="text" name="form_action" value="delete_evidence_attachment" hidden>
+            <button
+              type="submit"
+              class="transparent_button"
+              aria-label="Delete evidence"
+            >
+              <i class="bi bi-trash3 cl-cert-document-download"></i>
+            </button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="cl-empty-state">
+      <i class="bi bi-folder2-open"></i>
+      <strong>No evidence attached</strong>
+      <span>Evidence linked to this line item will appear here.</span>
+    </div>
+  {% endif %}
+</section>
+
+<script>
+  function toggleLineItemEvidenceForm() {
+    const form = document.getElementById("LineItemEvidenceUploadForm");
+
+    if (!form) return;
+
+    form.hidden = !form.hidden;
+  }
+
+  function initLineItemEvidencePreview() {
+    const input = document.getElementById("lineItemEvidenceFiles");
+    const container = document.getElementById(
+      "lineItemEvidenceSelectedFiles"
+    );
+
+    if (!input || !container || input.dataset.initialized === "true") {
+      return;
+    }
+
+    input.dataset.initialized = "true";
+
+    let selectedFiles = [];
+
+    function renderFiles() {
+      container.replaceChildren();
+
+      selectedFiles.forEach((file, index) => {
+        const row = document.createElement("div");
+        row.className = "cl-query-selected-file";
+
+        const icon = document.createElement("i");
+
+        if (file.type.startsWith("image/")) {
+          icon.className = "bi bi-file-earmark-image";
+        } else if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) {
+          icon.className = "bi bi-file-earmark-pdf";
+        } else if (/\.(doc|docx)$/i.test(file.name)) {
+          icon.className = "bi bi-file-earmark-word";
+        } else if (/\.(xls|xlsx)$/i.test(file.name)) {
+          icon.className = "bi bi-file-earmark-excel";
+        } else {
+          icon.className = "bi bi-file-earmark-text";
+        }
+
+        const name = document.createElement("span");
+        name.className = "cl-evidence-preview-name";
+        name.textContent =
+          `${file.name} · ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "cl-query-remove-file";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", `Remove ${file.name}`);
+
+        remove.addEventListener("click", () => {
+          selectedFiles.splice(index, 1);
+          updateInput();
+        });
+
+        row.append(icon, name, remove);
+        container.appendChild(row);
+      });
+    }
+
+    function updateInput() {
+      const transfer = new DataTransfer();
+
+      selectedFiles.forEach((file) => {
+        transfer.items.add(file);
+      });
+
+      input.files = transfer.files;
+      renderFiles();
+    }
+
+    input.addEventListener("change", () => {
+      Array.from(input.files).forEach((file) => {
+        const alreadySelected = selectedFiles.some(
+          (existing) =>
+            existing.name === file.name &&
+            existing.size === file.size &&
+            existing.lastModified === file.lastModified
+        );
+
+        if (!alreadySelected) {
+          selectedFiles.push(file);
+        }
+      });
+
+      updateInput();
+    });
+
+    // Clear selected files if needed after a successful upload.
+    input.clearEvidenceSelection = function () {
+      selectedFiles = [];
+      input.value = "";
+      input.files = new DataTransfer().files;
+      container.replaceChildren();
+    };
+  }
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initLineItemEvidencePreview
+  );
+
+  document.addEventListener(
+    "htmx:afterSwap",
+    initLineItemEvidencePreview
+  );
+</script>

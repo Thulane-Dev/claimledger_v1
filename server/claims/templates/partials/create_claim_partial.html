@@ -1,0 +1,529 @@
+{% load static %}
+
+
+<div class="claimledger-create-page">
+
+    <!-- PAGE HEADER -->
+    <header class="claimledger-create-header">
+        <div class="claimledger-create-header-copy">
+            <a href="javascript:history.back()" class="claimledger-create-back">
+                <i class="bi bi-arrow-left"></i>
+                <span>Back</span>
+            </a>
+
+            <div class="claimledger-create-eyebrow">
+                CLAIM MANAGEMENT
+            </div>
+
+            <h1>Create payment claim</h1>
+
+            <p>
+                Record the work completed, add supporting evidence
+                and prepare your payment claim.
+            </p>
+        </div>
+
+        <div class="claimledger-create-header-icon">
+            <i class="bi bi-file-earmark-plus"></i>
+        </div>
+    </header>
+
+    <form
+        id="claimledgerCreateForm"
+        class="claimledger-create-form"
+        method="POST"
+        enctype="multipart/form-data"
+        action="{% url 'claims:save-payment-claim' %}"
+        hx-post="{% url 'claims:save-payment-claim' %}"
+        hx-target="#content"
+        hx-swap="innerHTML"
+        hx-on::after-request="
+            if (event.detail.successful) {
+                this.reset();
+            }
+        "
+    >
+        {% csrf_token %}
+
+        <!-- SECTION 01: CLAIM DETAILS -->
+        <section class="claimledger-create-card">
+
+            <div class="claimledger-create-section-heading">
+                <div class="claimledger-create-section-number">01</div>
+
+                <div>
+                    <h2>Claim details</h2>
+                    <p>Enter the project and payment claim information.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-create-grid">
+
+                <div class="claimledger-create-field claimledger-create-field-full">
+                    <label for="claimProject">
+                        Project <span class="claimledger-required">*</span>
+                    </label>
+
+                    <select
+                        id="claimProject"
+                        name="project_uuid"
+                        class="claimledger-create-control"
+                        required
+                    >
+                        <option value="">Select a project</option>
+
+                        {% for project in projects %}
+                            <option value="{{ project.uuid }}">
+                                {{ project.project_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <small>Select the project this claim belongs to.</small>
+                </div>
+
+                <div class="claimledger-create-field">
+                    <label for="claimNumber">
+                        Claim number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="claimNumber"
+                        name="claim_number"
+                        class="claimledger-create-control"
+                        placeholder="e.g. CL-001"
+                        maxlength="100"
+                    >
+
+                    <small>Leave blank if your system generates it.</small>
+                </div>
+
+                <div class="claimledger-create-field">
+                    <label for="claimTitle">
+                        Claim title <span class="claimledger-required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="claimTitle"
+                        name="claim_title"
+                        class="claimledger-create-control"
+                        placeholder="e.g. October progress claim"
+                        maxlength="255"
+                        required
+                    >
+                </div>
+
+                <div class="claimledger-create-field">
+                    <label for="claimPeriodStart">
+                        Claim period starts
+                    </label>
+
+                    <input
+                        type="date"
+                        id="claimPeriodStart"
+                        name="period_start"
+                        onfocus="this.showPicker()"
+                        onclick="this.showPicker()"
+                        class="claimledger-create-control"
+                    >
+                </div>
+
+                <div class="claimledger-create-field">
+                    <label for="claimPeriodEnd">
+                        Claim period ends
+                    </label>
+
+                    <input
+                        type="date"
+                        id="claimPeriodEnd"
+                        name="period_end"
+                        onfocus="this.showPicker()"
+                        onclick="this.showPicker()"
+                        class="claimledger-create-control"
+                    >
+                </div>
+
+                <div class="claimledger-create-field claimledger-create-field-full">
+                    <label for="claimNotes">Notes</label>
+
+                    <textarea
+                        id="claimNotes"
+                        name="notes"
+                        class="claimledger-create-control claimledger-create-textarea"
+                        rows="3"
+                        placeholder="Add any additional information about this claim..."
+                    ></textarea>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SECTION 02: LINE ITEMS -->
+        <section class="claimledger-create-card">
+
+            <div class="claimledger-create-section-heading claimledger-create-section-heading-between">
+                <div class="claimledger-create-section-title">
+                    <div class="claimledger-create-section-number">02</div>
+
+                    <div>
+                        <h2>Work items</h2>
+                        <p>
+                            Add each type of work or material being claimed.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="claimledger-create-item-count">
+                    <span id="claimledgerItemCount">1</span>
+                    <span id="claimledgerItemCountLabel">item</span>
+                </div>
+            </div>
+
+            <div
+                id="claimledgerLineItems"
+                class="claimledger-create-line-items"
+            ></div>
+
+            <button
+                type="button"
+                id="claimledgerAddItem"
+                class="claimledger-create-add-item"
+            >
+                <i class="bi bi-plus-circle"></i>
+                <span>Add another item</span>
+            </button>
+
+            <div class="claimledger-create-total">
+                <div>
+                    <span class="claimledger-create-total-label">
+                        Total claim amount
+                    </span>
+                    <span class="claimledger-create-total-note">
+                        Calculated from all work items
+                    </span>
+                </div>
+
+                <strong id="claimledgerGrandTotal">R 0.00</strong>
+            </div>
+
+            <p class="claimledger-create-total-disclaimer">
+                This is a preliminary total before any applicable tax,
+                retention, deductions or other adjustments.
+            </p>
+        </section>
+
+
+        <!-- SECTION 03: CLAIM-LEVEL ATTACHMENTS -->
+        <section class="claimledger-create-card">
+
+            <div class="claimledger-create-section-heading">
+                <div class="claimledger-create-section-number">03</div>
+
+                <div>
+                    <h2>Claim supporting documents</h2>
+                    <p>
+                        Attach documents that support the overall payment claim.
+                    </p>
+                </div>
+            </div>
+
+            <div
+                class="claimledger-create-upload-zone"
+                id="claimledgerMainUploadZone"
+            >
+                <input
+                    type="file"
+                    id="claimledgerMainAttachments"
+                    name="attachments"
+                    class="claimledger-create-file-input"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp"
+                >
+
+                <label
+                    for="claimledgerMainAttachments"
+                    class="claimledger-create-upload-label"
+                >
+                    <span class="claimledger-create-upload-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </span>
+
+                    <span class="claimledger-create-upload-title">
+                        Click to upload supporting documents
+                    </span>
+
+                    <span class="claimledger-create-upload-description">
+                        Or drag and drop files here
+                    </span>
+
+                    <span class="claimledger-create-upload-formats">
+                        PDF, Word, Excel or images
+                    </span>
+                </label>
+            </div>
+
+            <div
+                id="claimledgerMainAttachmentList"
+                class="claimledger-create-attachments"
+            ></div>
+
+            <div
+                id="claimledgerMainAttachmentSummary"
+                class="claimledger-create-attachment-summary"
+                hidden
+            >
+                <span id="claimledgerMainAttachmentCount">0 files</span>
+                <span id="claimledgerMainAttachmentSize">0 KB</span>
+            </div>
+        </section>
+
+
+        <!-- FORM ACTIONS -->
+        <footer class="claimledger-create-footer">
+
+            <div class="claimledger-create-footer-note">
+                <i class="bi bi-shield-check"></i>
+                <span>Your claim can be saved as a draft before submission.</span>
+            </div>
+
+            <div class="claimledger-create-footer-actions d-none">
+                <a
+                    href="{% url 'projects:projects' %}"
+                    class="claimledger-create-button claimledger-create-button-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    name="action"
+                    value="draft"
+                    formnovalidate
+                    class="claimledger-create-button claimledger-create-button-draft"
+                >
+                    <i class="bi bi-floppy"></i>
+                    Save as draft
+                </button>
+
+                <button
+                    type="submit"
+                    name="action"
+                    value="submit"
+                    class="claimledger-create-button claimledger-create-button-primary"
+                >
+                    Create claim
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+
+        </footer>
+
+        <!-- Footer actions -->
+        <div class="claimledger-claim-footer">
+            <button
+                type="button"
+                class="btn claimledger-btn-secondary"
+                data-bs-dismiss="offcanvas"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="submit"
+                class="btn claimledger-btn-draft"
+                name="action"
+                value="draft"
+                formnovalidate
+            >
+                <i class="bi bi-file-earmark"></i>
+                Save as draft
+            </button>
+
+            <button
+                type="submit"
+                class="btn claimledger-btn-primary"
+                name="action"
+                value="submit"
+            >
+                Create claim
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+
+    </form>
+</div>
+
+
+<!-- LINE ITEM TEMPLATE -->
+<template id="claimledgerLineItemTemplate">
+    <article class="claimledger-create-line-item">
+
+        <div class="claimledger-create-line-item-header">
+            <div class="claimledger-create-line-item-heading">
+                <span class="claimledger-create-line-item-number">01</span>
+
+                <div>
+                    <h3>Work item <span class="claimledger-item-heading-index">1</span></h3>
+                    <p>Describe the work and its supporting evidence.</p>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="claimledger-create-remove-item"
+                aria-label="Remove work item"
+                title="Remove work item"
+            >
+                <i class="bi bi-trash3"></i>
+                <span>Remove</span>
+            </button>
+        </div>
+
+        <div class="claimledger-create-grid">
+
+            <div class="claimledger-create-field claimledger-create-field-full">
+                <label>Description <span class="claimledger-required">*</span></label>
+
+                <input
+                    type="text"
+                    class="claimledger-create-control item-description"
+                    data-field="description"
+                    maxlength="255"
+                    placeholder="e.g. Supply and pour concrete"
+                    required
+                >
+            </div>
+
+            <div class="claimledger-create-field">
+                <label>Quantity <span class="claimledger-required">*</span></label>
+
+                <input
+                    type="number"
+                    class="claimledger-create-control item-quantity"
+                    data-field="quantity"
+                    min="0.001"
+                    step="0.001"
+                    value="1"
+                    required
+                >
+            </div>
+
+            <div class="claimledger-create-field">
+                <label>Unit of measurement <span class="claimledger-required">*</span></label>
+
+                <select
+                    class="claimledger-create-control item-unit"
+                    data-field="unit"
+                    required
+                >
+                    <option value="each">Each</option>
+                    <option value="box">Box</option>
+                    <option value="bag">Bag</option>
+                    <option value="tonne">Tonne</option>
+                    <option value="kg">Kilogram (kg)</option>
+                    <option value="m">Metre (m)</option>
+                    <option value="m2">Square metre (m²)</option>
+                    <option value="m3">Cubic metre (m³)</option>
+                    <option value="litre">Litre</option>
+                    <option value="hour">Hour</option>
+                    <option value="day">Day</option>
+                    <option value="load">Load</option>
+                    <option value="set">Set</option>
+                    <option value="roll">Roll</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="claimledger-create-field item-custom-unit-field" hidden>
+                <label>Specify unit <span class="claimledger-required">*</span></label>
+
+                <input
+                    type="text"
+                    class="claimledger-create-control item-custom-unit"
+                    data-field="custom_unit"
+                    maxlength="50"
+                    placeholder="e.g. pallet"
+                    disabled
+                >
+            </div>
+
+            <div class="claimledger-create-field">
+                <label>Rate (R) <span class="claimledger-required">*</span></label>
+
+                <div class="claimledger-create-input-prefix">
+                    <span>R</span>
+                    <input
+                        type="number"
+                        class="claimledger-create-control item-rate"
+                        data-field="rate"
+                        min="0"
+                        step="0.01"
+                        value="0.00"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="claimledger-create-field">
+                <label>Item amount</label>
+
+                <div class="claimledger-create-amount-display">
+                    <span class="item-amount">R 0.00</span>
+                    <small>Quantity × rate</small>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ITEM-SPECIFIC EVIDENCE -->
+        <div class="claimledger-create-item-evidence">
+
+            <div class="claimledger-create-evidence-heading">
+                <div class="claimledger-create-evidence-icon">
+                    <i class="bi bi-paperclip"></i>
+                </div>
+
+                <div>
+                    <h4>Supporting evidence</h4>
+                    <p>Upload documents or photos for this work item.</p>
+                </div>
+            </div>
+
+            <div class="claimledger-create-upload-zone claimledger-create-upload-zone-compact">
+                <input
+                    type="file"
+                    class="claimledger-create-file-input item-attachments"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp"
+                >
+
+                <label class="claimledger-create-upload-label">
+                    <span class="claimledger-create-upload-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </span>
+
+                    <span class="claimledger-create-upload-title">
+                        Add evidence for this item
+                    </span>
+
+                    <span class="claimledger-create-upload-formats">
+                        PDF, Word, Excel or images
+                    </span>
+                </label>
+            </div>
+
+            <div class="claimledger-create-attachments item-attachment-list"></div>
+
+            <div class="claimledger-create-attachment-summary item-attachment-summary" hidden>
+                <span class="item-attachment-count">0 files</span>
+                <span class="item-attachment-size">0 KB</span>
+            </div>
+
+        </div>
+
+    </article>
+</template>
+

@@ -1,0 +1,330 @@
+/* =========================================================
+   CLAIMLEDGER SIDEBAR
+   ========================================================= */
+
+.claimledger-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 1030;
+
+  /* width: 260px; */
+  width: 280px;
+  height: 100vh;
+  height: 100dvh;
+
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  padding: 22px 14px 14px;
+
+  background: #ffffff;
+  border-right: 1px solid #e8ebf0;
+  color: #172033;
+  scrollbar-width: thin;
+  scrollbar-color: #d7dce5 transparent;
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.claimledger-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  flex-shrink: 0;
+  padding: 3px 9px 25px;
+
+  color: #172033;
+  text-decoration: none;
+}
+
+.claimledger-sidebar-brand:hover {
+  color: #172033;
+  text-decoration: none;
+}
+
+.claimledger-brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+
+  border-radius: 11px;
+  background: #172033;
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+
+.claimledger-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.claimledger-brand-name {
+  color: #172033;
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: -0.45px;
+  line-height: 1.2;
+}
+
+.claimledger-brand-subtitle {
+  color: #8b95a7;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   NAVIGATION LAYOUT
+   ========================================================= */
+
+.claimledger-sidebar-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 23px;
+
+  min-height: min-content;
+}
+
+.claimledger-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.claimledger-nav-label {
+  display: block;
+  padding: 0 11px 7px;
+
+  color: #929bad;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   NAVIGATION LINKS
+   ========================================================= */
+
+.claimledger-nav-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  width: 100%;
+  min-height: 42px;
+  flex-shrink: 0;
+
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  color: #687386;
+  background: transparent;
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.35;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.claimledger-nav-link:hover {
+  color: #172033;
+  background: #f5f7fa;
+  text-decoration: none;
+}
+
+.claimledger-nav-link:focus-visible {
+  outline: 2px solid #8794ad;
+  outline-offset: 2px;
+}
+
+.claimledger-nav-link.is-active {
+  color: #172033;
+  background: #f0f3f8;
+  border-color: #e7ebf2;
+  font-weight: 700;
+}
+
+.claimledger-nav-link.is-active::before {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: -1px;
+
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: #172033;
+
+  content: "";
+}
+
+/* =========================================================
+   ICONS
+   ========================================================= */
+
+.claimledger-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+
+  color: #8a94a6;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.claimledger-nav-link:hover .claimledger-nav-icon {
+  color: #172033;
+}
+
+.claimledger-nav-link.is-active .claimledger-nav-icon {
+  color: #172033;
+}
+
+.claimledger-nav-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =========================================================
+   PRIMARY ACTION: NEW CLAIM
+   ========================================================= */
+
+.claimledger-nav-link--primary {
+  color: #172033;
+  font-weight: 700;
+}
+
+.claimledger-nav-link--primary .claimledger-nav-icon {
+  color: #172033;
+}
+
+.claimledger-nav-link--primary:hover {
+  background: #eef1f6;
+}
+
+.claimledger-nav-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 23px;
+  height: 23px;
+  flex-shrink: 0;
+
+  border-radius: 7px;
+  background: #172033;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* =========================================================
+   FUTURE-PAGE PLACEHOLDERS
+   ========================================================= */
+
+.claimledger-nav-link--placeholder {
+  cursor: default;
+  color: #929bad;
+}
+
+.claimledger-nav-link--placeholder:hover {
+  color: #929bad;
+  background: transparent;
+}
+
+.claimledger-nav-link--placeholder .claimledger-nav-icon {
+  color: #a4adbb;
+}
+
+.claimledger-nav-link--placeholder:focus-visible {
+  outline: none;
+}
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.claimledger-sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  flex-shrink: 0;
+  margin-top: 24px;
+  padding-top: 12px;
+
+  border-top: 1px solid #edf0f4;
+}
+
+.claimledger-sidebar-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 5px 11px 9px;
+
+  color: #8b95a7;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.claimledger-footer-indicator {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.claimledger-logout-link {
+  color: #707b8e;
+}
+
+.claimledger-logout-link:hover {
+  color: #b42318;
+  background: #fff5f4;
+}
+
+.claimledger-logout-link:hover .claimledger-nav-icon {
+  color: #b42318;
+}
+
+/* =========================================================
+   DESKTOP CONTENT OFFSET
+   ========================================================= */
+
+@media (min-width: 992px) {
+  .claimledger-main-content {
+    margin-left: 260px;
+    min-width: 0;
+  }
+}
